@@ -6,6 +6,7 @@
     "scripts": {
         "start": "webpack serve --open --config webpack.dev.js",
         "build": "webpack --config webpack.prod.js",
+        "test": "mocha",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"
     },
@@ -14,8 +15,10 @@
         "jquery": "^3.6.3"
     },
     "devDependencies": {
+        "@types/dotenv-webpack": "^7.0.4",
         "@types/jquery": "^3.5.16",
         "css-loader": "^6.7.3",
+        "dotenv-webpack": "^8.0.1",
         "gh-pages": "^5.0.0",
         "html-webpack-plugin": "^5.5.0",
         "mini-css-extract-plugin": "^2.7.3",

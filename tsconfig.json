@@ -4,8 +4,7 @@
     "module": "commonjs",
     "target":"ES6",
     "lib": ["es5", "es6", "dom", "dom.Iterable"],
-    "rootDir": "src",
-    "outDir": "./built",
+    "rootDir": "src"
   },
-  "exclude": ["dist/**"]
+  "exclude": ["dist/**","src/tests/**"]
 }
