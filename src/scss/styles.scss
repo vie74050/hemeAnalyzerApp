@@ -36,14 +36,13 @@ body{
         overflow-x: hidden;
         background-color: #eee;
         border: 1px solid #555;
-        #graphcontent {
+        #graphscontainer {
             display: flex;
             flex-direction: column;
             background-color: #fff;
 
-            .graphcontentrow{
-                font-family: 'Courier New', Courier, monospace;
-                font-size:  11px;
+            .graphrow{
+                font-size:  12px;
                 position: relative;
                 height: 100px;
                 width: 100%;
@@ -51,6 +50,18 @@ body{
                 flex-direction: row;
                 border: 1px solid #555;
             
+                .titleCol{
+                    width: 20px;
+                    .ytitle{
+                        font-size: 10px;
+                        writing-mode: vertical-rl;
+                        text-orientation: mixed;
+                        text-align: center;
+                        height: 100%;
+                    }
+                }
+                
+
                 .graph{
                     width: calc(100% - 150px)
                 }
@@ -65,6 +76,21 @@ body{
                     }
                 }
             }
+        }
+        .table {
+            width:100%;
+            text-align: center;
+
+            /* striped rows */
+            tbody tr:nth-of-type(odd) { 
+                background-color:#ccc;
+            }
+            /* hover row */
+            tbody tr:hover {
+                background-color: #fffb00;
+                cursor: pointer;
+            }
+
         }
     }
 
