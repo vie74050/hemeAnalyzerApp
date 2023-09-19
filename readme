@@ -22,4 +22,3 @@ To connect to Google sheets, an App Key is required, and was generated from [Clo
 **NB** The current AppKey (`API Key MedLab`) is generated on BCITVie's account and is restricted to the testing domains specified in the console management.  
 
 The `AppKey` should be stored in a `./.env`.
-
