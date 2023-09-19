@@ -1,3 +1,5 @@
+import { testData } from "./testdata";'./testdata';
+
 interface ISpreadsheetValues {
     majorDimension: "DIMENSION_UNSPECIFIED" | "ROWS" | "COLUMNS";
     range: string;
@@ -45,10 +47,12 @@ async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
                 }
             );
             data = await response.json();
-
+            console.log(data);
             DATA = parseData(data);
             return DATA;
         } catch (e) {
+
+            DATA = parseData(testData as ISpreadsheetValues); console.log("loading test data");
             console.error("Error fetching spreadsheet data:", e, sheetname, spreadsheetId);
             return null;
         }
