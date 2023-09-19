@@ -36,7 +36,13 @@ async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
 
         try {
             const response = await fetch(
-                `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetname}?key=${apiKey}`
+                `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetname}?key=${apiKey}`,
+                { 
+                    mode: "cors",
+                    headers: { 
+                        "Content-Type": "application/json"
+                    }
+                }
             );
             data = await response.json();
 
