@@ -5,14 +5,29 @@
   </head>
   <body>
     <div id="monitor">
-      <div id="top-menu"></div>
+      <div id="top-menu">
+        <button id="QCFiles-btn">QC Files &#128200;</button>
+        <button id="Explorer-btn" title="Unavailable">Explorer &#128194;</button>
+      </div>
       <div id="content">
-        <div id="graphscontainer" class="flexcol"></div>
+        <div class="tableFixHead">
+          <div id="graphscontainer" class="flexcol"></div>
+          <table id="qcfiletable" class="table" style="display: table">
+            <thead>
+              <tr>
+                <th title="Out of range status">&#9888</th>
+                <th>File</th>
+                <th>Lot #</th>
+                <th>Material</th>
+                <th>Expiry Date</th>
+                <th>Analysis Date</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
       <div id="bot-menu"></div>
     </div>
-    <div id="samplesContainerMenu">
-
-    </div>
+    <div id="samplesContainerMenu"></div>
   </body>
 </html>

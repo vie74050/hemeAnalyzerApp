@@ -6,7 +6,10 @@ interface IChartData {
     yMin: number,
     yMax: number,
     xData: Array<any>,
-    yData: Array<number>
+    yData: Array<number>,
+    sd?: number | string,
+    mean?: number | string,
+    cv?: number | string
 }
 
 /**
@@ -20,29 +23,12 @@ class LineGraph {
     titleHTML: HTMLDivElement;
     stat_curHTML: HTMLTableCellElement;
     stat_sdHTML: HTMLTableCellElement;
-    stat_avgHTML: HTMLTableCellElement;
+    stat_meanHTML: HTMLTableCellElement;
     stat_cvHTML: HTMLTableCellElement;
     data: IChartData
 
-    public constructor(chartData: IChartData, graphscontainerID: string = 'graphscontainer') {
-        this.data = chartData;
-
-        let container = document.getElementById(graphscontainerID);
-        if (!container) {
-            console.error('Graphs container not found.');
-        }
-        const row = this.UICreateGraphRowHTML(chartData.canvasId);
-        container.appendChild(row);
-
-        this.canvas = row.querySelector('canvas') as HTMLCanvasElement;
-
-        this.chart = this.CreateLineChart(chartData) as Chart;
-
-        this.titleHTML = row.querySelector('._yTitle') as HTMLDivElement;
-        this.stat_avgHTML = row.querySelector('._avg') as HTMLTableCellElement;
-        this.stat_curHTML = row.querySelector('._cur') as HTMLTableCellElement;
-        this.stat_sdHTML = row.querySelector('._sd') as HTMLTableCellElement;
-        this.stat_cvHTML = row.querySelector('._cv') as HTMLTableCellElement;
+    public constructor(chartData: IChartData) {
+        this.data = chartData;        
     }
 
     /** Create HTML elements for .graphrow with the structure
@@ -60,7 +46,7 @@ class LineGraph {
         const titleCol = document.createElement('div');
         const yTitle = document.createElement('div');
         yTitle.classList.add('_yTitle', 'ytitle');
-        yTitle.innerHTML = this.data.yTitle;
+        
         titleCol.classList.add('titleCol');
         titleCol.appendChild(yTitle);
         graphRow.appendChild(titleCol);
@@ -80,7 +66,11 @@ class LineGraph {
         const table = document.createElement('table');
         dataSummary.appendChild(table);
         table.appendChild(this.UICreateDataStatsTableHTML());
-
+        
+        // set the title
+        this.titleHTML = yTitle;
+        this.canvas = canvas;
+        
         return graphRow;
     }
 
@@ -91,7 +81,7 @@ class LineGraph {
                 <td class="_sd"></td>
             </tr>
             <tr>
-                <td class="_avg"></td>
+                <td class="_mean"></td>
             </tr>
             <tr>
                 <td class="_cv"></td>
@@ -101,26 +91,34 @@ class LineGraph {
     UICreateDataStatsTableHTML(): HTMLTableElement {
         const table = document.createElement('table');
         const tr1 = document.createElement('tr');
-        const td1 = document.createElement('td');
-        td1.classList.add('_cur');
-        td1.setAttribute('rowspan', '3');
-        tr1.appendChild(td1);
-        const td2 = document.createElement('td');
-        td2.classList.add('_sd');
-        tr1.appendChild(td2);
+
+        const td1_cur = document.createElement('td');
+        td1_cur.classList.add('_cur');
+        td1_cur.setAttribute('rowspan', '3');
+        tr1.appendChild(td1_cur);
+
+        const td2_sd = document.createElement('td');
+        td2_sd.classList.add('_sd');
+        tr1.appendChild(td2_sd);
         table.appendChild(tr1);
 
         const tr2 = document.createElement('tr');
-        const td3 = document.createElement('td');
-        td3.classList.add('_avg');
-        tr2.appendChild(td3);
+        const td3_mean = document.createElement('td');
+        td3_mean.classList.add('_mean');
+        tr2.appendChild(td3_mean);
         table.appendChild(tr2);
 
         const tr3 = document.createElement('tr');
-        const td4 = document.createElement('td');
-        td4.classList.add('_cv');
-        tr3.appendChild(td4);
+        const td4_cv = document.createElement('td');
+        td4_cv.classList.add('_cv');
+        tr3.appendChild(td4_cv);
         table.appendChild(tr3);
+
+        // set stats data
+        this.stat_meanHTML = td3_mean;
+        this.stat_curHTML = td1_cur;
+        this.stat_sdHTML = td2_sd;
+        this.stat_cvHTML = td4_cv;
 
         return table;
     }
@@ -138,6 +136,7 @@ class LineGraph {
             yData = chartData.yData;
         const canvas = this.canvas;
         const ctx = canvas.getContext('2d');
+        const isHeadingRow = chartData.canvasId === 'headingRow';
        
         if (!ctx) {
             console.error('Canvas context not supported.');
@@ -170,13 +169,13 @@ class LineGraph {
         Chart.defaults.maintainAspectRatio = false;
         Chart.defaults.elements.point.hitRadius = 2;
         Chart.defaults.elements.point.radius = 5;
+        Chart.defaults.backgroundColor = '#9BD0F5';
 
         const chart = new Chart(ctx, {
             type: 'line',
-
             data: data,
             options: {
-
+                responsive: true,
                 scales: {
                     x: {
                         ticks: {
@@ -195,20 +194,32 @@ class LineGraph {
                             major: {
                                 enabled: true
                             },
+                            display: true,
                             padding: 0,
                             callback: function (val, index) {
                                 const targW = 40;
-                                // ensure y tick labels are same width so graphs align
                                 let num = Number(val).toFixed(1).trim();
+
+                                if( isHeadingRow ) {
+                                    //console.log(index,val, target, num);
+                                    num = (index === 0) ? 'min' : (index === 1) ? 'target' : 'max';
+                                }
+
+                                // ensure y tick labels are same width so graphs align
                                 let w = ctx.measureText(num).width;   
                                 while (w < targW) {
                                     num = num + ' ';
                                     w = ctx.measureText(num).width;
                                 }
-                                                  
                                 return num;
+                                
                             }
+                        },
+                        grid: {
+                            display: !( isHeadingRow )
                         }
+                            
+
                     }
                 },
                 interaction: {
@@ -246,18 +257,35 @@ class LineGraph {
         return sd / mean;
     }
 
-    /** Update the data summary table with the current, average and coefficient of variation values */
-    uiUpdateDataSummaryTable(currVal: number): void {
-        var newdata = this.data.yData;
+    public CreateGraphHeader(): HTMLDivElement {
+        const row = this.UICreateGraphRowHTML(this.data.canvasId);       
+        this.chart = this.CreateLineChart(this.data) as Chart;
 
-        this.stat_avgHTML.innerText = this.getMean(newdata).toFixed(1);
-        this.stat_curHTML.innerText = currVal.toFixed(1);
-        this.stat_sdHTML.innerText = this.getStandardDeviation(newdata).toFixed(1);
-        this.stat_cvHTML.innerText = this.getCV(newdata).toFixed(1);
+        this.titleHTML.innerHTML = this.data.yTitle;
+        this.stat_sdHTML.innerHTML = this.data.sd.toString();
+        this.stat_meanHTML.innerHTML = this.data.mean.toString();   
+        this.stat_cvHTML.innerHTML = this.data.cv.toString();
+        this.stat_curHTML.innerHTML = "Data"; 
+
+        return row;
     }
 
-    /** Update the data summary table with the current, average and coefficient of variation values */
-    public AddDataPoint(xData: string = '', v: number = -1): void {
+    public CreateGraphRow(chartData: IChartData = this.data): HTMLDivElement {
+        const row = this.UICreateGraphRowHTML(chartData.canvasId);       
+        this.chart = this.CreateLineChart(chartData) as Chart;
+
+        // set title
+        this.titleHTML.innerHTML = this.data.yTitle;
+        this.stat_sdHTML.innerHTML = this.data.sd.toString();
+        this.stat_meanHTML.innerHTML = this.data.mean.toString();   
+        this.stat_cvHTML.innerHTML = this.data.cv.toString();
+        this.stat_curHTML.innerHTML = this.data.yData[this.data.yData.length - 1].toString();   
+        
+        return row;
+    }
+
+    /** Update the graph with new point */
+    public AddDataPoint(xData: string = '', v: number): void {
         const chart = this.chart;
         // newy - the value that is plotted on the chart if out of range
         const newy = v < this.data.yMin ? this.data.yMin : v > this.data.yMax ? this.data.yMax : v;
@@ -270,7 +298,6 @@ class LineGraph {
             chart.update();
         }
 
-        this.uiUpdateDataSummaryTable(v);
     }
 
 }

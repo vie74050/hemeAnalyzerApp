@@ -47,12 +47,12 @@ async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
                 }
             );
             data = await response.json();
-            console.log(data);
-            DATA = parseData(data);
+            DATA = parseDataToArrayRows(data);
+            //console.log(DATA);
             return DATA;
         } catch (e) {
 
-            DATA = parseData(testData as ISpreadsheetValues); console.log("loading test data");
+            DATA = parseDataToArrayRows(testData as ISpreadsheetValues); console.log("loading test data");
             console.error("Error fetching spreadsheet data:", e, sheetname, spreadsheetId);
             return null;
         }
@@ -83,7 +83,7 @@ function findGetParameters(key: string = '') {
  * @param data Incoming data returned from Google Sheets API 
  * @returns Rocord<string, string>[] Array of rows with headers as key
  */
-function parseData(data: ISpreadsheetValues): Record<string, string>[] {
+function parseDataToArrayRows(data: ISpreadsheetValues): Record<string, string>[] {
 
     const rows: Record<string, string>[] = [];
     const rawRows: string[][] = data.values || [[]];
