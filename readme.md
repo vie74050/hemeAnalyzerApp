@@ -14,7 +14,7 @@ copyright: for BCIT use only
 This web app simulates a generalized User Interface of a Heme Analyzer.  
 Sample data is retrieved from Google sheets.  This allows instructors to generate sample data for various use cases TBD.
 
-## Development
+## Developer
 
 ### Set Up
 
@@ -23,3 +23,13 @@ To connect to Google sheets, an App Key is required, and was generated from [Clo
 **NB** The current AppKey (`API Key MedLab`) is generated on BCITVie's account and is restricted to the testing domains specified in the console management.  
 
 The `AppKey` should be stored in a `./.env`.
+
+Install using `npm install`.
+
+### Development
+
+See package.json scripts:
+
+- `npm test` - for testing using jest
+- `npm run start` - for testing locally on `localhost:8080`
+- `npm run deploy` - to deploy to test server (GitHub Pages). It will build to dist and deploy to `gh-pages` branch.

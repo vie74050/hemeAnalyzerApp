@@ -35,6 +35,10 @@ body{
             background-color: rgb(112, 198, 255);
             font-weight: 600;
         }
+        #back-btn {
+            display: none;
+            float: right;
+        }
     }
     #content {
         width: 100%;
@@ -109,37 +113,35 @@ body{
         .tableFixHead {
             overflow-y: auto;
             height: 100%;
-        }
-        .table {
-            width:100%;
-            text-align: center;
-            border-collapse: collapse;
-            th {
-                position: sticky;
-                top: 0px;
-                background: #eee;                
-            }
-            th:first-child {
-                cursor: pointer;
-                width: 50px;
-            }
-            th:first-child, td:first-child{
-                border-right: 1px solid #555;
-                font-size: 18px;
-            }
-            tr {
-                height: 26px;
-            }
-            /* striped rows */
-            tbody tr:nth-of-type(odd) { 
-                background-color:#ccc;
-            }
-            /* hover row */
-            tbody tr:hover {
-                background-color: #fffb00;
-                cursor: pointer;
-            }
+        
+            >table {
+                display: none;
+                width:100%;
+                text-align: center;
+                border-collapse: collapse;
+                th {
+                    position: sticky;
+                    top: 0px;
+                    background: #eee;                
+                }
+                th:first-child, td:first-child{
+                    border-right: 1px solid #555;
+                    font-size: 18px;
+                }
+                tr {
+                    height: 26px;
+                }
+                /* striped rows */
+                tbody tr:nth-of-type(odd) { 
+                    background-color:#ccc;
+                }
+                /* hover row */
+                tbody tr:hover {
+                    background-color: #fffb00;
+                    cursor: pointer;
+                }
 
+            }
         }
     }
 

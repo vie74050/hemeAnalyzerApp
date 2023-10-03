@@ -1,4 +1,4 @@
-import { testData } from "./testdata";'./testdata';
+import { googData } from "../tests/testdata";'./testdata';
 
 interface ISpreadsheetValues {
     majorDimension: "DIMENSION_UNSPECIFIED" | "ROWS" | "COLUMNS";
@@ -11,10 +11,14 @@ var spreadsheetId = "1QCDTOlikbl3E0CjCcmjNOfPrl1veu1C1j6tBtlXKI_o";
 // Default sheet name(s) within worksheet 
 var sheetname = 'SampleData';
 
+const data_for_testing = googData as ISpreadsheetValues;
+
 var DATA: Record<string, string>[];
 
 /** Load sheet data from specified google sheet.
  * If _GET params are passed in URL, they override the Defaults.
+ * - `id` = google worksheet id
+ * - `name` = sheet name(s) within worksheet
  * - require API_KEY in ./.envs to be set
 */
 async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
@@ -26,10 +30,10 @@ async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
     const get_name = findGetParameters('name');
 
     let data: ISpreadsheetValues;
-
+    
     // _GET param overrides defaults
-    if (get_id.length>0) spreadsheetId = findGetParameters('id');
-    if (get_name.length>0) sheetname = findGetParameters('name');
+    if (get_id.length>0) spreadsheetId = get_id;
+    if (get_name.length>0) sheetname = get_name;
 
     if (!apiKey) {
         console.error('app key error');
@@ -46,15 +50,19 @@ async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
                     }
                 }
             );
+            if (!response.ok) throw response.statusText;
             data = await response.json();
             DATA = parseDataToArrayRows(data);
-            //console.log(DATA);
+
+            console.log("sheet loaded", spreadsheetId, sheetname, data);
             return DATA;
         } catch (e) {
-
-            DATA = parseDataToArrayRows(testData as ISpreadsheetValues); console.log("loading test data");
             console.error("Error fetching spreadsheet data:", e, sheetname, spreadsheetId);
-            return null;
+            
+            DATA = parseDataToArrayRows( data_for_testing ); 
+            console.log("loading test data", DATA);
+
+            return DATA;
         }
     }
 
@@ -79,15 +87,15 @@ function findGetParameters(key: string = '') {
     return result;
 }
 
-/** Parses data to rows
+/** Parses data from google sheets to rows
  * @param data Incoming data returned from Google Sheets API 
  * @returns Rocord<string, string>[] Array of rows with headers as key
  */
 function parseDataToArrayRows(data: ISpreadsheetValues): Record<string, string>[] {
 
     const rows: Record<string, string>[] = [];
-    const rawRows: string[][] = data.values || [[]];
-    const headers: string[] = rawRows.shift() || [];
+    const rawRows: string[][] = Object.assign([], data["values"]);
+    const headers: string[] = rawRows.shift() as string[];
     for (const row of rawRows) {
         const rowData = row.reduce<Record<string, string>>((acc, cell, index) => {
             acc[headers[index]] = cell;
@@ -100,11 +108,15 @@ function parseDataToArrayRows(data: ISpreadsheetValues): Record<string, string>[
     return rows;
 }
 
+/** Returns DATA or calls LoadGSheetsData() if DATA is undefined
+*  @returns Promise<Record<string, string>[]  
+*/
 async function GetData(): Promise<Record<string, string>[] | null> {
 
     if (DATA === undefined) {
-        let data = await LoadGSheetsData();
-        return data;
+        let DATA = await LoadGSheetsData();
+        
+        return DATA;
 
     }else {
         return DATA;

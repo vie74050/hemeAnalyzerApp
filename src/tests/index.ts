@@ -1,3 +1,1 @@
-//import './GetGSheetsDataTest';
-//import './UICreateLineGraphTest';
-import './UICreateQCFileTableTest';
+import '../UI/UISetUp';
