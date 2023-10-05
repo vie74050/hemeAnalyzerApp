@@ -54,7 +54,7 @@ async function LoadGSheetsData(): Promise<Record<string, string>[] | null>{
             data = await response.json();
             DATA = parseDataToArrayRows(data);
 
-            console.log("sheet loaded", spreadsheetId, sheetname, data);
+            //console.log("sheet loaded", spreadsheetId, sheetname, data);
             return DATA;
         } catch (e) {
             console.error("Error fetching spreadsheet data:", e, sheetname, spreadsheetId);

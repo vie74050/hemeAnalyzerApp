@@ -1,7 +1,7 @@
 import { LineGraph, IChartData } from "../Graph/UICreateLineGraph";
 import { QCSampleItem } from "../Data/HemeSampleItem";
-import { $graphscontainer } from "./UISetUp";
-import { $backBtn } from "./UISetUp";
+import { $graphscontainer } from "./UIMonitorSetUp";
+import { $backBtn } from "./UIMonitorSetUp";
 
 /** Populates table body from data, where Groups="QCSample" = <tr>
  * Expected table for QC Files:
@@ -121,28 +121,27 @@ export function UILoadQCGraphs(sampleData: QCSampleItem) {
         sd: "sd",
         mean: "mean",
         cv: "cv"
-    });
-    $graphscontainer?.appendChild(headingRow.CreateGraphHeader());
-
+    }, $graphscontainer);
+   
     const analysisdates = sampleData.analysisDates;
     const paramerterData = sampleData.GetSubgroup('haparameter'); //console.log(paramerterData);
 
     // for each parameterData, create new LineGraph
     for (let key in paramerterData) {
 
-        const paramItem = paramerterData[key];
-        const id = paramItem['item'].scrub();
-        const yData = analysisdates.map((s, i) => {
+        let paramItem = paramerterData[key];
+        let id = paramItem['item'].scrub();
+        let yData = analysisdates.map((s, i) => {
             let dateHeader = 'date' + (i + 1);
             return Number(paramItem[dateHeader]);
         });
-        const yTitle = paramItem['label'] ? paramItem['label'] : paramItem['item'];
-        const yMin = Number(paramItem['allowedmin']);
-        const yMax = Number(paramItem['allowedmax']);
-        const sd = Number(paramItem['sd']);
-        const mean = Number(paramItem['mean']);
-        const cv = Number(paramItem['cv']);
-        const chartData: IChartData = {
+        let yTitle = paramItem['label'] ? paramItem['label'] : paramItem['item'];
+        let yMin = Number(paramItem['allowedmin']);
+        let yMax = Number(paramItem['allowedmax']);
+        let sd = Number(paramItem['sd']);
+        let mean = Number(paramItem['mean']);
+        let cv = Number(paramItem['cv']);
+        let chartData: IChartData = {
             canvasId: id,
             xData: analysisdates,
             yData: yData,
@@ -153,8 +152,8 @@ export function UILoadQCGraphs(sampleData: QCSampleItem) {
             mean: mean,
             cv: cv
         };
-        const chart = new LineGraph(chartData);
-        $graphscontainer?.appendChild(chart.CreateGraphRow());
+        new LineGraph(chartData, $graphscontainer);
+        
     }
 
 }

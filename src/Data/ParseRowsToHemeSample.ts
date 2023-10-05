@@ -1,4 +1,4 @@
-import "../helpers/utils";
+import "../helpers/string-exts";
 import { PASampleItem } from "./HemeSampleItem";
 import { QCSampleItem } from "./HemeSampleItem";
 import { HemeSampleItem } from "./HemeSampleItem";

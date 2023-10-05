@@ -21,14 +21,49 @@ class LineGraph {
     chart: Chart;
     canvas: HTMLCanvasElement;
     titleHTML: HTMLDivElement;
+    minHTML: HTMLTableCellElement;
+    targetHTML: HTMLTableCellElement;
+    maxHTML: HTMLTableCellElement;
     stat_curHTML: HTMLTableCellElement;
     stat_sdHTML: HTMLTableCellElement;
     stat_meanHTML: HTMLTableCellElement;
     stat_cvHTML: HTMLTableCellElement;
     data: IChartData
 
-    public constructor(chartData: IChartData) {
-        this.data = chartData;        
+    public constructor(chartData: IChartData, $container: HTMLElement) {
+        this.data = chartData;
+
+        // create HTML elements
+        const row = this.UICreateGraphRowHTML(chartData.canvasId);
+
+        // set content text
+        if (chartData.canvasId == 'headingRow') {
+            this.titleHTML.innerHTML = this.data.yTitle;
+            this.maxHTML.innerHTML = 'max';
+            this.targetHTML.innerHTML = 'target';
+            this.minHTML.innerHTML = 'min';
+            this.stat_sdHTML.innerHTML = this.data.sd.toString();
+            this.stat_meanHTML.innerHTML = this.data.mean.toString();
+            this.stat_cvHTML.innerHTML = this.data.cv.toString();
+            this.stat_curHTML.innerHTML = 'Data';
+        } else {
+            // set title
+            this.titleHTML.innerHTML = this.data.yTitle;
+            // set yaxis labels
+            this.maxHTML.innerHTML = String(this.data.yMax.toFixed(2)).padEnd(3, '0');
+            this.targetHTML.innerHTML = ((this.data.yMax + this.data.yMin) / 2).toFixed(2).padEnd(3, '0');
+            this.minHTML.innerHTML = String(this.data.yMin.toFixed(2)).padEnd(3, '0');
+            // set stats
+            this.stat_sdHTML.innerHTML = String(this.data.sd).padEnd(3, '0');
+            this.stat_meanHTML.innerHTML = String(this.data.mean).padEnd(3, '0');
+            this.stat_cvHTML.innerHTML = String(this.data.cv).padEnd(3, '0');
+            this.stat_curHTML.innerHTML = String(this.data.yData[this.data.yData.length - 1]).padEnd(3, '0');
+        }
+
+        $container.appendChild(row);
+
+        // create chart
+        this.CreateLineChart(chartData);
     }
 
     /** Create HTML elements for .graphrow with the structure
@@ -46,10 +81,17 @@ class LineGraph {
         const titleCol = document.createElement('div');
         const yTitle = document.createElement('div');
         yTitle.classList.add('_yTitle', 'ytitle');
-        
+
         titleCol.classList.add('titleCol');
         titleCol.appendChild(yTitle);
         graphRow.appendChild(titleCol);
+
+        const dataSummary_yaxis = document.createElement('div');
+        dataSummary_yaxis.classList.add('dataSummary', 'yaxis');
+        const table_yaxis = this.UICreateYAxisHTML();
+        dataSummary_yaxis.appendChild(table_yaxis);
+        graphRow.appendChild(dataSummary_yaxis);
+
 
         const graph = document.createElement('div');
         graph.classList.add('graph');
@@ -59,19 +101,47 @@ class LineGraph {
         canvas.setAttribute('id', graphId);
         graph.appendChild(canvas);
 
-        const dataSummary = document.createElement('div');
-        dataSummary.classList.add('dataSummary');
-        graphRow.appendChild(dataSummary);
+        const dataSummary_stats = document.createElement('div');
+        dataSummary_stats.classList.add('dataSummary', 'stats');
+        const table_stats = this.UICreateDataStatsTableHTML();
+        dataSummary_stats.appendChild(table_stats);
+        graphRow.appendChild(dataSummary_stats);
 
-        const table = document.createElement('table');
-        dataSummary.appendChild(table);
-        table.appendChild(this.UICreateDataStatsTableHTML());
-        
         // set the title
         this.titleHTML = yTitle;
         this.canvas = canvas;
-        
+
         return graphRow;
+    }
+
+    /** Create HTML for y-axis */
+    UICreateYAxisHTML(): HTMLTableElement {
+        const yAxis = document.createElement('table');
+
+        const tr1 = document.createElement('tr');
+        const td1 = document.createElement('td');
+        td1.classList.add('_max');
+        tr1.appendChild(td1);
+
+        const tr2 = document.createElement('tr');
+        const td2 = document.createElement('td');
+        td2.classList.add('_target');
+        tr2.appendChild(td2);
+
+        const tr3 = document.createElement('tr');
+        const td3 = document.createElement('td');
+        td3.classList.add('_min');
+        tr3.appendChild(td3);
+
+        yAxis.appendChild(tr1);
+        yAxis.appendChild(tr2);
+        yAxis.appendChild(tr3);
+
+        this.maxHTML = td1;
+        this.targetHTML = td2;
+        this.minHTML = td3;
+
+        return yAxis;
     }
 
     /** Create HTML for table for statistics, with the structure:
@@ -122,6 +192,7 @@ class LineGraph {
 
         return table;
     }
+
     /** Create a line graph with chartjs 
      * @param canvasId id of the canvas element
      * @param yMin minimum value of the y-axis  
@@ -130,20 +201,46 @@ class LineGraph {
      * @param yData array of y-values
     */
     CreateLineChart(chartData: IChartData): Chart | undefined {
-        const yMin = chartData.yMin,
-            yMax = chartData.yMax,
-            xData = chartData.xData,
-            yData = chartData.yData;
+        Chart.defaults.plugins.legend.display = false;
+        Chart.defaults.elements.line.borderWidth = 1;
+        Chart.defaults.maintainAspectRatio = false;
+        Chart.defaults.elements.point.hitRadius = 2;
+        Chart.defaults.elements.point.radius = 5;
+        
+        const yMin = chartData.yMin, yMax = chartData.yMax;
+        const target = (yMax + yMin) / 2;
+        const isHeadingRow = chartData.canvasId === 'headingRow';
         const canvas = this.canvas;
         const ctx = canvas.getContext('2d');
-        const isHeadingRow = chartData.canvasId === 'headingRow';
-       
+
         if (!ctx) {
             console.error('Canvas context not supported.');
             return;
         }
 
-        const target = (yMax + yMin) / 2;
+        const xData = JSON.parse(JSON.stringify(chartData.xData)),
+            yData = JSON.parse(JSON.stringify(chartData.yData));
+
+        // determine max canvas size
+        const maxPointsPerPg = 5;
+        const pgWidth = canvas.parentElement.clientWidth;
+        canvas.style.height = '98px';
+        canvas.height = 98;
+        
+
+        // if xData.length > maxPointsPerscreen, increase canvas size
+        let numpages = Math.ceil(chartData.xData.length / maxPointsPerPg);
+        // set graph width
+        canvas.style.width = pgWidth * numpages + 'px';
+        canvas.width = pgWidth * numpages;
+
+        // fill out xData with empty strings if not enough data
+        if (chartData.xData.length < maxPointsPerPg && chartData.xData.length > 0) {
+            for (let i = xData.length; i < maxPointsPerPg; i++) {
+                xData.push('');
+            }
+        }
+
         const data = {
             labels: xData,
             datasets: [{
@@ -164,18 +261,11 @@ class LineGraph {
             }]
         }
 
-        Chart.defaults.plugins.legend.display = false;
-        Chart.defaults.elements.line.borderWidth = 1;
-        Chart.defaults.maintainAspectRatio = false;
-        Chart.defaults.elements.point.hitRadius = 2;
-        Chart.defaults.elements.point.radius = 5;
-        Chart.defaults.backgroundColor = '#9BD0F5';
-
         const chart = new Chart(ctx, {
             type: 'line',
             data: data,
             options: {
-                responsive: true,
+                responsive: false,
                 scales: {
                     x: {
                         ticks: {
@@ -192,33 +282,33 @@ class LineGraph {
                         ticks: {
                             stepSize: target,
                             major: {
-                                enabled: true
+                                enabled: false
                             },
-                            display: true,
+                            display: false,
                             padding: 0,
                             callback: function (val, index) {
                                 const targW = 40;
                                 let num = Number(val).toFixed(1).trim();
 
-                                if( isHeadingRow ) {
+                                if (isHeadingRow) {
                                     //console.log(index,val, target, num);
                                     num = (index === 0) ? 'min' : (index === 1) ? 'target' : 'max';
                                 }
 
                                 // ensure y tick labels are same width so graphs align
-                                let w = ctx.measureText(num).width;   
+                                let w = ctx.measureText(num).width;
                                 while (w < targW) {
                                     num = num + ' ';
                                     w = ctx.measureText(num).width;
                                 }
                                 return num;
-                                
+
                             }
                         },
                         grid: {
-                            display: !( isHeadingRow )
+                            display: !(isHeadingRow) // no grid on heading row
                         }
-                            
+
 
                     }
                 },
@@ -241,49 +331,6 @@ class LineGraph {
         return chart;
     }
 
-    // helper math functions
-    getMean(array: number[]): number {
-        const n = array.length;
-        return array.reduce((a, b) => a + b) / n;
-    }
-    getStandardDeviation(array: number[]): number {
-        const n = array.length;
-        const mean = this.getMean(array);
-        return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-    }
-    getCV(array: number[]): number {
-        const mean = this.getMean(array);
-        const sd = this.getStandardDeviation(array);
-        return sd / mean;
-    }
-
-    public CreateGraphHeader(): HTMLDivElement {
-        const row = this.UICreateGraphRowHTML(this.data.canvasId);       
-        this.chart = this.CreateLineChart(this.data) as Chart;
-
-        this.titleHTML.innerHTML = this.data.yTitle;
-        this.stat_sdHTML.innerHTML = this.data.sd.toString();
-        this.stat_meanHTML.innerHTML = this.data.mean.toString();   
-        this.stat_cvHTML.innerHTML = this.data.cv.toString();
-        this.stat_curHTML.innerHTML = "Data"; 
-
-        return row;
-    }
-
-    public CreateGraphRow(chartData: IChartData = this.data): HTMLDivElement {
-        const row = this.UICreateGraphRowHTML(chartData.canvasId);       
-        this.chart = this.CreateLineChart(chartData) as Chart;
-
-        // set title
-        this.titleHTML.innerHTML = this.data.yTitle;
-        this.stat_sdHTML.innerHTML = this.data.sd.toString();
-        this.stat_meanHTML.innerHTML = this.data.mean.toString();   
-        this.stat_cvHTML.innerHTML = this.data.cv.toString();
-        this.stat_curHTML.innerHTML = this.data.yData[this.data.yData.length - 1].toString();   
-        
-        return row;
-    }
-
     /** Update the graph with new point */
     public AddDataPoint(xData: string = '', v: number): void {
         const chart = this.chart;
@@ -298,6 +345,22 @@ class LineGraph {
             chart.update();
         }
 
+    }
+
+    // helper math functions
+    getMean(array: number[]): number {
+        const n = array.length;
+        return array.reduce((a, b) => a + b) / n;
+    }
+    getStandardDeviation(array: number[]): number {
+        const n = array.length;
+        const mean = this.getMean(array);
+        return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+    }
+    getCV(array: number[]): number {
+        const mean = this.getMean(array);
+        const sd = this.getStandardDeviation(array);
+        return sd / mean;
     }
 
 }
