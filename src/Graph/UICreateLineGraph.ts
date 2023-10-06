@@ -28,6 +28,7 @@ class LineGraph {
     stat_sdHTML: HTMLTableCellElement;
     stat_meanHTML: HTMLTableCellElement;
     stat_cvHTML: HTMLTableCellElement;
+    _maxPointsPerPg: number = 5;
     data: IChartData
 
     public constructor(chartData: IChartData, $container: HTMLElement) {
@@ -35,7 +36,7 @@ class LineGraph {
 
         // create HTML elements
         const row = this.UICreateGraphRowHTML(chartData.canvasId);
-
+                
         // set content text
         if (chartData.canvasId == 'headingRow') {
             this.titleHTML.innerHTML = this.data.yTitle;
@@ -46,6 +47,17 @@ class LineGraph {
             this.stat_meanHTML.innerHTML = this.data.mean.toString();
             this.stat_cvHTML.innerHTML = this.data.cv.toString();
             this.stat_curHTML.innerHTML = 'Data';
+            
+            // the headingRow graph scrollbar will controll the other graphs
+            const graphElem = this.canvas.parentElement;
+            graphElem.classList.add('headingRow');
+            graphElem.addEventListener('scroll', function(){
+                //console.log(this.scrollLeft);
+                const graphs = document.querySelectorAll('.graph');
+                graphs.forEach((g)=>{
+                    g.scrollLeft = this.scrollLeft;
+                });
+            });
         } else {
             // set title
             this.titleHTML.innerHTML = this.data.yTitle;
@@ -54,10 +66,11 @@ class LineGraph {
             this.targetHTML.innerHTML = ((this.data.yMax + this.data.yMin) / 2).toFixed(2).padEnd(3, '0');
             this.minHTML.innerHTML = String(this.data.yMin.toFixed(2)).padEnd(3, '0');
             // set stats
-            this.stat_sdHTML.innerHTML = String(this.data.sd).padEnd(3, '0');
-            this.stat_meanHTML.innerHTML = String(this.data.mean).padEnd(3, '0');
-            this.stat_cvHTML.innerHTML = String(this.data.cv).padEnd(3, '0');
-            this.stat_curHTML.innerHTML = String(this.data.yData[this.data.yData.length - 1]).padEnd(3, '0');
+            this.stat_sdHTML.innerHTML = String(Number(this.data.sd).toFixed(2)).padEnd(3, '0');
+            this.stat_meanHTML.innerHTML = String(Number(this.data.mean).toFixed(2)).padEnd(3, '0');
+            this.stat_cvHTML.innerHTML = String(Number(this.data.cv).toFixed(2)).padEnd(3, '0');
+            this.stat_curHTML.innerHTML = String(Number(this.data.yData[this.data.yData.length - 1])
+                                        .toFixed(2)).padEnd(3, '0');
         }
 
         $container.appendChild(row);
@@ -222,7 +235,7 @@ class LineGraph {
             yData = JSON.parse(JSON.stringify(chartData.yData));
 
         // determine max canvas size
-        const maxPointsPerPg = 5;
+        const maxPointsPerPg = this._maxPointsPerPg;
         const pgWidth = canvas.parentElement.clientWidth;
         canvas.style.height = '98px';
         canvas.height = 98;
@@ -347,6 +360,9 @@ class LineGraph {
 
     }
 
+    set maxPointsPerPg(val: number) {
+        this._maxPointsPerPg = val;
+    }
     // helper math functions
     getMean(array: number[]): number {
         const n = array.length;

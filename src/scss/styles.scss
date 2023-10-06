@@ -173,10 +173,13 @@ body{
                     overflow: hidden;
                     position: relative;
                     z-index: 0;
+
+                    &.headingRow {
+                        overflow-x: auto;
+                    }
                     canvas {
                         position: absolute;
                         left: 0;
-                        
                     }
                 }
                 .dataSummary {

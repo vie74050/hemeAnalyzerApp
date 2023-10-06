@@ -152,7 +152,14 @@ export function UILoadQCGraphs(sampleData: QCSampleItem) {
             mean: mean,
             cv: cv
         };
-        new LineGraph(chartData, $graphscontainer);
+        let chart = new LineGraph(chartData, $graphscontainer);
+
+        // set heading row width to max chart width
+        if(yData.length > chart._maxPointsPerPg){
+            headingRow.canvas.style.width = (chart.canvas.width + 100) + 'px';
+            headingRow.canvas.parentElement.scrollLeft = headingRow.canvas.parentElement.scrollWidth;
+        };
+
         
     }
 
