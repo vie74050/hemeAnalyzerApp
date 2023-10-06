@@ -48,8 +48,10 @@ class LineGraph {
             this.stat_cvHTML.innerHTML = this.data.cv.toString();
             this.stat_curHTML.innerHTML = 'Data';
             
-            // the headingRow graph scrollbar will controll the other graphs
+            // the headingRow graph scrollbar will controll the other graphs  
             const graphElem = this.canvas.parentElement;
+            const graphrowElem = graphElem.parentElement;
+            graphrowElem.classList.add('headingRow');
             graphElem.classList.add('headingRow');
             graphElem.addEventListener('scroll', function(){
                 //console.log(this.scrollLeft);
