@@ -4,6 +4,8 @@ import { UIQCSetUp, ShowHome } from './UI/UIMonitorSetUp';
 import { CreateHemeSamplesFromRowData } from './Data/ParseRowsToHemeSample';
 import { btnGroupSelHandler } from './helpers/btnGroupSelHandler';
 
+import { Tooltip } from 'bootstrap';
+
 function Load() {
     GetData().then((data) => {
         const hemeSamples = CreateHemeSamplesFromRowData(data); 
@@ -45,6 +47,11 @@ function Load() {
             btnGroupSelHandler(e.currentTarget as HTMLElement, btngroup);
         });
 
+        // add tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new Tooltip(tooltipTriggerEl);
+        })
     });
 }
 
