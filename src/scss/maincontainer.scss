@@ -1,0 +1,77 @@
+#maincontainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    column-gap: 50px;
+    width: 100vw;
+    height: 100vh;
+
+    &.mini {
+        height: 60px;
+        width: fit-content;
+        margin: 0 auto;
+    }
+
+    .main_icon {
+        box-sizing: border-box;
+        width: 80px;
+        height: 50px;
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-size: contain;
+        cursor: pointer;
+        color: #666;
+
+        &:hover {
+            outline: 1px dashed #999;
+            box-shadow: 0px -10px 50px #ffee00;
+            background-color: #fff;
+        }
+
+        &.selected {
+            outline: 2px dashed rgb(0, 84, 112);
+            box-shadow: 0px -10px 50px rgb(0, 84, 112);
+            background-color: #fff;
+        }
+
+        &::after {
+            margin-top: 80%;
+            display: block;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        &#computer-btn {
+            background-image: url('./icons/computer.png');
+
+            &::after {
+                content: 'View files';
+            }
+        }
+
+        &#runbatch-btn {
+            background-image: url('./icons/batch_samples.png');
+
+            &::after {
+                content: 'Run Batch Samples';
+            }
+        }
+
+        &#runmanual-btn {
+            background-image: url('./icons/sm_manual_sample.png');
+
+            &::after {
+                content: 'Run Manual Sample';
+            }
+        }
+
+        &#runqc-btn {
+            background-image: url('./icons/qc_samples.png');
+
+            &::after {
+                content: 'Run QC Samples';
+            }
+        }
+
+    }
+}
