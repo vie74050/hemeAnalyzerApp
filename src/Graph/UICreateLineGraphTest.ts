@@ -1,5 +1,5 @@
 import { LineGraph, IChartData } from './UICreateLineGraph';
-import { $graphscontainer } from '../UI/UIMonitorSetUp';
+import { $graphscontainer } from '../UI/UIMonitor';
 
 function simpletest() {
     var xData = ['Aug-1-2023', 'Aug-13-2023', 'Aug-31-2023'];

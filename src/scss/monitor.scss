@@ -44,6 +44,12 @@
         outline: 1px solid #555;
         box-sizing: border-box;
 
+        .content-page{
+            display: none;
+            &.selected {
+                display: block;
+            }
+        }
         #graphscontainer {
             display: flex;
             flex-direction: column;
@@ -147,7 +153,6 @@
             height: 100%;
 
             >table {
-                display: none;
                 width: 100%;
                 text-align: center;
                 border-collapse: collapse;
