@@ -4,13 +4,16 @@
     display: none;
     box-sizing: border-box;
     position: relative;
-    height: 100vh;
-    max-height: calc(100vh - 140px);
+    height: calc(100vh - 140px);
     overflow: hidden;
     border: 5px solid #333;
     border-radius: 5px;
     background-color: #000;
 
+    &.show{
+        display: flex;
+        flex-direction: column;
+    }
     #top-menu,
     #bot-menu {
         width: 100%;
@@ -35,9 +38,8 @@
 
     #content {
         width: 100%;
-        height: calc(100% - 100px);
-        overflow-y: auto;
-        overflow-x: hidden;
+        height: 100%;
+        overflow: hidden;
         background-color: #eee;
         outline: 1px solid #555;
         box-sizing: border-box;
@@ -49,6 +51,9 @@
             }
         }
         #graphscontainer {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            width: calc(100% + #{$scollbar-width});
             display: flex;
             flex-direction: column;
             background-color: #fff;
@@ -114,7 +119,7 @@
 
                 .dataSummary {
                     height: 100%;
-                    width: 100px;
+                    width: 150px;
                     flex-shrink: 0;
                     flex-grow: 0;
                     z-index: 1;

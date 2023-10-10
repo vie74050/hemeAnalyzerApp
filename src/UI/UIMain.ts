@@ -17,7 +17,7 @@ export function UIMainSetUp(mianID: string, monitorID: string) {
 
     $computerBtn?.addEventListener('click', (e) => {
         $main.classList.add('mini');
-        $monitor.style.display = 'block';
+        $monitor.classList.add('show');
         btnGroupSelHandler(e.currentTarget as HTMLElement, btngroup);
     });
 

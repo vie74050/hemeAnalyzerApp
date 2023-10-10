@@ -47,7 +47,7 @@ class LineGraph {
             this.stat_sdHTML.innerHTML = this.data.sd.toString();
             this.stat_meanHTML.innerHTML = this.data.mean.toString();
             this.stat_cvHTML.innerHTML = this.data.cv.toString();
-            this.stat_curHTML.innerHTML = 'Data';
+            this.stat_curHTML.innerHTML = 'Latest';
             
             // the headingRow graph scrollbar will controll the other graphs  
             const graphElem = this.canvas.parentElement;
@@ -78,30 +78,37 @@ class LineGraph {
         }
 
         $container.appendChild(row);
-
+              
         // create chart
         this.chart = this.CreateLineChart(chartData);
 
         // custom event for chart point click
+        let THIS = this;
         if (chartData.canvasId != 'headingRow') {
-            let THIS = this         
+                    
             this.chart.options.onClick = function (evt, item) {
                 //console.log(evt, item);
                 if (item.length > 0) {
                     const index = item[0].index;
-                
-                    EChartClick.detail.data = { i: index };
+                    const selectedX = THIS.data.xData[index];
+                    EChartClick.detail.data = { i: index, x: selectedX };
                     document.dispatchEvent(EChartClick);
                 }
             }
 
-            // listen to chart-click event and update the current value
+            // listen to chart-click event and update the current y to selected y[i]
             document.addEventListener('chart-click', (e: any) => {
                 let i = e.detail.data.i;
                 let y =  THIS.data.yData[i]
                 let elem = THIS.stat_curHTML;
                 //console.log(i, y, elem);
                 elem.innerHTML = String(Number(y).toFixed(2)).padEnd(3, '0');
+            });
+        } else {
+            document.addEventListener('chart-click', (e: any) => {
+                let x = e.detail.data.x;
+                let elem = THIS.stat_curHTML;
+                elem.innerHTML = x;
             });
         }
 
@@ -260,7 +267,7 @@ class LineGraph {
 
         // determine max canvas size
         const maxPointsPerPg = this._maxPointsPerPg;
-        const pgWidth = canvas.parentElement.clientWidth; console.log(pgWidth);
+        const pgWidth = canvas.parentElement.clientWidth;
         canvas.style.height = '98px';
         canvas.height = 98;
         
