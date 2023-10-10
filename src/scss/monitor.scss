@@ -51,8 +51,7 @@
             }
         }
         #graphscontainer {
-            overflow-y: scroll;
-            overflow-x: hidden;
+
             width: calc(100% + #{$scollbar-width});
             display: flex;
             flex-direction: column;
@@ -153,7 +152,7 @@
         }
 
         .tableFixHead {
-            overflow-y: auto;
+            overflow-y: scroll;
             overflow-x: hidden;
             height: 100%;
 
