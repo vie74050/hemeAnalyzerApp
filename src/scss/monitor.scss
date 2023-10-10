@@ -4,13 +4,11 @@
     display: none;
     box-sizing: border-box;
     position: relative;
-    margin: 1em;
     height: 100vh;
     max-height: calc(100vh - 140px);
     overflow: hidden;
     border: 5px solid #333;
     border-radius: 5px;
-    padding: 5px;
     background-color: #000;
 
     #top-menu,
@@ -56,13 +54,14 @@
             background-color: #fff;
 
             .graphrowheader {
-                width: calc(100% -10px);
+                
                 height: 1em;
                 display: table;
                 background-color: #fff;
                 position: absolute;
+                left: 82px;
+                right: 80px;
                 top: 45px;
-                left: 80px;
                 z-index: 999;
 
                 .graphrowheaderitem {
@@ -138,7 +137,8 @@
             }
             .graphrow.headingRow {
                 position: absolute;
-                width: calc(100% - #{$scollbar-width}*1.5);
+                flex-grow: 0;
+                width: calc(100% - #{$scollbar-width});
                 background-color: #eee;
                 z-index: 10;
             }

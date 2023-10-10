@@ -10,7 +10,10 @@ function simpletest() {
         yData: yData,
         yTitle: 'WBC',
         yMin: 5,
-        yMax: 10
+        yMax: 10,
+        sd: 1.5,
+        mean: 6.5,
+        cv: 0.23
     }
 
     const g1 = new LineGraph(chartData, $graphscontainer);
