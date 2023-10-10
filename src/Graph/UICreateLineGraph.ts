@@ -1,4 +1,5 @@
 import Chart from 'chart.js/auto';
+import { EChartClick } from './EChartEvents';
 
 interface IChartData {
     canvasId: string,
@@ -7,9 +8,9 @@ interface IChartData {
     yMax: number,
     xData: Array<any>,
     yData: Array<number>,
-    sd?: number | string,
-    mean?: number | string,
-    cv?: number | string
+    sd: number | string,
+    mean: number | string,
+    cv: number | string
 }
 
 /**
@@ -71,6 +72,7 @@ class LineGraph {
             this.stat_sdHTML.innerHTML = String(Number(this.data.sd).toFixed(2)).padEnd(3, '0');
             this.stat_meanHTML.innerHTML = String(Number(this.data.mean).toFixed(2)).padEnd(3, '0');
             this.stat_cvHTML.innerHTML = String(Number(this.data.cv).toFixed(2)).padEnd(3, '0');
+            // set current selected value
             this.stat_curHTML.innerHTML = String(Number(this.data.yData[this.data.yData.length - 1])
                                         .toFixed(2)).padEnd(3, '0');
         }
@@ -78,7 +80,31 @@ class LineGraph {
         $container.appendChild(row);
 
         // create chart
-        this.CreateLineChart(chartData);
+        this.chart = this.CreateLineChart(chartData);
+
+        // custom event for chart point click
+        if (chartData.canvasId != 'headingRow') {
+            let THIS = this         
+            this.chart.options.onClick = function (evt, item) {
+                //console.log(evt, item);
+                if (item.length > 0) {
+                    const index = item[0].index;
+                
+                    EChartClick.detail.data = { i: index };
+                    document.dispatchEvent(EChartClick);
+                }
+            }
+
+            // listen to chart-click event and update the current value
+            document.addEventListener('chart-click', (e: any) => {
+                let i = e.detail.data.i;
+                let y =  THIS.data.yData[i]
+                let elem = THIS.stat_curHTML;
+                //console.log(i, y, elem);
+                elem.innerHTML = String(Number(y).toFixed(2)).padEnd(3, '0');
+            });
+        }
+
     }
 
     /** Create HTML elements for .graphrow with the structure
@@ -159,7 +185,7 @@ class LineGraph {
         return yAxis;
     }
 
-    /** Create HTML for table for statistics, with the structure:
+    /** Create HTML table for statistics, with the structure:
      *  <table>
             <tr>
                 <td class="_cur" rowspan="3"></td>
@@ -209,11 +235,7 @@ class LineGraph {
     }
 
     /** Create a line graph with chartjs 
-     * @param canvasId id of the canvas element
-     * @param yMin minimum value of the y-axis  
-     * @param yMax maximum value of the y-axis
-     * @param xData array of x-values
-     * @param yData array of y-values
+     * @param chartData data for the chart
     */
     CreateLineChart(chartData: IChartData): Chart | undefined {
         Chart.defaults.plugins.legend.display = false;
@@ -238,7 +260,7 @@ class LineGraph {
 
         // determine max canvas size
         const maxPointsPerPg = this._maxPointsPerPg;
-        const pgWidth = canvas.parentElement.clientWidth;
+        const pgWidth = canvas.parentElement.clientWidth; console.log(pgWidth);
         canvas.style.height = '98px';
         canvas.height = 98;
         
@@ -328,7 +350,8 @@ class LineGraph {
                     }
                 },
                 interaction: {
-                    mode: 'point'
+                    mode: 'nearest',
+                    intersect: false,
                 },
                 plugins: {
                     tooltip: {
@@ -365,22 +388,6 @@ class LineGraph {
     set maxPointsPerPg(val: number) {
         this._maxPointsPerPg = val;
     }
-    // helper math functions
-    getMean(array: number[]): number {
-        const n = array.length;
-        return array.reduce((a, b) => a + b) / n;
-    }
-    getStandardDeviation(array: number[]): number {
-        const n = array.length;
-        const mean = this.getMean(array);
-        return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-    }
-    getCV(array: number[]): number {
-        const mean = this.getMean(array);
-        const sd = this.getStandardDeviation(array);
-        return sd / mean;
-    }
-
 }
 export { LineGraph, IChartData };
 

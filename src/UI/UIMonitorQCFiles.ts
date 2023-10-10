@@ -1,10 +1,10 @@
 import { LineGraph, IChartData } from "../Graph/UICreateLineGraph";
 import { QCSampleItem } from "../Data/HemeSampleItem";
-import { $graphscontainer } from "./UIMonitorSetUp";
-import { $backBtn } from "./UIMonitorSetUp";
+import { $graphscontainer } from "./UIMonitor";
+import { $backBtn } from "./UIMonitor";
 
 /** Populates table body from data, where Groups="QCSample" = <tr>
- * Expected table for QC Files:
+ * Expected table for QC Files from `monitor.html`:
  * <table>
       <thead>
         <tr>
@@ -88,8 +88,9 @@ export function UICreateQCTable(sampleData: QCSampleItem[], table: HTMLTableElem
 
 }
 
-/** Creates charts from sampleData subgroup `haparameter` */
-export function UILoadQCGraphs(sampleData: QCSampleItem) {
+/** <tr> click handler when item row is clicked:
+ * creates charts from item's sampleData subgroup `haparameter` */
+function UILoadQCGraphs(sampleData: QCSampleItem) {
     // clear graphs container
     $graphscontainer.innerHTML = '';
 

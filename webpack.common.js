@@ -25,7 +25,13 @@ module.exports = {
       {
         test: /\.scss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        exclude: /node_modules/,
       },
+      {
+        test: /\.html$/i,
+        use: ["html-loader"],
+        exclude: /node_modules/,
+      }
     ],
   },
 
