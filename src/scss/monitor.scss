@@ -50,6 +50,7 @@
                 display: block;
             }
         }
+        
         #graphscontainer {
 
             width: calc(100% + #{$scollbar-width});
@@ -183,7 +184,7 @@
                 }
 
                 /* hover row */
-                tbody tr:hover {
+                &.selectable tbody tr:hover {
                     background-color: #fffb00;
                     cursor: pointer;
                 }

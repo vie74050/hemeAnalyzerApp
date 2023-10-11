@@ -1,8 +1,7 @@
 import "../helpers/string-exts";
-import { PASampleItem } from "./HemeSampleItem";
-import { QCSampleItem } from "./HemeSampleItem";
-import { HemeSampleItem } from "./HemeSampleItem";
+import { HemeSampleItem, PASampleItem, QCSampleItem } from "./HemeSampleItem";
 
+/** Groups from sheet data to use as HemeSampleItem type */
 export enum hemeGroups { qc='QCSample' , pa='PASample'};
 
 /** Parse row data to create HemeSamples 
@@ -31,12 +30,14 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
 
             itemInfo['id'] = row.Item.scrub();
             itemInfo['label'] = row.Label.length > 0 ? row.Label : row.Item;
+            
+            let subgroupsArr = [];
 
             // get all items in data where groups = row['Item']
-            const subgroups = data.filter(item => item.Groups === row.Item);
+            const itemsInGroup = data.filter(item => item.Groups === row.Item);
 
             // create itemInfo for each subgroup            
-            for (const subgroupInfoItem of subgroups) {
+            for (const subgroupInfoItem of itemsInGroup) {
                
                 let subgroupInfo: Record<string, string> = Object.keys(subgroupInfoItem)
                     .filter(key => subgroupInfoItem[key] != null && subgroupInfoItem[key] != undefined && subgroupInfoItem[key].length > 0)
@@ -47,15 +48,16 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
 
                 let subgroupitemId = subgroupInfo['item'].scrub();
                 let subgroupRef = subgroupInfo.subgroup.scrub();
-                if (itemInfo[subgroupRef]) {
-                    itemInfo[subgroupRef][subgroupitemId] = subgroupInfo;
+                if (subgroupsArr[subgroupRef]) {
+                    subgroupsArr[subgroupRef][subgroupitemId] = subgroupInfo;
                 }else {
-                    itemInfo[subgroupRef] = {};
-                    itemInfo[subgroupRef][subgroupitemId] = subgroupInfo;
+                    subgroupsArr[subgroupRef] = {};
+                    subgroupsArr[subgroupRef][subgroupitemId] = subgroupInfo;
                 }
                
             }
             
+            itemInfo['subgroups'] = subgroupsArr;
             if (group === hemeGroups.qc) {
                 hemeSamples.push(new QCSampleItem(itemInfo));
             }
