@@ -189,6 +189,15 @@
                     cursor: pointer;
                 }
 
+                &.scrolw{
+                    overflow-x: auto;
+                    white-space: nowrap;
+
+                    th {
+                        max-width: max-content;
+                    }
+                }
+
             }
         }
     }

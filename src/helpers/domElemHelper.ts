@@ -9,3 +9,14 @@ export function selectElemFromGroup($elem: HTMLElement, elemgroup: HTMLElement[]
     });
     $elem.classList.add('selected');
 }
+
+/** Creates a DOM element from a string
+ * @param htmlstring - html string
+ * @param tag - tag of element to return
+ */
+export function UICreateElemFromString(htmlstring:string, tag: string) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlstring, 'text/html');
+
+    return doc.body.getElementsByTagName(tag)[0] ;
+}

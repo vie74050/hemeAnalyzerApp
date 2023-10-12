@@ -26,6 +26,9 @@ class HemeSampleItem {
     public get subgroups(): Record<string, string | object> {
         return this._rawData['subgroups'] as Record<string, string | object>;
     }
+    /** Returns all the items for the subgroup
+     * @param sgid 
+     */
     public GetSubgroup(sgid: QCsubgroups | PAsubgroups): { [key: string]: Record<string, string>; } {
 
         return this._rawData['subgroups'][sgid] as { [key: string]: Record<string, string>; };

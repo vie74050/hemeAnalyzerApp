@@ -1,9 +1,13 @@
 import { LineGraph, IChartData } from "../Graph/UICreateLineGraph";
 import { QCSampleItem } from "../Data/HemeSampleItem";
-import { $graphscontainer } from "./UIMonitor";
 import { $backBtn } from "./UIMonitor";
 
-/** Populates table body from data, where Groups="QCSample" = <tr>
+const qcfilespagehtml = require('./UIMonitorQCFiles.html').default;
+
+let $graphscontainer: HTMLElement = null;
+let $table: HTMLTableElement = null;
+
+/** Creates table body from data, where Groups="QCSample" = <tr>
  * Expected table for QC Files from `monitor.html`:
  * <table>
       <thead>
@@ -18,10 +22,15 @@ import { $backBtn } from "./UIMonitor";
       </thead>
     </table>
 */
-export function UICreateQCTable(sampleData: QCSampleItem[], table: HTMLTableElement) {
+function UICreateQCTable(sampleData: QCSampleItem[], $qcfilesPage: HTMLDivElement) {
     const maxRows = 1000;
     const $tbody = document.createElement('tbody');
-    table.appendChild($tbody);
+ 
+    // subpage elements for qcfiles page
+    $qcfilesPage.innerHTML = qcfilespagehtml;
+    $graphscontainer = $qcfilesPage.querySelector('#graphscontainer') as HTMLElement;
+    $table = $qcfilesPage.querySelector('#qcfiletable') as HTMLTableElement;
+    $table.appendChild($tbody);
 
     sampleData.forEach((item, i) => {
         let tr = document.createElement('tr');
@@ -56,7 +65,7 @@ export function UICreateQCTable(sampleData: QCSampleItem[], table: HTMLTableElem
         // add click event to each row
         tr.addEventListener('click', function () {
 
-            table.style.display = 'none'; // hide table
+            $table.style.display = 'none'; // hide table
             $backBtn.style.display = 'inline-block'; // show back            
             UILoadQCGraphs(item); // create graphs container
 
@@ -166,3 +175,4 @@ function UILoadQCGraphs(sampleData: QCSampleItem) {
 
 }
 
+export { UICreateQCTable }

@@ -1,4 +1,4 @@
-import { selectElemFromGroup } from '../helpers/selectElemHelper';
+import { selectElemFromGroup } from '../helpers/domElemHelper';
 
 const mainhtml = require('./UIMain.html').default;
 
