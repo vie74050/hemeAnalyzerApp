@@ -1,5 +1,5 @@
 import { HemeSampleItem } from "../Data/HemeSampleItem";
-import { UICreateElemFromString } from "../helpers/domElemHelper";
+import { selectElemFromGroup, UICreateElemFromString } from "../helpers/domElemHelper";
 
 interface RunData {
     id: string | number,
@@ -15,23 +15,47 @@ enum explorerNav {
     reagentinfo = 'reagentinfo'
 }
 
-function UICreateExplorerTables(
+function UICreateExplorerPage(
     data: Record<string, string>[], 
     hemeSamples: HemeSampleItem[], 
     $explorerpage: HTMLDivElement
 ){
     // get run data    
     const rundata = getRunData(hemeSamples); console.log(rundata);
+    const $subnavdiv = document.createElement('div');
+    $subnavdiv.classList.add('subnav');
+    $explorerpage.appendChild($subnavdiv);
+
+    let btngroup = [], tablegrp = [];
     
     // for each explorerNav, create table from explorerhtml as template
     for (const key in explorerNav) {
         const nav = explorerNav[key];
+
+        // create a button for each nav
+        const $btn = document.createElement('button');
+        $btn.id = nav;
+        $btn.classList.add('btn', 'btn-sm');
+
+        $btn.innerText = nav; 
+        btngroup.push($btn);
+        $subnavdiv.appendChild($btn);
+        $btn.addEventListener('click', () => {
+            selectElemFromGroup($btn, btngroup);
+            selectElemFromGroup($table, tablegrp);
+        });
+        
         const $table = UICreateElemFromString(explorerhtml, 'table') as HTMLTableElement;
         $table.id = nav;
+
+        tablegrp.push($table);
         $explorerpage.appendChild($table);
-        
         createTableContent(rundata, $table);
     }    
+
+    // set default selected button
+    selectElemFromGroup(btngroup[0], btngroup);
+    selectElemFromGroup(tablegrp[0], tablegrp);
 
 }
 
@@ -140,4 +164,4 @@ function createTableContent(runData : RunData[], $table: HTMLTableElement) {
     
 }
 
-export { UICreateExplorerTables as UICreateExplorerTable };
+export { UICreateExplorerPage as UICreateExplorerTable };
