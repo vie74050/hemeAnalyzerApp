@@ -1,7 +1,64 @@
-#explorer-page {
-    table {
-        th:nth-child(1) {
-            width: 80px;
+#monitor #content #explorer-page {
+    $btn-color-hover: #f4ffc2;
+    $btn-color-selected: rgb(180, 225, 255);
+    height: calc(100% - 35px);
+    
+    #explorermenu {
+        position: absolute;
+        width: 100%;
+        top: 0px;
+        z-index: 10;
+
+        ul.tab-container {
+            
+            li.tab {
+                border: 1px solid #555;
+                border-bottom: none;
+                border-radius: 5px 5px 0 0;
+                cursor: pointer;
+                text-transform: capitalize;
+                padding: 0.25em 1em;
+                background-color: #f1f1f1;
+
+                &:hover {
+                    background-color: $btn-color-hover;
+                }
+                &.selected {
+                    background-color: $btn-color-selected;
+                }
+            }
+        }
+
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            button {
+                outline: 0;
+                padding-bottom: 0;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }   
+        }
+        
+    }
+
+    #tablecontainer {
+        margin-top: 33px;
+        z-index: 9;
+        overflow-x: auto;
+
+        table {
+            
+            th {
+                background-color: $btn-color-selected;
+                white-space: nowrap;
+            }
+
+            th:nth-child(1) {
+                width: 100px;
+
+            }
         }
     }
 }

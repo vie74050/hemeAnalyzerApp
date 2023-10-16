@@ -13,10 +13,11 @@ export function selectElemFromGroup($elem: HTMLElement, elemgroup: HTMLElement[]
 /** Creates a DOM element from a string
  * @param htmlstring - html string
  * @param tag - tag of element to return
+ * @param i - index of element to return
  */
-export function UICreateElemFromString(htmlstring:string, tag: string) {
+export function UICreateElemFromString(htmlstring:string, tag: string, i=0) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlstring, 'text/html');
 
-    return doc.body.getElementsByTagName(tag)[0] ;
+    return doc.body.getElementsByTagName(tag)[i] ;
 }

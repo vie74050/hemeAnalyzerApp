@@ -3,6 +3,11 @@
 @import "./monitor-explorer.scss";
 
 #monitor {
+    $background-color: #999;
+    $btn-color: #eee;
+    $btn-color-hover: #f4ffc2;
+    $btn-color-selected: rgb(112, 198, 255);
+    
     display: none;
     box-sizing: border-box;
     position: relative;
@@ -10,8 +15,8 @@
     overflow: hidden;
     border: 1px solid #333;
     border-radius: 5px;
-    background-color: #000;
-
+    background-color: $background-color;
+    
     &.show{
         display: flex;
         flex-direction: column;
@@ -20,32 +25,31 @@
     #bot-menu {
         width: 100%;
         height: 50px;
-        background-color: #eee;
-
+      
         #back-btn {
             display: none;
             float: right;
         }
     }
-    button {
-        
+    button.btn {
+        background-color: $btn-color;
         outline: 1px solid #555;
+        
+        &:hover {
+            background-color: $btn-color-hover;
+        }
         &.selected {
-
+            background-color: $btn-color-selected;
+            font-weight: 600;
         }
     }
 
-    button.selected {
-        background-color: rgb(112, 198, 255);
-        font-weight: 600;
-    }
     #content {
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background-color: #eee;
-        outline: 1px solid #eee;
         box-sizing: border-box;
+        position: relative;
 
         .content-page{
             display: none;
@@ -164,20 +168,23 @@
                 width: 100%;
                 text-align: center;
                 border-collapse: collapse;
+                background-color: #fff;
+                font-size: 0.9em;
                 display: none;
                 &.selected {
                     display: table;
                 }
                 th {
                     position: sticky;
+                    font-weight: 500;
                     top: 0px;
-                    background: #eee;
+                    background-color: rgb(180, 225, 255);
                 }
 
                 th:first-child,
                 td:first-child {
-                    border-right: 1px solid #555;
-                    font-size: 18px;
+                    border-right: 1px solid #aaa;
+                    
                 }
 
                 tr {
@@ -186,7 +193,7 @@
 
                 /* striped rows */
                 tbody tr:nth-of-type(odd) {
-                    background-color: #ccc;
+                    background-color: #f1f1f1;
                 }
 
                 /* hover row */
@@ -194,16 +201,6 @@
                     background-color: #fffb00;
                     cursor: pointer;
                 }
-
-                &.scrolw{
-                    overflow-x: auto;
-                    white-space: nowrap;
-
-                    th {
-                        max-width: max-content;
-                    }
-                }
-
             }
             
         }

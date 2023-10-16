@@ -1,6 +1,31 @@
-<table id="{id}" class="selectable explorer-table scrolw">
-    <thead><tr></tr>
+<div id="explorermenu">
+  <ul id="exploerer-nav" class="tab-container nav nav-tabs" role="tablist">
+    <li id="{{id}}-tab" class="tab"></li>
+  </ul>
+  <span id="explorer-btns" class="top-right">
+    <!-- add search button -->
+    <button id="search-btn" class="btn" type="button" data-bs-toggle="tooltip"
+    title="search patients">
+      &#128269;  
+    </button>  
+    <!-- add checkmark button -->
+    <button id="checkmark-btn" class="btn" type="button" data-bs-toggle="tooltip"
+    title="validate">
+      &#10003;
+    </button>
+    <!-- add an notes button -->
+    <button id="edit-btn" class="btn" type="button" data-bs-toggle="tooltip"
+    title="comments/notes">
+      &#9998;
+    </button>
+  </span>
+</div>
+
+<div id="tablecontainer" class="tableFixHead">
+  <table id="{{id}}" class="selectable explorer-table">
+    <thead>
+      <tr></tr>
     </thead>
-    <tbody>
-    </tbody>
-</table>
+    <tbody></tbody>
+  </table>
+</div>

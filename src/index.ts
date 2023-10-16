@@ -11,16 +11,16 @@ function Load() {
 
     // wait for data, then populate UT content from data
     GetData().then((data) => {
-        UIQCTableSetUp(data);   
+        UIQCTableSetUp(data);
         UIExplorerSetUp(data);
-    });
 
-    // add tooltip
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new Tooltip(tooltipTriggerEl);
-    })
-  
+
+        // add tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new Tooltip(tooltipTriggerEl);
+        });
+    });
 }
 
 Load();

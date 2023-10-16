@@ -2,7 +2,7 @@ import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { hemeGroups, CreateHemeSamplesFromRowData } from "../Data/ParseRowsToHemeSample";
 import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
-import { UICreateExplorerTable } from "./UIMonitorExplorer";
+import { UICreateExplorerPage } from "./UIMonitorExplorer";
 
 enum monitorNav {
     home = 'home',
@@ -140,7 +140,7 @@ function UIExplorerSetUp(data: Record<string, string>[]) {
     let $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
     
     if ($explorerpage) {
-        UICreateExplorerTable(data, hemeSamples, $explorerpage);
+        UICreateExplorerPage(hemeSamples, $explorerpage);
     }
 }
 
