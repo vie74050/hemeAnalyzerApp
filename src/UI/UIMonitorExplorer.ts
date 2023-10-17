@@ -1,25 +1,33 @@
 import { HemeSampleItem } from "../Data/HemeSampleItem";
 import { selectElemFromGroup, UICreateElemFromString } from "../helpers/domElemHelper";
-
-interface RunData {
-    id: string | number,
-    label: string,
-    date: Date,
-    subgroups: Record<string, string | object>
-}
+import { RunData, GetRunData } from "../Data/GetRunData";
+import { UICreateSearchModalElem } from "./modals/UISearch";
 
 enum explorerNav {
     runinfo = 'runinfo',
     patientinfo = 'patientinfo',
     reagentinfo = 'reagentinfo'
 }
+enum rowDataAttributes {
+    id = 'id',
+    label = 'label',
+    patientid = 'Patient id',
+    patientname = 'name'
+}
 
+/** Gets the html template and creates the elements for Exploerer page:
+ * - creates a `<ul><li>` for each nav button as tabs
+ * - creates a `<table>` for each nav button as content target
+ * 
+ * @param hemeSamples: HemeSampleItem[], the parsed from sheet
+ * @param $explorerpage: HTMLDivElement, target container for explorer page
+ */
 function UICreateExplorerPage(
     hemeSamples: HemeSampleItem[], 
     $explorerpage: HTMLDivElement
 ){
     // get run data    
-    const rundata = getRunData(hemeSamples); //console.log(rundata);
+    const rundata = GetRunData(hemeSamples); //console.log(rundata);
     let btngroup = [], tablegrp = [];
 
     // create explorer page
@@ -34,14 +42,12 @@ function UICreateExplorerPage(
     $ul.innerHTML = '';   
     $explorermenudiv.appendChild($ul);
 
-    const $btns = UICreateElemFromString(explorerhtml, 'span') as HTMLLIElement;
-    $explorermenudiv.appendChild($btns);
-
     // for each explorerNav, create table from explorerhtml as template
     const $tablecontainerdiv = UICreateElemFromString(explorerhtml, 'div',1) as HTMLLIElement;
     $tablecontainerdiv.innerHTML = '';
     $explorerpage.appendChild($tablecontainerdiv);
 
+    // create a table for each nav
     for (const key in explorerNav) {
         const nav = explorerNav[key];
 
@@ -53,7 +59,7 @@ function UICreateExplorerPage(
         $ul.appendChild($btn_li);
 
         $tablecontainerdiv.appendChild($table);
-        createTableContent(rundata, $table);
+        UIcreateTableContent(rundata, $table);
 
         tablegrp.push($table);
         btngroup.push($btn_li);
@@ -68,78 +74,27 @@ function UICreateExplorerPage(
     // set default selected button
     selectElemFromGroup(btngroup[0], btngroup);
     selectElemFromGroup(tablegrp[0], tablegrp);
+
+    // menu buttons
+    const $btns = UICreateElemFromString(explorerhtml, 'span') as HTMLLIElement;
+    $explorermenudiv.appendChild($btns);   
+    const $searchEl = UICreateSearchModalElem($tablecontainerdiv, rowDataAttributes);
+    $explorerpage.appendChild($searchEl);
+
 }
 
-/** Extracts run data from each samples and sorts by reverse date */
-function getRunData(hemeSamples: HemeSampleItem[]): RunData[] {
-    let runData = [];
-    let i = 0;
-    // for each sample, get the run data
-    hemeSamples.forEach((sample) => {
-        const runDates = sample.analysisDates;
-        const subgroupsItems = sample.subgroups;
-
-        runDates.forEach((datestring, dateCol_index) => {
-            const date = new Date(datestring);
-            const dateref = 'date' + (dateCol_index + 1);
-            const runinfo = {  
-                'Day': date.toLocaleDateString("en-US"),
-                'Time': date.toLocaleTimeString(),
-            }
-            
-            let data: RunData = {
-                id: sample.id,
-                label: sample.label,
-                date: date,
-                //dateref: dateref,
-                //sample: sample,
-                subgroups: { runinfo: runinfo }
-            };
-            
-
-            for (const key in subgroupsItems) {
-                const items = subgroupsItems[key] as object;
-                const obj = data.subgroups[key] as object || {};
-
-                let parseditems = {};
-                for (const itemkey in items) {
-                    const item = items[itemkey];
-                    const key = item['item'];
-                    if (item['description']) parseditems[key] = item['description']
-                    else if (item[dateref]) parseditems[key] = item[dateref]
-                    else parseditems[key] = '';
-                }
-                data.subgroups[key] = {...obj, ...parseditems};
-
-            }
-
-            runData.push(data);
-            i++;
-        });
-    });
-
-    // sort runData by reversed date (recent on top)
-    runData = runData.sort((a, b) => {
-        return b.date.getTime() - a.date.getTime();
-    });
-    // add seq to sorted runData runinfo
-    runData.forEach((run, index) => {
-        run.subgroups['runinfo']['Seq'] = runData.length - index;
-    });
-
-    return runData;
-}
-
-/** Fill specified table with data, based on tableid
+/** Fill specified table with data, based on tableid:
+ * - creates a `<tr>` for each runData
+ * - creates `<td>` for each value in runData.subgroups[tableid]
  * @param runData: RunData[]
  * @param $table: HTMLTableElement
  * Require tableid to be the key specified in runData.subgroups
  */
-function createTableContent(runData : RunData[], $table: HTMLTableElement) {
+function UIcreateTableContent(runData : RunData[], $table: HTMLTableElement) {
     const tableid = $table.id;
     const tablehead = $table.querySelector('thead') as HTMLTableSectionElement;
     const tablebody = $table.querySelector('tbody') as HTMLTableSectionElement;
-    
+        
     // get table header row
     let tableheadrow = tablehead.querySelector('tr') as HTMLTableRowElement;
     // if tableheadrow is null create tableheadrow
@@ -156,27 +111,37 @@ function createTableContent(runData : RunData[], $table: HTMLTableElement) {
     
     // create table header html from subgroupHeaders
     let thhtml = '<th>Sample No.</th>';
-    
-
     subgroupHeaders.forEach((key) => {
         thhtml += `<th>${key}</th>`;
     });
     tableheadrow.innerHTML = thhtml;    
-    
-    
-    // create row for each runData
+        
+    // create tr for each runData
     runData.forEach((run, index) => {      
         const subgroupItems = run.subgroups[tableid] as object;
         const tr = document.createElement('tr');
         let trhtml = '';
+
+        let patientinfo = {id: run.id, label: run.label};
+        if (run.subgroups['patientinfo']) {
+            patientinfo = {...patientinfo, ...run.subgroups['patientinfo'] as object};
+        }
+        // tag rows with searchable attributes
+        for (const key in rowDataAttributes) {
+            const attr = rowDataAttributes[key];
+            let value = patientinfo[attr];
+            if (value) {
+                tr.setAttribute(`data-${key}`, value.scrub());
+            }
         
-        tr.id=run.id.toString();
+        }      
+
         trhtml += `<td>${run.label}</td>`;       
 
         subgroupHeaders.forEach((key) => {
             let text = '';
             if (subgroupItems) {
-                text = subgroupItems[key] || '';
+                text = subgroupItems[key] || ''; 
             }
     
             trhtml += `<td>${text}</td>`;
@@ -184,12 +149,18 @@ function createTableContent(runData : RunData[], $table: HTMLTableElement) {
         tr.innerHTML = trhtml;
         
         tr.addEventListener('click', (e) => {
-            console.log('clicked', run);
+            loadItemDetails(run);
         });
         
         tablebody.appendChild(tr);   
     });
         
+}
+
+// EVENT HANDLERS
+
+function  loadItemDetails(run: RunData) {
+    console.log(run);
 }
 
 export { UICreateExplorerPage };

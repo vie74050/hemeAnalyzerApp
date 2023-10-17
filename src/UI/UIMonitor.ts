@@ -96,7 +96,9 @@ function ShowQCFilesTable() {
 }
 
 function ShowFileExplorer() {
-
+    // get elems with class `hilight` and remove the class
+    const hilights = document.getElementsByClassName('hilight');
+    Array.from(hilights).forEach((elem) => elem.classList.remove('hilight'));
 }
 
 function BackBtnHandler() {

@@ -179,12 +179,12 @@
                     font-weight: 500;
                     top: 0px;
                     background-color: rgb(180, 225, 255);
+                    text-transform: capitalize;
                 }
 
                 th:first-child,
                 td:first-child {
-                    border-right: 1px solid #aaa;
-                    
+                    border-right: 1px solid #aaa;   
                 }
 
                 tr {
@@ -197,9 +197,16 @@
                 }
 
                 /* hover row */
-                &.selectable tbody tr:hover {
-                    background-color: #fffb00;
-                    cursor: pointer;
+                &.selectable tbody tr
+                {
+                    &:hover {
+                        background-color: #ffffe8;
+                        cursor: pointer;
+                    }
+                    &.hilight {
+                        background-color: #fffb00;
+                    }
+
                 }
             }
             
