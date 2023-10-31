@@ -1,6 +1,6 @@
 import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { hemeGroups, CreateHemeSamplesFromRowData } from "../Data/ParseRowsToHemeSample";
-import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
+import { QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
 import { UICreateExplorerPage } from "./UIMonitorExplorer";
 
@@ -78,27 +78,20 @@ function UIMonitorSetUp(monitorId: string) {
     return { $backBtn };
 }
 
-// button event handlers
+// EVENT HANDLERS
+
 function ShowHomePage() {
     
 }
 
 function ShowQCFilesTable() {
     const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
-    const $qctable = $qccontentpage.querySelector('#qcfiletable') as HTMLDivElement;
-    const $graphscontainer = $qccontentpage.querySelector('#graphscontainer') as HTMLDivElement;
-
-    // show $qctable
-    $qctable.style.display = 'table';
-    // clear graphs container
-    $graphscontainer.innerHTML = '';
-
+    $qccontentpage.dispatchEvent(new Event('reset'));
 }
 
 function ShowFileExplorer() {
-    // get elems with class `hilight` and remove the class
-    const hilights = document.getElementsByClassName('hilight');
-    Array.from(hilights).forEach((elem) => elem.classList.remove('hilight'));
+    const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
+    $explorerpage.dispatchEvent(new Event('reset'));    
 }
 
 function BackBtnHandler() {
@@ -120,8 +113,9 @@ function BackBtnHandler() {
 
 }
 
+// EXPORTED FUNTIONS FOR SETUP
 
-/** Method for setting up QC Tables, called when sheetdata loaded */
+/** For setting up QC Tables, called when sheetdata loaded */
 function UIQCTableSetUp(data: Record<string, string>[]) {
     const hemeSamples = CreateHemeSamplesFromRowData(data);
     const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
@@ -137,9 +131,10 @@ function UIQCTableSetUp(data: Record<string, string>[]) {
     }   
 }
 
+/** For setting up Explorer page, called when sheetdata loaded */
 function UIExplorerSetUp(data: Record<string, string>[]) {
     const hemeSamples = CreateHemeSamplesFromRowData(data);
-    let $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
+    const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
     
     if ($explorerpage) {
         UICreateExplorerPage(hemeSamples, $explorerpage);

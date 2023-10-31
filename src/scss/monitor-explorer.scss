@@ -4,10 +4,12 @@
     $btn-color-selected: rgb(180, 225, 255);
     height: calc(100% - 35px);
     
-    #explorermenu {
-        position: absolute;
+    >div{
+        height: 100%;
+    }
+
+    .explorertabmenu {
         width: 100%;
-        top: 0px;
         z-index: 10;
 
         ul.tab-container {
@@ -44,8 +46,51 @@
         
     }
 
+    .rowheader {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        min-height: 50px;
+        height: fit-content;
+        background-color: #fff;
+        font-size: small;
+                
+        .col-group{
+            display: flex;
+            flex-grow: 1;
+            gap: 1px;
+            flex-direction: column;
+            border: 1px solid #555;
+            border-radius: 0.3em;
+            
+            .rowheaderitem{
+                display: flex;
+                flex-grow: 1;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                
+                &._pn {
+                    @extend .text-bg-success;
+                }
+                
+                &._validated.selected {
+                    @extend .text-bg-info;
+                }
+                &._pn.selected, 
+                &._action.selected, 
+                &._error.selected {
+                    @extend .text-bg-danger;
+                }
+                &._none.selected {
+                    @extend .text-bg-dark;
+                }
+            }
+
+        }
+    }
+
     #tablecontainer {
-        margin-top: 33px;
         z-index: 9;
         overflow-x: auto;
         background-color: $table-bg-color;
