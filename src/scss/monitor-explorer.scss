@@ -9,6 +9,7 @@
     }
 
     .explorertabmenu {
+        position: relative;
         width: 100%;
         z-index: 10;
 
@@ -72,8 +73,12 @@
                 
                 &._pn {
                     @extend .text-bg-success;
+                    line-height: 2;
+                    font-size: large;
                 }
-                
+                &._action, &._error, &._none {
+                    height: 33%;
+                }
                 &._validated.selected {
                     @extend .text-bg-info;
                 }
@@ -84,6 +89,32 @@
                 }
                 &._none.selected {
                     @extend .text-bg-dark;
+                }
+
+                &.left-icon {
+                    justify-items: left;
+                    justify-content: start;
+                    padding-left: 1em;
+
+                    &::before {
+                        display: block;
+                        width: 40px;
+                        float: left;
+                        font-size: 2em;
+                    }
+
+                    &._id::before {
+                        content: "\1F194";
+                    } 
+                    &._altid::before {
+                        content: "\1F4C7";
+                    }
+                    &._datetime::before {
+                        content: "\1F4C5";
+                    }
+                    &._name::before {
+                        content: "\1F464";
+                    }
                 }
             }
 
@@ -105,6 +136,38 @@
             th:nth-child(1) {
                 width: 100px;
 
+            }
+        }
+    }
+
+    #subpagecontainer table{
+        font-size: small;
+        th{
+            font-weight: bold;
+            width: calc(100% / 10);
+            min-width: 3em;
+        }
+        th:nth-child(1),
+        td:nth-child(1) {
+            text-align: left;
+            padding-left: 0.5em;
+        }
+
+        td._flags{
+            text-align: left;
+            vertical-align: top;
+            padding: 1em;
+            background-color: #fff;
+        }
+
+        td.img-holder {
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.5em;
+        
+            img {
+                max-width: calc(100vh - 200px);
+                max-height: 100%;
             }
         }
     }

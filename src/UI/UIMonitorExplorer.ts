@@ -199,4 +199,4 @@ function resetPage() {
     Array.from(hilights).forEach((elem) => elem.classList.remove('hilight'));
 }
 
-export { UICreateExplorerPage };
+export { UICreateExplorerPage};

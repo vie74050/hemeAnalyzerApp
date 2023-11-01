@@ -1,5 +1,5 @@
-type QCsubgroups = 'sampleinfo' | 'reagentinfo' | 'runinfo' | 'haparameter';
-type PAsubgroups = 'patientinfo' | 'reagentinfo' | 'runinfo' | 'haparameter';
+type QCsubgroups = 'sampleinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
+type PAsubgroups = 'patientinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
 
 /* Class that accepts a Record<string, string> and returns a HemeSample object.
  The parent class for QC and PA samples.

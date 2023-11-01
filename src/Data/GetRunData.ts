@@ -4,6 +4,7 @@ export interface RunData {
     id: string | number,
     label: string,
     date: Date,
+    dateref: string,
     subgroups: Record<string, string | object>
 }
 
@@ -28,15 +29,15 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
                 id: sample.id,
                 label: sample.label,
                 date: date,
-                //dateref: dateref,
+                dateref: dateref,
                 //sample: sample,
                 subgroups: { runinfo: runinfo }
             };
 
 
-            for (const key in subgroupsItems) {
-                const items = subgroupsItems[key] as object;
-                const obj = data.subgroups[key] as object || {};
+            for (const key_subgroupid in subgroupsItems) {
+                const items = subgroupsItems[key_subgroupid] as object;
+                const obj = data.subgroups[key_subgroupid] as object || {};
 
                 let parseditems = {};
                 for (const itemkey in items) {
@@ -46,7 +47,7 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
                     else if (item[dateref]) parseditems[key] = item[dateref];
                     else parseditems[key] = '';
                 }
-                data.subgroups[key] = { ...obj, ...parseditems };
+                data.subgroups[key_subgroupid] = { ...obj, ...parseditems };
 
             }
 

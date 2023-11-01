@@ -1,6 +1,6 @@
 import { selectElemFromGroup } from "../helpers/domElemHelper";
-import { hemeGroups, CreateHemeSamplesFromRowData } from "../Data/ParseRowsToHemeSample";
-import { QCSampleItem } from "../Data/HemeSampleItem";
+import { hemeGroups } from "../Data/ParseRowsToHemeSample";
+import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
 import { UICreateExplorerPage } from "./UIMonitorExplorer";
 
@@ -116,8 +116,8 @@ function BackBtnHandler() {
 // EXPORTED FUNTIONS FOR SETUP
 
 /** For setting up QC Tables, called when sheetdata loaded */
-function UIQCTableSetUp(data: Record<string, string>[]) {
-    const hemeSamples = CreateHemeSamplesFromRowData(data);
+function UIQCTableSetUp(hemeSamples: HemeSampleItem[]) {
+    
     const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
     // create QC table
     if ($qccontentpage) {
@@ -132,8 +132,7 @@ function UIQCTableSetUp(data: Record<string, string>[]) {
 }
 
 /** For setting up Explorer page, called when sheetdata loaded */
-function UIExplorerSetUp(data: Record<string, string>[]) {
-    const hemeSamples = CreateHemeSamplesFromRowData(data);
+function UIExplorerSetUp(hemeSamples: HemeSampleItem[]) {
     const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
     
     if ($explorerpage) {
