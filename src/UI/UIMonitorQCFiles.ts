@@ -1,10 +1,14 @@
 import { LineGraph, IChartData } from "../Graph/UICreateLineGraph";
 import { QCSampleItem } from "../Data/HemeSampleItem";
-import { $graphscontainer } from "./UIMonitor";
 import { $backBtn } from "./UIMonitor";
 
-/** Populates table body from data, where Groups="QCSample" = <tr>
- * Expected table for QC Files from `monitor.html`:
+const qcfilespagehtml = require('./UIMonitorQCFiles.html').default;
+
+let $graphscontainer: HTMLElement = null;
+let $table: HTMLTableElement = null;
+
+/** Creates table body from data, where Groups="QCSample" = <tr>
+ * Expected table for QC Files from `UIMonitorQCFiles.html`:
  * <table>
       <thead>
         <tr>
@@ -18,10 +22,15 @@ import { $backBtn } from "./UIMonitor";
       </thead>
     </table>
 */
-export function UICreateQCTable(sampleData: QCSampleItem[], table: HTMLTableElement) {
+function UICreateQCTable(sampleData: QCSampleItem[], $qcfilesPage: HTMLDivElement) {
     const maxRows = 1000;
     const $tbody = document.createElement('tbody');
-    table.appendChild($tbody);
+ 
+    // subpage elements for qcfiles page
+    $qcfilesPage.innerHTML = qcfilespagehtml;
+    $graphscontainer = $qcfilesPage.querySelector('#graphscontainer') as HTMLElement;
+    $table = $qcfilesPage.querySelector('#qcfiletable') as HTMLTableElement;
+    $table.appendChild($tbody);
 
     sampleData.forEach((item, i) => {
         let tr = document.createElement('tr');
@@ -55,11 +64,7 @@ export function UICreateQCTable(sampleData: QCSampleItem[], table: HTMLTableElem
 
         // add click event to each row
         tr.addEventListener('click', function () {
-
-            table.style.display = 'none'; // hide table
-            $backBtn.style.display = 'inline-block'; // show back            
-            UILoadQCGraphs(item); // create graphs container
-
+            trClickHandler(item);
         });
     });
     // create remaining empty rows
@@ -86,15 +91,19 @@ export function UICreateQCTable(sampleData: QCSampleItem[], table: HTMLTableElem
         tr.appendChild(td5);
     }
 
+    // custom event to listen for $qcfilespage reset
+    $qcfilesPage.addEventListener('reset', () => {
+        resetPage();
+    });
+
 }
 
-/** <tr> click handler when item row is clicked:
- * creates charts from item's sampleData subgroup `haparameter` */
+/** creates charts from item's sampleData subgroup `haparameter` */
 function UILoadQCGraphs(sampleData: QCSampleItem) {
     // clear graphs container
     $graphscontainer.innerHTML = '';
 
-    // create header row container div class graphrowheader for fileInfo
+    // create header row container div class rowheader for fileInfo
     const fileInfo = {
         'File No.': sampleData.id,
         'Lot No.': sampleData.lotNo,
@@ -102,11 +111,11 @@ function UILoadQCGraphs(sampleData: QCSampleItem) {
         'Expiry Date': sampleData.expiry
     };
     const $fileInfoContainer = document.createElement('div');
-    $fileInfoContainer.setAttribute('class', 'graphrowheader');
+    $fileInfoContainer.setAttribute('class', 'rowheader');
     $graphscontainer?.appendChild($fileInfoContainer);
     for (const key in fileInfo) {
         const $div = document.createElement('div');
-        $div.setAttribute('class', 'graphrowheaderitem');
+        $div.setAttribute('class', 'rowheaderitem');
         $div.innerText = `${key}: ${fileInfo[key as keyof typeof fileInfo]}`;
         $fileInfoContainer.appendChild($div);
     }
@@ -166,3 +175,20 @@ function UILoadQCGraphs(sampleData: QCSampleItem) {
 
 }
 
+// EVENT HANDLERS
+
+/** <tr> click handler when item row is clicked*/
+function trClickHandler(item: QCSampleItem) {
+    $table.style.display = 'none'; // hide table
+    $backBtn.style.display = 'inline-block'; // show back            
+    UILoadQCGraphs(item); // create graphs container
+}
+
+/** handle qcpage reset */
+function resetPage() {
+    $table.style.display = 'table'; // show table
+    $graphscontainer.innerHTML = ''; // clear graphs container
+    $backBtn.style.display = 'none'; // hide back
+}
+
+export { UICreateQCTable }

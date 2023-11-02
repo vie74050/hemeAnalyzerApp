@@ -1,7 +1,8 @@
 import { LineGraph, IChartData } from './UICreateLineGraph';
-import { $graphscontainer } from '../UI/UIMonitor';
+
 
 function simpletest() {
+    const $graphscontainer = document.createElement('div');
     var xData = ['Aug-1-2023', 'Aug-13-2023', 'Aug-31-2023'];
     var yData = [6, 7, 4];
     var chartData: IChartData = {

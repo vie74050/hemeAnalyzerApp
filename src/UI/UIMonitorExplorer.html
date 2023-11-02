@@ -1,0 +1,29 @@
+<div class="explorertabmenu">
+  <ul id="explorer-nav" class="tab-container nav nav-tabs" role="tablist">
+    <li id="{{id}}-tab" class="tab"></li>
+  </ul>
+  <span id="explorer-btns" class="top-right">
+    <!-- add search button -->
+    <button
+      id="search-btn"
+      class="btn"
+      type="button"
+      data-bs-toggle="modal"
+      title="search patients"
+      data-bs-target="#search-modal"
+    >
+      &#128269;
+    </button>
+  </span>
+</div>
+
+<div id="tablecontainer" class="tableFixHead">
+  <table id="{{id}}" class="selectable explorer-table">
+    <thead>
+      <tr><!-- th subgroupHeaders for each subgroup key --></tr>
+    </thead>
+    <tbody><!-- tr for each runData --></tbody>
+  </table>
+</div>
+
+<div id="subpagecontainer"><!-- sample page --></div>

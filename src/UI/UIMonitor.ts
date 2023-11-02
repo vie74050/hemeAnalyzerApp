@@ -1,7 +1,8 @@
+import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { hemeGroups } from "../Data/ParseRowsToHemeSample";
 import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
-import { btnGroupSelHandler } from "../helpers/btnGroupSelHandler";
+import { UICreateExplorerPage } from "./UIMonitorExplorer";
 
 enum monitorNav {
     home = 'home',
@@ -9,103 +10,134 @@ enum monitorNav {
     explorer = 'explorer',
     back = 'back'
 }
-let monitorNavBtns: HTMLButtonElement[],
-    $backBtn: HTMLButtonElement,
-    $qctable: HTMLTableElement, 
-    $graphscontainer: HTMLElement,
+
+const monitorhtml = require('./UIMonitor.html').default;
+let $backBtn: HTMLButtonElement = null,
+    topbtns: HTMLCollectionOf<HTMLButtonElement> = null,
+    contentPages: HTMLCollectionOf<HTMLElement> = null,
     currentPage: string = monitorNav.home;
 
+/** Method for setting up monitor page
+ * @param monitorId id of monitor container div 
+ */
 function UIMonitorSetUp(monitorId: string) {
-    const monitorhtml = require('./UIMonitor.html').default;
+    
     const $monitor = document.getElementById(monitorId) as HTMLDivElement;
-    $monitor.innerHTML = monitorhtml;
-
-    // specify dom elements
-    $graphscontainer = $monitor.querySelector('#graphscontainer') as HTMLElement;
-    $qctable = $monitor.querySelector('#qcfiletable') as HTMLTableElement;
-
-    // loop through monitorNav enum and get buttons from #top-menu
-    let pagesNav = [];
-    monitorNavBtns = [];
-    for (let btn in monitorNav) {
-        let btnelem = $monitor.querySelector(`#${btn}-btn`) as HTMLButtonElement;
-        let pageelem = $monitor.querySelector(`#${btn}-page`) as HTMLDivElement;
-        
-        if (pageelem) {
-            pagesNav.push(pageelem);
-            // initially hide all pages except home
-            if (btn == 'home') {
-                btnGroupSelHandler(pageelem, pagesNav);
-            }  
-        }             
+    $monitor.innerHTML = monitorhtml;   
+    
+    topbtns = $monitor.getElementsByTagName('button') as HTMLCollectionOf<HTMLButtonElement>;
+    contentPages = $monitor.getElementsByClassName('content-page')as HTMLCollectionOf<HTMLElement>;
+    
+    // loop through monitorNav enum and get corresponding buttons from #top-menu
+    for (let navId in monitorNav) {
+        let btnelem = $monitor.querySelector(`#${navId}-btn`) as HTMLButtonElement;
                 
-        // add event for button if it exists
         if (btnelem) {
-            monitorNavBtns.push(btnelem);
-            if (btn == 'back') {
-                $backBtn = btnelem;
-                btnelem.addEventListener('click', () => {
-                    $backBtn.style.display = 'none';
-
-                    switch (currentPage) {
-                        case monitorNav.qcfiles:
-                            ShowQCFilesTable();
-                            break;
-                        default:
-                            break;
-                    }
-                    
-                });
-
-            } else {
-                if (btn == 'home') {
-                    btnGroupSelHandler(btnelem, monitorNavBtns);
+           
+            if (navId == 'back') {
+                // reference for subpage navigation
+                $backBtn = btnelem;               
+            } 
+                
+            btnelem.addEventListener('click', () => {
+                $backBtn.style.display = 'none';
+                switch (navId) {
+                    case monitorNav.back:
+                        BackBtnHandler();
+                        break;
+                    case monitorNav.home:
+                        currentPage = navId;
+                        ShowHomePage();
+                        break;
+                    case monitorNav.qcfiles:
+                        currentPage = navId;
+                        ShowQCFilesTable();
+                        break;
+                    case monitorNav.explorer:
+                        currentPage = navId;
+                        ShowFileExplorer();
+                        break;
+                    default:
+                        break;
                 }
-                btnelem.addEventListener('click', () => {
-                    btnGroupSelHandler(btnelem, monitorNavBtns);
-                    currentPage = btn;
-                    if (pageelem){
-                        btnGroupSelHandler(pageelem, pagesNav);
-                    }
-                    switch (currentPage) {
-                        case monitorNav.qcfiles:
-                            ShowQCFilesTable();
-                            break;
-                        default:
-                            break;
-                    }
-                    
-                });
+       
+                let btn = $monitor.querySelector(`#${currentPage}-btn`) as HTMLElement;
+                let pageelem = $monitor.querySelector(`#${currentPage}-page`) as HTMLElement;
 
-            }
-            
+                pageelem.scrollTop = 0;
+                selectElemFromGroup(btn, Array.from(topbtns));
+                selectElemFromGroup(pageelem, Array.from(contentPages));
+                
+            });
+
         }
     }
     
-    return { $qctable, $backBtn, $graphscontainer, monitorNavBtns };
+    ShowHomePage();
+
+    return { $backBtn };
+}
+
+// EVENT HANDLERS
+
+function ShowHomePage() {
+    
 }
 
 function ShowQCFilesTable() {
-    
-    $qctable.style.display = 'table';
-    // clear graphs container
-    $graphscontainer.innerHTML = '';
-
-    btnGroupSelHandler(monitorNavBtns[1], monitorNavBtns);
+    const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
+    $qccontentpage.dispatchEvent(new Event('reset'));
 }
 
+function ShowFileExplorer() {
+    const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
+    $explorerpage.dispatchEvent(new Event('reset'));    
+}
+
+function BackBtnHandler() {
+    
+    //console.log(currentPage);
+    switch (currentPage) {
+        case monitorNav.home:
+            ShowHomePage();
+            break;
+        case monitorNav.qcfiles:
+            ShowQCFilesTable();
+            break;
+        case monitorNav.explorer:
+            ShowFileExplorer();
+            break;
+        default:
+            break;
+    }
+
+}
+
+// EXPORTED FUNTIONS FOR SETUP
+
+/** For setting up QC Tables, called when sheetdata loaded */
 function UIQCTableSetUp(hemeSamples: HemeSampleItem[]) {
-                
+    
+    const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
     // create QC table
-    if ($qctable) {
+    if ($qccontentpage) {
         // filter hemeSamples for QC Samples
         const qcsamples = hemeSamples
                         .filter((sample) => sample.data.groups === hemeGroups.qc)
                         .map((sample) => sample as QCSampleItem);
 
-        UICreateQCTable(qcsamples, $qctable);
+        UICreateQCTable(qcsamples, $qccontentpage);
 
     }   
 }
 
-export {UIMonitorSetUp, UIQCTableSetUp, $graphscontainer, $backBtn };
+/** For setting up Explorer page, called when sheetdata loaded */
+function UIExplorerSetUp(hemeSamples: HemeSampleItem[]) {
+    const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
+    
+    if ($explorerpage) {
+        UICreateExplorerPage(hemeSamples, $explorerpage);
+    }
+}
+
+export { UIMonitorSetUp, UIQCTableSetUp, $backBtn, UIExplorerSetUp };

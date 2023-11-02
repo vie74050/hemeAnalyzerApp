@@ -1,0 +1,121 @@
+<div class="rowheader">
+  <div
+    class="col-group"
+    title="Run status"
+    style="width: 8em; flex-grow: unset"
+  >
+    <div id="samplepage-pn" class="rowheaderitem _pn">Negative</div>
+    <div id="samplepage-validated" class="rowheaderitem _validated">
+      Validated
+    </div>
+  </div>
+  <div
+    title="Run alerts"
+    class="col-group"
+    style="width: 8em; flex-grow: unset"
+  >
+    <div id="samplepage-action" class="rowheaderitem _action">Action</div>
+    <div id="samplepage-error" class="rowheaderitem _error">Error</div>
+    <div id="samplepage-none" class="rowheaderitem _none">None</div>
+  </div>
+
+  <div class="col-group">
+    <div
+      id="samplepage-id"
+      class="rowheaderitem left-icon _id"
+      title="ID (barcode)"
+    >
+      -
+    </div>
+    <div
+      id="samplepage-datetime"
+      class="rowheaderitem left-icon _datetime"
+      title="Date & Time"
+    ></div>
+  </div>
+  <div class="col-group">
+    <div
+      id="samplepage-patientid"
+      class="rowheaderitem left-icon _altid"
+      title="alt ID"
+    >
+      -
+    </div>
+    <div
+      id="samplepage-name"
+      class="rowheaderitem left-icon _name"
+      title="Patient Name"
+    >
+      -
+    </div>
+  </div>
+</div>
+
+<div style="height: calc(100% - 100px)">
+  <div class="explorertabmenu">
+    <ul class="tab-container nav nav-tabs" role="tablist">
+      <li id="samplepage-main-tab" class="tab">Main</li>
+      <li id="samplepage-graph-tab" class="tab">Graph</li>
+      <li id="samplepage-cumulative-tab" class="tab">Cumulative</li>
+    </ul>
+    <span id="explorer-btns" class="top-right">
+      <!-- add checkmark button -->
+      <button
+        id="checkmark-btn"
+        class="btn"
+        type="button"
+        data-bs-toggle="tooltip"
+        title="validate"
+      >
+        &#10003;
+      </button>
+      <!-- add an notes button -->
+      <button
+        id="edit-btn"
+        class="btn"
+        type="button"
+        data-bs-toggle="tooltip"
+        title="comments/notes"
+      >
+        &#9998;
+      </button>
+    </span>
+  </div>
+  <div class="tableFixHead">
+    <table id="samplepage-main" class="content-page">
+      <colgroup>
+        <col span="1" style="width: 15%;"/>
+        <col span="1" style="width: 35%;"/>
+        <col span="1" style="width: 35%;"/>
+        <col span="1" style="width: 15%;"/>
+     </colgroup>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Data</th>
+          <th>Unit</th>
+          <th class="_flags">Flags</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <table id="samplepage-graph" class="content-page">
+      <colgroup>
+        <col span="1" style="width: 85%;"/>
+        <col span="1" style="width: 15%;"/>
+     </colgroup>
+      <thead>
+        <tr>
+          <th>Scaterplot</th>
+          <th class="_flags">Flags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="graph" class="img-holder"></td>
+        </tr>
+      </tbody>
+    </table>
+    <table id="samplepage-cumulative" class="content-page"></table>
+  </div>
+</div>

@@ -1,27 +1,18 @@
 <div id="top-menu">
-    <button id="home-btn" data-bs-toggle="tooltip" title="Start screen">Home &#127968;</button>
-    <button id="qcfiles-btn" data-bs-toggle="tooltip" title="View QC Samples">QC Files &#128200;</button>
-    <button id="explorer-btn" data-bs-toggle="tooltip" title="Unavailable">Explorer &#128194;</button>
-    <button id="back-btn">◄ Back</button>
-  </div>
-  <div id="content">
-    <div id="home-page" class="content-page">Home</div>
-    <div id="qcfiles-page" class="tableFixHead content-page">
-      <div id="graphscontainer" class="flexcol"></div>
-      <table id="qcfiletable">
-        <thead>
-          <tr>
-            <th width="50" title="Out of range status">&#9888</th>
-            <th>File</th>
-            <th>Lot #</th>
-            <th>Material</th>
-            <th>Expiry Date</th>
-            <th>Analysis Date</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-    <div id="explorer-page" class="content-page">Explorer</div>
-  </div>
-  <div id="bot-menu">
+  <button id="home-btn" class="btn" type="button" data-bs-toggle="tooltip">
+    Home &#127968;
+  </button>
+  <button id="qcfiles-btn" class="btn" type="button" data-bs-toggle="tooltip">
+    QC Files &#128200;
+  </button>
+  <button id="explorer-btn" class="btn" type="button" data-bs-toggle="tooltip">
+    Explorer &#128194;
+  </button>
+  <button id="back-btn" class="btn" type="button">◄ Back</button>
 </div>
+<div id="content">
+  <div id="home-page" class="content-page"><!--UIMonitorHome--></div>
+  <div id="qcfiles-page" class="tableFixHead content-page"><!--UIMonitorQCFiles--></div>
+  <div id="explorer-page" class="content-page"><!--UIMonitorExplorer--></div>
+</div>
+<div id="bot-menu"></div>

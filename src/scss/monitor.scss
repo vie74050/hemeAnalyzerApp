@@ -1,34 +1,31 @@
+@import "~bootstrap/scss/bootstrap";
 @import "./content-scrollbar.scss";
+@import "./monitor-explorer.scss";
 
 #monitor {
+    $background-color: #999;
+    $btn-color: #eee;
+    $btn-color-hover: #f4ffc2;
+    $btn-color-selected: rgb(112, 198, 255);
+
     display: none;
     box-sizing: border-box;
     position: relative;
     height: calc(100vh - 140px);
     overflow: hidden;
-    border: 5px solid #333;
+    border: 1px solid #333;
     border-radius: 5px;
-    background-color: #000;
+    background-color: $background-color;
 
-    &.show{
+    &.show {
         display: flex;
         flex-direction: column;
     }
+
     #top-menu,
     #bot-menu {
         width: 100%;
-        height: 60px;
-        background-color: #eee;
-
-        button {
-            padding: 0.6em;
-            cursor: pointer;
-        }
-
-        button.selected {
-            background-color: rgb(112, 198, 255);
-            font-weight: 600;
-        }
+        height: 50px;
 
         #back-btn {
             display: none;
@@ -36,20 +33,35 @@
         }
     }
 
+    button.btn {
+        background-color: $btn-color;
+        outline: 1px solid #555;
+
+        &:hover {
+            background-color: $btn-color-hover;
+        }
+
+        &.selected {
+            background-color: $btn-color-selected;
+            font-weight: 600;
+        }
+    }
+
     #content {
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background-color: #eee;
-        outline: 1px solid #555;
         box-sizing: border-box;
+        position: relative;
 
-        .content-page{
+        .content-page {
             display: none;
+
             &.selected {
                 display: block;
             }
         }
+
         #graphscontainer {
 
             width: calc(100% + #{$scollbar-width});
@@ -57,18 +69,17 @@
             flex-direction: column;
             background-color: #fff;
 
-            .graphrowheader {
-                
+            .rowheader {
+                position: absolute;
+                top: 45px;
+                left: 82px;
+                right: 80px;
                 height: 1em;
                 display: table;
                 background-color: #fff;
-                position: absolute;
-                left: 82px;
-                right: 80px;
-                top: 45px;
                 z-index: 999;
-
-                .graphrowheaderitem {
+    
+                .rowheaderitem {
                     display: table-cell;
                     text-align: center;
                     font-size: 12px;
@@ -139,6 +150,7 @@
                     }
                 }
             }
+
             .graphrow.headingRow {
                 position: absolute;
                 flex-grow: 0;
@@ -146,6 +158,7 @@
                 background-color: #eee;
                 z-index: 10;
             }
+
             >div:nth-child(3) {
                 margin-top: 100px;
             }
@@ -160,17 +173,25 @@
                 width: 100%;
                 text-align: center;
                 border-collapse: collapse;
+                background-color: #fff;
+                font-size: 0.9em;
+                display: none;
+
+                &.selected {
+                    display: table;
+                }
 
                 th {
                     position: sticky;
+                    font-weight: 500;
                     top: 0px;
-                    background: #eee;
+                    background-color: rgb(180, 225, 255);
+                    text-transform: capitalize;
                 }
 
                 th:first-child,
                 td:first-child {
-                    border-right: 1px solid #555;
-                    font-size: 18px;
+                    border-right: 1px solid #aaa;
                 }
 
                 tr {
@@ -179,16 +200,23 @@
 
                 /* striped rows */
                 tbody tr:nth-of-type(odd) {
-                    background-color: #ccc;
+                    background-color: #f1f1f1;
                 }
 
                 /* hover row */
-                tbody tr:hover {
-                    background-color: #fffb00;
-                    cursor: pointer;
-                }
+                &.selectable tbody tr {
+                    &:hover {
+                        background-color: #ffffe8;
+                        cursor: pointer;
+                    }
 
+                    &.hilight {
+                        background-color: #fffb00;
+                    }
+
+                }
             }
+
         }
     }
 

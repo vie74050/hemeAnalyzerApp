@@ -1,4 +1,4 @@
-import { btnGroupSelHandler } from '../helpers/btnGroupSelHandler';
+import { selectElemFromGroup } from '../helpers/domElemHelper';
 
 const mainhtml = require('./UIMain.html').default;
 
@@ -13,29 +13,30 @@ export function UIMainSetUp(mianID: string, monitorID: string) {
     const $runbatchBtn = $main.querySelector('#runbatch-btn') as HTMLButtonElement;
     const $runmanualBtn = $main.querySelector('#runmanual-btn') as HTMLButtonElement;
     const $runqcBtn = $main.querySelector('#runqc-btn') as HTMLButtonElement;
+
     const btngroup = [$computerBtn, $runbatchBtn, $runmanualBtn, $runqcBtn];
 
     $computerBtn?.addEventListener('click', (e) => {
         $main.classList.add('mini');
         $monitor.classList.add('show');
-        btnGroupSelHandler(e.currentTarget as HTMLElement, btngroup);
+        selectElemFromGroup(e.currentTarget as HTMLElement, btngroup);
     });
 
     $runbatchBtn.addEventListener('click', (e) => {
         $main.classList.remove('mini');
-        $monitor.style.display = 'none';
-        btnGroupSelHandler(e.currentTarget as HTMLElement, btngroup);
+        $monitor.classList.remove('show');
+        selectElemFromGroup(e.currentTarget as HTMLElement, btngroup);
     });
 
     $runmanualBtn.addEventListener('click', (e) => {
         $main.classList.remove('mini');
-        $monitor.style.display = 'none';
-        btnGroupSelHandler(e.currentTarget as HTMLElement, btngroup);
+        $monitor.classList.remove('show');
+        selectElemFromGroup(e.currentTarget as HTMLElement, btngroup);
     });
 
     $runqcBtn.addEventListener('click', (e) => {
         $main.classList.remove('mini');
-        $monitor.style.display = 'none';
-        btnGroupSelHandler(e.currentTarget as HTMLElement, btngroup);
+        $monitor.classList.remove('show');
+        selectElemFromGroup(e.currentTarget as HTMLElement, btngroup);
     });
 }
