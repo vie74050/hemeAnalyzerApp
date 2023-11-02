@@ -1,6 +1,7 @@
 @import "~bootstrap/scss/bootstrap";
 @import "./content-scrollbar.scss";
 @import "./monitor-explorer.scss";
+@import "./monitor-home.scss";
 
 #monitor {
     $background-color: #999;
@@ -12,6 +13,7 @@
     box-sizing: border-box;
     position: relative;
     height: calc(100vh - 140px);
+    min-height: 450px;
     overflow: hidden;
     border: 1px solid #333;
     border-radius: 5px;
