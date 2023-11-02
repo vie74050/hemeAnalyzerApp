@@ -3,6 +3,7 @@ import { hemeGroups } from "../Data/ParseRowsToHemeSample";
 import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
 import { UICreateExplorerPage } from "./UIMonitorExplorer";
+import { UICreateHomePage } from "./UIMonitorHome";
 
 enum monitorNav {
     home = 'home',
@@ -17,6 +18,21 @@ let $backBtn: HTMLButtonElement = null,
     contentPages: HTMLCollectionOf<HTMLElement> = null,
     currentPage: string = monitorNav.home;
 
+// getter and setter for currentPage to call SelectCurrentPage() when currentPage is set
+Object.defineProperty(this, 'currentPage', {
+    get: () => currentPage,
+    set: (value: string) => {
+        SelectCurrentPage();
+        console.log(value, currentPage);
+    }
+});
+export function SetCurrentPage(value: string) {
+// if value is in monitorNav, set currentPage to value
+    if (value in monitorNav) {
+        currentPage = value;
+    }
+}
+
 /** Method for setting up monitor page
  * @param monitorId id of monitor container div 
  */
@@ -27,7 +43,7 @@ function UIMonitorSetUp(monitorId: string) {
     
     topbtns = $monitor.getElementsByTagName('button') as HTMLCollectionOf<HTMLButtonElement>;
     contentPages = $monitor.getElementsByClassName('content-page')as HTMLCollectionOf<HTMLElement>;
-    
+   
     // loop through monitorNav enum and get corresponding buttons from #top-menu
     for (let navId in monitorNav) {
         let btnelem = $monitor.querySelector(`#${navId}-btn`) as HTMLButtonElement;
@@ -38,82 +54,66 @@ function UIMonitorSetUp(monitorId: string) {
                 // reference for subpage navigation
                 $backBtn = btnelem;               
             } 
-                
+
+            // start with home page
+            if (navId == 'home') {
+                UIHomeSetUp();
+            }
+            
+            // add event listener to each button
             btnelem.addEventListener('click', () => {
-                $backBtn.style.display = 'none';
+                
                 switch (navId) {
-                    case monitorNav.back:
-                        BackBtnHandler();
-                        break;
-                    case monitorNav.home:
+                   case monitorNav.home:
                         currentPage = navId;
-                        ShowHomePage();
                         break;
                     case monitorNav.qcfiles:
                         currentPage = navId;
-                        ShowQCFilesTable();
                         break;
                     case monitorNav.explorer:
                         currentPage = navId;
-                        ShowFileExplorer();
                         break;
                     default:
+                        SelectCurrentPage();
                         break;
                 }
-       
-                let btn = $monitor.querySelector(`#${currentPage}-btn`) as HTMLElement;
-                let pageelem = $monitor.querySelector(`#${currentPage}-page`) as HTMLElement;
-
-                pageelem.scrollTop = 0;
-                selectElemFromGroup(btn, Array.from(topbtns));
-                selectElemFromGroup(pageelem, Array.from(contentPages));
-                
+                       
             });
 
         }
     }
     
-    ShowHomePage();
-
+    SelectCurrentPage();
+    
     return { $backBtn };
 }
 
 // EVENT HANDLERS
 
-function ShowHomePage() {
-    
+function SelectCurrentPage() {
+    const btns = Array.from(topbtns);
+    const contents = Array.from(contentPages);
+    let btn = topbtns.namedItem(`${currentPage}-btn`) as HTMLButtonElement;
+    let pageelem = contentPages.namedItem(`${currentPage}-page`) as HTMLDivElement;
+
+    $backBtn.style.display = 'none';
+    pageelem.scrollTop = 0;
+    selectElemFromGroup(btn, btns);
+    selectElemFromGroup(pageelem, contents);
+    pageelem.dispatchEvent(new Event('reset'));
+
+    //console.log(`Current Page: ${currentPage}`);
 }
 
-function ShowQCFilesTable() {
-    const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
-    $qccontentpage.dispatchEvent(new Event('reset'));
-}
+// FUNCTIONS FOR UI SETUP
 
-function ShowFileExplorer() {
-    const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
-    $explorerpage.dispatchEvent(new Event('reset'));    
-}
-
-function BackBtnHandler() {
-    
-    //console.log(currentPage);
-    switch (currentPage) {
-        case monitorNav.home:
-            ShowHomePage();
-            break;
-        case monitorNav.qcfiles:
-            ShowQCFilesTable();
-            break;
-        case monitorNav.explorer:
-            ShowFileExplorer();
-            break;
-        default:
-            break;
+function UIHomeSetUp() {
+    const $homepage = contentPages.namedItem(monitorNav.home+'-page') as HTMLDivElement;
+   
+    if ($homepage) {
+        UICreateHomePage($homepage);
     }
-
 }
-
-// EXPORTED FUNTIONS FOR SETUP
 
 /** For setting up QC Tables, called when sheetdata loaded */
 function UIQCTableSetUp(hemeSamples: HemeSampleItem[]) {
@@ -140,4 +140,4 @@ function UIExplorerSetUp(hemeSamples: HemeSampleItem[]) {
     }
 }
 
-export { UIMonitorSetUp, UIQCTableSetUp, $backBtn, UIExplorerSetUp };
+export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, currentPage};
