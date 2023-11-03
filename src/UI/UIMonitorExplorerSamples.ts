@@ -14,7 +14,7 @@ enum subgroupNav {
  * @param run: RunData, the run data
  * @param $container: HTMLLIElement, the target container
  */
-export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement) {
+export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $alerts: HTMLElement) {
     //console.log(run);
             
     // get all div ids from $container #rowheader, including children
@@ -62,9 +62,16 @@ export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement) {
         
         if (!isAction && !isError) {
             $none.innerHTML = 'None';
-            $none.classList.add('selected');
-            
+            $none.classList.add('selected');       
         }
+
+        // update alerts modal content
+        $alerts.dispatchEvent(new CustomEvent('updatemodal', {
+            detail: {
+                actions: runInfo['Action'],
+                errors: runInfo['Error']
+            }
+        }));
 
         // get div with id 'samplepage-datetime` and update w runinfo Day,Time
         const $datetime = $container.querySelector('#samplepage-datetime');
