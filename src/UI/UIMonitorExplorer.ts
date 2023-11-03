@@ -1,7 +1,8 @@
 import { HemeSampleItem } from "../Data/HemeSampleItem";
 import { selectElemFromGroup, UICreateElemFromString } from "../helpers/domElemHelper";
 import { RunData, GetRunData } from "../Data/GetRunData";
-import { UICreateSearchModalElem } from "./modals/UISearch";
+import { Modal_UICreateSearch } from "./modals/UISearch";
+import { Modal_UICreateAlerts } from "./modals/UIAlerts";
 import { $backBtn } from "./UIMonitor";
 import { UpdateSamplesPage } from "./UIMonitorExplorerSamples";
 
@@ -25,6 +26,7 @@ const $tablecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 1) as HTM
 const $subpagecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 2) as HTMLLIElement;
 
 let $maincontainerdiv: HTMLDivElement = null;
+let $alerts: HTMLElement = null;
 
 /** Gets the html template and creates the elements for Exploerer page:
  * - creates a `<ul><li>` for each nav button as tabs
@@ -45,7 +47,7 @@ function UICreateExplorerPage(
     $maincontainerdiv.classList.add('main-div');
     $explorerpage.appendChild($maincontainerdiv);
 
-    // set up options buttons
+    // set up tabs
     $explorermenudiv.innerHTML = '';
     const $ul = UICreateElemFromString(explorerhtml, 'ul') as HTMLLIElement;
     $ul.innerHTML = '';
@@ -56,7 +58,7 @@ function UICreateExplorerPage(
     $tablecontainerdiv.innerHTML = '';
     $maincontainerdiv.appendChild($tablecontainerdiv);
 
-    // create a table for each nav
+    // create a `li` tab and `table` for each nav
     for (const key in explorerNav) {
         const nav = explorerNav[key];
 
@@ -81,7 +83,7 @@ function UICreateExplorerPage(
         });
     }
 
-    // set html for samples page
+    // set html for samples' subpage
     $subpagecontainerdiv.innerHTML = sampleshtml;
     $subpagecontainerdiv.style.display = 'none'; // hide initially
     $explorerpage.appendChild($subpagecontainerdiv);
@@ -90,10 +92,11 @@ function UICreateExplorerPage(
     selectElemFromGroup(btngroup[0], btngroup);
     selectElemFromGroup(tablegrp[0], tablegrp);
 
-    // menu buttons
+    // option buttons
     const $btns = UICreateElemFromString(explorerhtml, 'span') as HTMLLIElement;
     $explorermenudiv.appendChild($btns);
-    const $searchEl = UICreateSearchModalElem($tablecontainerdiv, rowDataAttributes);
+    // add SEARCH MODAL to explorer page
+    const $searchEl = Modal_UICreateSearch($tablecontainerdiv, rowDataAttributes);
     $explorerpage.appendChild($searchEl);
 
     //add custom event to listen for $explorerpage reset
@@ -101,6 +104,9 @@ function UICreateExplorerPage(
         resetPage();
     });
 
+    // add ALERTS MODAL to explorer page
+    $alerts = Modal_UICreateAlerts();
+    $explorerpage.appendChild($alerts);
 }
 
 /** Fill specified table with data, based on tableid:
@@ -185,7 +191,7 @@ function trClickHandler(run: RunData) {
     $subpagecontainerdiv.style.display = 'block'; // show samples page
     $backBtn.style.display = 'inline-block'; // show back
 
-    UpdateSamplesPage(run, $subpagecontainerdiv);
+    UpdateSamplesPage(run, $subpagecontainerdiv, $alerts);
 }
 
 /** handle explorer page reset event */
@@ -199,4 +205,4 @@ function resetPage() {
     Array.from(hilights).forEach((elem) => elem.classList.remove('hilight'));
 }
 
-export { UICreateExplorerPage};
+export { UICreateExplorerPage };

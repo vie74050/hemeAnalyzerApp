@@ -1,11 +1,10 @@
 import { UICreateElemFromString } from '../../helpers/domElemHelper';
-import { RunData } from '../../Data/GetRunData';
 
 /** Creates the search modal element from html template
  * @param $tablecontainer the container element to search attributes for
  * @returns 
  */
-function UICreateSearchModalElem($tablecontainer: HTMLElement, attributes): HTMLElement {
+function Modal_UICreateSearch($tablecontainer: HTMLElement, attributes): HTMLElement {
     const searchhtml = require('./UISearch.html').default;
     const $searchEl = UICreateElemFromString(searchhtml, 'div') as HTMLElement;
     const $input = $searchEl.querySelector('input') as HTMLInputElement;
@@ -52,4 +51,4 @@ function SearchBtnHandler(str: string, $tbl_container: HTMLElement, attr) {
 
 }
 
-export { UICreateSearchModalElem };
+export { Modal_UICreateSearch };
