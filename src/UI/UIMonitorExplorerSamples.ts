@@ -272,6 +272,7 @@ function UIFlags(paramdata: HemeSampleItem, dateref, $holder: HTMLTableElement) 
         $td_flags = document.createElement('td');
         $td_flags.setAttribute('rowspan', n.toString());
         $td_flags.classList.add('_flags');
+        $tr.appendChild($td_flags);
     }
     // clear flags column
     $td_flags.innerHTML = '';
@@ -281,6 +282,6 @@ function UIFlags(paramdata: HemeSampleItem, dateref, $holder: HTMLTableElement) 
         let txt = runinfo.flags? runinfo.flags[dateref]? runinfo.flags[dateref] : '' : '';
         if (txt.length >0) txt = txt.replace(/\n/g, '<br>');
         $td_flags.innerHTML = txt;
-        $tr.appendChild($td_flags);
+        
     }
 }

@@ -9,16 +9,20 @@ export function UICreateHomePage($container: HTMLDivElement) {
 
     // add event listener to each button: set currentPage to the data-target value
     $homeBtns.forEach($btn => {
-        $btn.addEventListener('click', () => {
-            // add tooltip to button
-            $btn.setAttribute('data-bs-toggle', 'tooltip');
-            
+        // add tooltip to button
+        $btn.setAttribute('data-bs-toggle', 'tooltip');
+        // event listener    
+        $btn.addEventListener('click', () => {    
             SetCurrentPage($btn.dataset.target);
         });
     });
 
     // disable all buttons that don't have data-target attribute
     const $disabledBtns = $container.querySelectorAll('button:not([data-target])') as NodeListOf<HTMLButtonElement>;
-    $disabledBtns.forEach($btn => $btn.disabled = true);
+    $disabledBtns.forEach($btn =>{
+        $btn.disabled = true;
+        $btn.setAttribute('title', 'Not available');
+        $btn.setAttribute('data-bs-toggle', 'tooltip');
+    });
 
 }
