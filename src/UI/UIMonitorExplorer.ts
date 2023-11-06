@@ -181,6 +181,13 @@ function UIcreateTableContent(runData: RunData[], $table: HTMLTableElement) {
         tablebody.appendChild(tr);
     });
 
+    // add an extra column to each row for spacer
+    const spacer = document.createElement('td');
+    spacer.classList.add('spacer');
+    tablebody.querySelectorAll('tr').forEach((tr) => {
+        tr.appendChild(spacer.cloneNode());
+    });
+
 }
 
 // EVENT HANDLERS

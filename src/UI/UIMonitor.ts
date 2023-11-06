@@ -23,7 +23,7 @@ Object.defineProperty(this, 'currentPage', {
     get: () => currentPage,
     set: (value: string) => {
         SelectCurrentPage();
-        console.log(value, currentPage);
+        //console.log(value, currentPage);
     }
 });
 export function SetCurrentPage(value: string) {

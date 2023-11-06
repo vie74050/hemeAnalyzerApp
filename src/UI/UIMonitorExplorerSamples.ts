@@ -188,6 +188,10 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
     $th2.innerHTML = 'Time';
     $tr1.appendChild($th1);
     $tr2.appendChild($th2);
+
+    // reverse analysis dates so most recent is first
+    analysisDates = analysisDates.reverse();
+    
     analysisDates.forEach((date) => {
         let day = date.split(' ')[0];
         let time = date.split(' ')[1];
@@ -214,7 +218,7 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
         $tr.appendChild($td);
         analysisDates.forEach((date,i) => {
             let $td = document.createElement('td');
-            let dateref = i+1;
+            let dateref = analysisDates.length - i;
             let value = item['date'+dateref] || '-';
             $td.innerHTML = value;
             $tr.appendChild($td);
@@ -249,7 +253,7 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
 
 /** Create img for the Graph table */
 function UIGraphSetup(run: RunData, $td: HTMLElement) {
-    const images = run.subgroups.other as object; console.log(run.subgroups);
+    const images = run.subgroups.other as object; //console.log(run.subgroups);
     
     $td.replaceChildren();
     if (images) {    

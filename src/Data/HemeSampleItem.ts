@@ -23,23 +23,24 @@ class HemeSampleItem {
         return this._rawData['label'] as string;
     }
 
+    /** Returns all the subgroups in raw data */
     public get subgroups(): Record<string, string | object> {
         return this._rawData['subgroups'] as Record<string, string | object>;
     }
-    /** Returns all the items for the subgroup
+    /** Returns all the items for the subgroup by sgid
      * @param sgid 
      */
     public GetSubgroup(sgid: QCsubgroups | PAsubgroups): { [key: string]: Record<string, string>; } {
 
         return this._rawData['subgroups'][sgid] as { [key: string]: Record<string, string>; };
     }
+    /** Returns the last analysis date in the analysisdates string */
     public get analysisDate(): string {
-        // returns the last analysis date in the analysisdates string
         let analysisdates = this.analysisDates;
         return analysisdates[analysisdates.length - 1];
     }
+    /** Returns all analysis dates in the analysisdates string */
     public get analysisDates(): string[] {
-        // returns all analysis dates in the analysisdates string
         let analysisdates = (this.data.analysisdates as string).split(/ *; */);
         return analysisdates;
     }
