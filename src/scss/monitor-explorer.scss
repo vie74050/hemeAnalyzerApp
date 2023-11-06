@@ -159,16 +159,17 @@
             width: 10em;
             min-width: fit-content;
         }
-        th:last-child, td:last-child {
+        th:last-child, td:last-child,
+        ._flags {
             width: auto;
-        }  
+            text-align: left;
+        }
         td._flags, 
         td[rowspan]{
             text-align: left;
             vertical-align: top;
             padding: 1em;
             background-color: #fff;
-            width: auto;
         }
         
         td.img-holder {

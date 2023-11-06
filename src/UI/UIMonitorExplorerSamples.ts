@@ -181,30 +181,20 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
     // - first column is 'Date', 'Time' followed by analysis dates
     let $thead = document.createElement('thead');
     let $tr1 = document.createElement('tr');
-    let $tr2 = document.createElement('tr');
     let $th1 = document.createElement('th');
-    let $th2 = document.createElement('th');
-    $th1.innerHTML = 'Date';
-    $th2.innerHTML = 'Time';
+    $th1.innerHTML = 'Date <br/>Time';
     $tr1.appendChild($th1);
-    $tr2.appendChild($th2);
 
     // reverse analysis dates so most recent is first
     analysisDates = analysisDates.reverse();
     
     analysisDates.forEach((date) => {
-        let day = date.split(' ')[0];
-        let time = date.split(' ')[1];
+        let daytime = date.replace(' ','<br/>');
         let $th_day = document.createElement('th');
-        let $th_time = document.createElement('th');
-        $th_day.innerHTML = day;
-        $th_time.innerHTML = time;
+        $th_day.innerHTML = daytime;
         $tr1.appendChild($th_day);
-        $tr2.appendChild($th_time);
-        
     });
     $thead.appendChild($tr1);
-    $thead.appendChild($tr2);
     $container.appendChild($thead);
 
     // create tbody with rows for each parameter
