@@ -22,8 +22,7 @@ let $backBtn: HTMLButtonElement = null,
 Object.defineProperty(this, 'currentPage', {
     get: () => currentPage,
     set: (value: string) => {
-        SelectCurrentPage();
-        //console.log(value, currentPage);
+        SelectCurrentPage();  //console.log(value, currentPage);
     }
 });
 export function SetCurrentPage(value: string) {
@@ -47,39 +46,25 @@ function UIMonitorSetUp(monitorId: string) {
     // loop through monitorNav enum and get corresponding buttons from #top-menu
     for (let navId in monitorNav) {
         let btnelem = $monitor.querySelector(`#${navId}-btn`) as HTMLButtonElement;
-                
+        // start with home page
+        if (navId == 'home') {
+            UIHomeSetUp();
+        }     
+
         if (btnelem) {
-           
             if (navId == 'back') {
                 // reference for subpage navigation
-                $backBtn = btnelem;               
-            } 
-
-            // start with home page
-            if (navId == 'home') {
-                UIHomeSetUp();
+                $backBtn = btnelem;         
+                // add event listener back btn
+                btnelem.addEventListener('click', () => {
+                    SelectCurrentPage();
+                });      
+            } else {
+                // add event listener to each nav button
+                btnelem.addEventListener('click', () => {
+                    SetCurrentPage(navId);
+                });
             }
-            
-            // add event listener to each button
-            btnelem.addEventListener('click', () => {
-                
-                switch (navId) {
-                   case monitorNav.home:
-                        currentPage = navId;
-                        break;
-                    case monitorNav.qcfiles:
-                        currentPage = navId;
-                        break;
-                    case monitorNav.explorer:
-                        currentPage = navId;
-                        break;
-                    default:
-                        SelectCurrentPage();
-                        break;
-                }
-                       
-            });
-
         }
     }
     

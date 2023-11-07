@@ -27,6 +27,7 @@ const $subpagecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 2) as H
 
 let $maincontainerdiv: HTMLDivElement = null;
 let $alerts: HTMLElement = null;
+let DataItems: HemeSampleItem[] = [];
 
 /** Gets the html template and creates the elements for Exploerer page:
  * - creates a `<ul><li>` for each nav button as tabs
@@ -35,10 +36,7 @@ let $alerts: HTMLElement = null;
  * @param hemeSamples: HemeSampleItem[], the parsed from sheet
  * @param $explorerpage: HTMLDivElement, target container for explorer page
  */
-function UICreateExplorerPage(
-    hemeSamples: HemeSampleItem[],
-    $explorerpage: HTMLDivElement
-) {
+function UICreateExplorerPage(hemeSamples: HemeSampleItem[], $explorerpage: HTMLDivElement) {
     // get run data    
     const rundata = GetRunData(hemeSamples); //console.log(rundata);
     let btngroup = [], tablegrp = [];
@@ -107,6 +105,8 @@ function UICreateExplorerPage(
     // add ALERTS MODAL to explorer page
     $alerts = Modal_UICreateAlerts();
     $explorerpage.appendChild($alerts);
+
+    DataItems = hemeSamples;
 }
 
 /** Fill specified table with data, based on tableid:
@@ -120,6 +120,9 @@ function UIcreateTableContent(runData: RunData[], $table: HTMLTableElement) {
     const tableid = $table.id;
     const tablehead = $table.querySelector('thead') as HTMLTableSectionElement;
     const tablebody = $table.querySelector('tbody') as HTMLTableSectionElement;
+
+    tablehead.innerHTML = ''; // clear table head
+    tablebody.innerHTML = ''; // clear table body
 
     // get table header row
     let tableheadrow = tablehead.querySelector('tr') as HTMLTableRowElement;
@@ -144,50 +147,55 @@ function UIcreateTableContent(runData: RunData[], $table: HTMLTableElement) {
 
     // create tr for each runData
     runData.forEach((run, index) => {
-        const subgroupItems = run.subgroups[tableid] as object;
-        const tr = document.createElement('tr');
-        let trhtml = '';
-
-        let patientinfo = { id: run.id, label: run.label };
-        if (run.subgroups['patientinfo']) {
-            patientinfo = { ...patientinfo, ...run.subgroups['patientinfo'] as object };
-        }
-        // tag rows with searchable attributes
-        for (const key in rowDataAttributes) {
-            const attr = rowDataAttributes[key];
-            let value = patientinfo[attr];
-            if (value) {
-                tr.setAttribute(`data-${key}`, value.scrub());
-            }
-
-        }
-
-        trhtml += `<td>${run.label}</td>`;
-
-        subgroupHeaders.forEach((key) => {
-            let text = '';
-            if (subgroupItems) {
-                text = subgroupItems[key] || '';
-            }
-
-            trhtml += `<td>${text}</td>`;
-        });
-        tr.innerHTML = trhtml;
-
-        tr.addEventListener('click', (e) => {
-            trClickHandler(run);
-        });
-
+        let tr = UI_CreateTableRow(run, subgroupHeaders, $table);
         tablebody.appendChild(tr);
     });
 
+}
+
+/** Create table row from rundata */
+function UI_CreateTableRow(run: RunData, columnHeadKey: string[], $table: HTMLTableElement): HTMLTableRowElement {
+    const tableid = $table.id;
+    const subgroupItems = run.subgroups[tableid] as object;
+    const tr = document.createElement('tr');
+    
     // add an extra column to each row for spacer
     const spacer = document.createElement('td');
     spacer.classList.add('spacer');
-    tablebody.querySelectorAll('tr').forEach((tr) => {
-        tr.appendChild(spacer.cloneNode());
+
+    let trhtml = '';
+    let patientinfo = { id: run.id, label: run.label };
+    
+    if (run.subgroups['patientinfo']) {
+        patientinfo = { ...patientinfo, ...run.subgroups['patientinfo'] as object };
+    }
+    // tag rows with searchable attributes
+    for (const key in rowDataAttributes) {
+        const attr = rowDataAttributes[key];
+        let value = patientinfo[attr];
+        if (value) {
+            tr.setAttribute(`data-${key}`, value.scrub());
+        }
+    }
+
+    trhtml += `<td>${run.label}</td>`;
+
+    columnHeadKey.forEach((key) => {
+        let text = '';
+        if (subgroupItems) {
+            text = subgroupItems[key] || '';
+        }
+
+        trhtml += `<td>${text}</td>`;
+    });
+    tr.innerHTML = trhtml;
+    tr.appendChild(spacer);
+
+    tr.addEventListener('click', (e) => {
+        trClickHandler(run);
     });
 
+    return tr;
 }
 
 // EVENT HANDLERS
@@ -212,4 +220,26 @@ function resetPage() {
     Array.from(hilights).forEach((elem) => elem.classList.remove('hilight'));
 }
 
-export { UICreateExplorerPage };
+function UI_AddDataRow(id: string) {
+    const item = DataItems.find(item => item.id === id);
+    
+    
+    //console.log("explorer", rundata, item);
+
+    if (item) {
+        if (item.analysisDate != item.presenting) {
+            item.addPresentingAsNewRun();
+            console.log("updated data: ", item);
+        }
+    }
+    
+    // update tables
+    const rundata = GetRunData(DataItems); 
+    const $tables = $tablecontainerdiv.querySelectorAll('table');
+    $tables.forEach(($table) => {
+       UIcreateTableContent(rundata, $table);
+    });
+
+}
+
+export { UICreateExplorerPage, UI_AddDataRow as Explorer_AddDataRow };

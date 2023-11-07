@@ -6,13 +6,8 @@
     width: 100vw;
     height: 100vh;
 
-    &.mini {
-        height: 100px;
-        width: fit-content;
-        margin: auto;
-    }
-
     .main_icon {
+        display: block;
         box-sizing: border-box;
         width: 80px;
         height: 50px;
@@ -49,7 +44,7 @@
             }
         }
 
-        &#runbatch-btn {
+        &#runpa-btn {
             background-image: url('./icons/batch_samples.png');
 
             &::after {
@@ -57,7 +52,7 @@
             }
         }
 
-        &#runmanual-btn {
+        &#runma-btn {
             background-image: url('./icons/sm_manual_sample.png');
 
             &::after {
@@ -73,5 +68,88 @@
             }
         }
 
+        &#main-btn {
+            display: none;
+            background-image: url('./icons/logoff.png');
+
+            &::after {
+                content: 'Rturn to samples ';
+            }
+        }
+
+    }
+    
+    &.mini {
+        height: 100px;
+        width: fit-content;
+        margin: auto;
+
+        .main_icon:not(.disabled) {
+            display: none;
+        }
+        .main_icon.option {
+            &#runqc-btn::after,
+            &#runpa-btn::after,
+            &#runma-btn::after {
+                content: 'Samples';
+            }
+        }
+        
+        #main-btn {
+            display: block;
+        }
+    }
+}
+
+.tooltip {
+    .tooltip-inner {
+        max-width: 230px;
+        width: 230px;
+    }
+    div.sampleimg {
+        position: relative;
+        height: 40px;
+        background-color: #eee;
+        background-image: linear-gradient(#eee, #ffaeae, #970000);
+        background-size: 30px;
+        background-repeat: no-repeat;
+        color: #000;
+        margin: 5px auto;
+        outline: 1px solid #fff;
+        border-radius: 10%/40%;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        padding: 5px 10px 0 35px;
+        border: none;
+        border-right: 65px solid #eee;
+        text-align: left;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1em;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: -5%;
+            right: -70px;
+            width: 40px;
+            height: 110%;
+            background-image: linear-gradient(#a20025, #ff1111, #533);
+            border-bottom-right-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        &.grey::after {
+            background-image: linear-gradient(#999, #aaa, #000);
+        }
+        &.white::after {
+            background-image: linear-gradient(#eee, #fff, #bbb);
+        }
+
+        span {
+            font-weight: 200; 
+            font-size: x-small;
+            display: block;
+            clear: both;
+        }
     }
 }

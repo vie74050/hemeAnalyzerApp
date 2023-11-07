@@ -48,13 +48,13 @@ export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $aler
 
         // get div with id 'samplepage-action` and update w runinfo 'Action'
         const $action = $container.querySelector('#samplepage-action');
-        const isAction = runInfo['Action'].length > 0;
+        const isAction = runInfo['Action']?.length > 0 || false;
         $action.innerHTML = isAction ? 'Action' : '';
         if (isAction) $action.classList.add('selected');
 
         // get div with id 'samplepage-error` and update w runinfo 'Error'
         const $error = $container.querySelector('#samplepage-error');
-        const isError = runInfo['Error'].length > 0;
+        const isError = runInfo['Error']?.length > 0 || false;
         $error.innerHTML = isError ? 'Error' : '';
         if (isError) $error.classList.add('selected');
 
@@ -145,20 +145,20 @@ function UIMainTableSetup(paramdata: HemeSampleItem, $tbody: HTMLTableElement, d
     $tbody.replaceChildren(); 
     // create tbody with rows for each parameter subgroup 'haparameter'
     // column 1 is label or item, column 2 is dateref value, column 3 is unit value
-    let params = paramdata.GetSubgroup('haparameter');
+    let params = paramdata.GetItemsOfSubgroup('haparameter');
     var n = 0;
     for (let param in params) {
         let item = params[param];
         let $tr = document.createElement('tr');
         let $td_item = document.createElement('td');
-        let $td_date = document.createElement('td');
+        let $td_data = document.createElement('td');
         let $td_unit = document.createElement('td');
         let label = item.label || item.item; 
         $td_item.innerHTML = label;
-        $td_date.innerHTML = item[dateref] || '-';
+        $td_data.innerHTML = item[dateref] || '-';
         $td_unit.innerHTML = item.unit || '';
         $tr.appendChild($td_item);
-        $tr.appendChild($td_date);
+        $tr.appendChild($td_data);
         $tr.appendChild($td_unit);
         $tbody.appendChild($tr);
         n++;
@@ -170,7 +170,7 @@ function UIMainTableSetup(paramdata: HemeSampleItem, $tbody: HTMLTableElement, d
 function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableElement) { 
     const mincolumns = 10; // create at least 5 columns
     let analysisDates = paramdata.analysisDates;
-    let params = paramdata.GetSubgroup('haparameter');
+    let params = paramdata.GetItemsOfSubgroup('haparameter');
     //console.log(params);
 
     // clear container
@@ -266,7 +266,7 @@ function UIGraphSetup(run: RunData, $td: HTMLElement) {
 
 /** Gets flags from dateref and adds it to a column */
 function UIFlags(paramdata: HemeSampleItem, dateref, $holder: HTMLTableElement) {
-    const runinfo = paramdata.GetSubgroup('other'); 
+    const runinfo = paramdata.GetItemsOfSubgroup('other'); 
     const n = $holder.querySelectorAll('tr').length;
     const $tr = $holder.querySelector('tr:first-child');
 

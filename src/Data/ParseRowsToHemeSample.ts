@@ -1,8 +1,8 @@
 import "../helpers/string-exts";
-import { HemeSampleItem, PASampleItem, QCSampleItem } from "./HemeSampleItem";
+import { HemeSampleItem, QCSampleItem } from "./HemeSampleItem";
 
 /** Groups from sheet data to use as HemeSampleItem type */
-export enum hemeGroups { qc='QCSample' , pa='PASample'};
+export enum hemeGroups { qc='QCSample' , pa='PASample', ma='MASample'};
 
 /** Parse row data to create HemeSamples 
  * for Groups = QCSample or PA Sample 
@@ -18,7 +18,17 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
     const hemeSamples: HemeSampleItem[] = [];
     for (const row of data) {
         const group = row.Groups;
-        if (group === hemeGroups.qc || group === hemeGroups.pa) {
+
+        // check if group is a valid hemeGroup
+        let validGroup = false;
+        for (let key in hemeGroups) {
+            if (group === hemeGroups[key]) {
+                validGroup = true;
+                break;
+            }
+        }
+
+        if (validGroup) { 
             // filter Record<string, string> for each row only if value is not null
 
             let itemInfo: Record<string, string | object> = Object.keys(row)
@@ -60,9 +70,8 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
             itemInfo['subgroups'] = subgroupsArr;
             if (group === hemeGroups.qc) {
                 hemeSamples.push(new QCSampleItem(itemInfo));
-            }
-            if (group === hemeGroups.pa) {
-                hemeSamples.push(new PASampleItem(itemInfo));
+            }else {
+                hemeSamples.push(new HemeSampleItem(itemInfo));
             }
 
         }
