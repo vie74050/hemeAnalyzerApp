@@ -1,17 +1,21 @@
-import { selectElemFromGroup } from '../helpers/domElemHelper';
 import { QC_AddDataRow } from './UIMonitorQCFiles';
 import { Explorer_AddDataRow } from './UIMonitorExplorer';
-import { HemeSampleItem, QCSampleItem } from '../Data/HemeSampleItem';
+import { HemeSampleItem } from '../Data/HemeSampleItem';
 import { hemeGroups } from '../Data/ParseRowsToHemeSample';
+import { Modal_UICreateVideo, IDetails } from './modals/UIVideo';
+import { Tooltip } from 'bootstrap';
 
 const mainhtml = require('./UIMain.html').default;
 let $main: HTMLDivElement, $monitor: HTMLDivElement;
+let $modal: HTMLElement = null;
 
 /** Setup HTML */
 function UIMainSetUp(mainID: string, monitorID: string) {
     $main = document.getElementById(mainID) as HTMLDivElement;
     $main.innerHTML = mainhtml;
     $monitor = document.getElementById(monitorID) as HTMLDivElement;
+    $modal = Modal_UICreateVideo();
+    $main.appendChild($modal);
 }
 
 /** set up UI events after data loaded */
@@ -22,53 +26,75 @@ function UIEventsSetUp(hemeSampleItems: HemeSampleItem[]) {
     let btngroup = [$computerBtn];
 
     $computerBtn?.addEventListener('click', (e) => {
-        $main.classList.add('mini');
-        $monitor.classList.add('show');
-        selectElemFromGroup(e.currentTarget as HTMLElement, btngroup);
+        showMonitor();
     });
     $mainBtn?.addEventListener('click', (e) => {
-        $main.classList.remove('mini');
-        $monitor.classList.remove('show');
+        HideMonitor();
     });
 
     // sample items associated w each type of heme sample
-    let samples: { [key: string]: string[] } = {};
-    for (let key in hemeGroups) {
+    var samples: { [key: string]: string[] } = {};
+    for (let btnid in hemeGroups) {
         // filter for hemeGroup items that have presenting data only
-        samples[key] = hemeSampleItems.filter((item) => {
+        samples[btnid] = hemeSampleItems.filter((item) => {
 
-            return item.group.scrub() === hemeGroups[key].scrub() && item.hasPresenting();
+            return item.group.scrub() === hemeGroups[btnid].scrub() && item.hasPresenting();
         }).map((item) => {
             return item.id;
         });
 
-        const $btn = $main.querySelector('#run' + key + '-btn') as HTMLButtonElement;
-        if (samples[key].length === 0) {
+        const $btn = $main.querySelector('#run' + btnid + '-btn') as HTMLButtonElement;
+        
+        if (samples[btnid].length === 0) {
             // remove the button if no sample items
             $btn.remove();
         } else {
             btngroup.push($btn);
             $btn.addEventListener('click', (e) => {
-                selectElemFromGroup(e.currentTarget as HTMLElement, btngroup);
-
+              
                 if ($btn.classList.contains('disabled')) {
                     return;
                 }
-
-                ShowModal($btn, samples[key]);
+                ui_RunHandler(samples[btnid], $btn);
+                showVideoModal( btnid );
 
             });
         }
+
+        new Tooltip($btn);
     }
 }
 
-function ShowModal($btn: HTMLButtonElement, samples: string[]) {
-
-
-    UI_RunHandler(samples, $btn);
+// EVENT HANDLERS
+function showMonitor() {
+    $main.classList.add('mini');
+    $monitor.classList.add('show');
 }
 
-function UI_RunHandler(ids: string[], $btn: HTMLButtonElement) {
+function HideMonitor() {
+    $main.classList.remove('mini');
+    $monitor.classList.remove('show');
+}
+
+function showVideoModal( key : string) {
+    enum srcs {
+        qc = 'https://bcit365-my.sharepoint.com/personal/vienna_ly_bcit_ca/_layouts/15/embed.aspx?UniqueId=4c41a444-c24c-4744-b275-e513a87dba45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
+        pa = 'https://www.youtube.com/embed/itzRgmkJu1w?si=Inh-dkjCaugtok29',
+        ma = 'https://www.youtube.com/embed/itzRgmkJu1w?si=Inh-dkjCaugtok29'
+    }
+    enum titles {
+        qc = 'Running QC Samples',
+        pa = 'Running Patient Samples',
+        ma = 'Running Manual Sample'
+    }
+    let detail: IDetails = {
+        src: srcs[key],
+        title: titles[key]
+    };
+    $modal.dispatchEvent(new CustomEvent('updatemodal', {detail: detail}));
+}
+
+function ui_RunHandler(ids: string[], $btn: HTMLButtonElement) {
     const tooltiphtml = require('./UIMain_tooltip.html').default;
     const btnid = $btn.id;
     let attrhtml = '', option = '';
@@ -79,7 +105,7 @@ function UI_RunHandler(ids: string[], $btn: HTMLButtonElement) {
         'qc2' = 'grey',
         'small' = 'small'
     };
-
+    
     for (let i = 0; i < ids.length; i++) {
         // randomly generate barcode image
         let barcode = '';
@@ -105,9 +131,11 @@ function UI_RunHandler(ids: string[], $btn: HTMLButtonElement) {
         Explorer_AddDataRow(ids[i]);
     }
 
-    /** @TODO update data-bs-original-title attribut to show selected sample ids */
     $btn.setAttribute('data-bs-original-title', attrhtml);
+    $btn.setAttribute('data-bs-toggle', 'tooltip');
+    $btn.setAttribute('data-bs-target', '');
     $btn.classList.add('disabled');
+    
 }
 
-export { UIMainSetUp, UIEventsSetUp as UIMainEventsSetUp };
+export { UIMainSetUp, UIEventsSetUp as UIMainEventsSetUp, HideMonitor };

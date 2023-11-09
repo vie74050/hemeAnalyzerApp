@@ -25,10 +25,18 @@ Object.defineProperty(this, 'currentPage', {
         SelectCurrentPage();  //console.log(value, currentPage);
     }
 });
-export function SetCurrentPage(value: string) {
+
+/** Sets the currentPage value if in monitorNav 
+ * @returns true if value is in monitorNav, false otherwise
+ * currentPage listener will call SelectCurrentPage() if true
+*/
+export function SetCurrentPage(value: string): boolean {
 // if value is in monitorNav, set currentPage to value
     if (value in monitorNav) {
         currentPage = value;
+        return true;
+    } else{
+        return false;
     }
 }
 
