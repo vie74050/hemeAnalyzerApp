@@ -181,13 +181,9 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
     // - first column is 'Date', 'Time' followed by analysis dates
     let $thead = document.createElement('thead');
     let $tr1 = document.createElement('tr');
-    let $tr2 = document.createElement('tr');
     let $th1 = document.createElement('th');
-    let $th2 = document.createElement('th');
-    $th1.innerHTML = 'Date';
-    $th2.innerHTML = 'Time';
+    $th1.innerHTML = 'Date <br>Time';
     $tr1.appendChild($th1);
-    $tr2.appendChild($th2);
 
     // reverse analysis dates so most recent is first
     analysisDates = analysisDates.reverse();
@@ -196,15 +192,11 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
         let day = date.split(' ')[0];
         let time = date.split(' ')[1];
         let $th_day = document.createElement('th');
-        let $th_time = document.createElement('th');
-        $th_day.innerHTML = day;
-        $th_time.innerHTML = time;
+        $th_day.innerHTML = day + '<br>' + time;
         $tr1.appendChild($th_day);
-        $tr2.appendChild($th_time);
 
     });
     $thead.appendChild($tr1);
-    $thead.appendChild($tr2);
     $container.appendChild($thead);
 
     // create tbody with rows for each parameter
@@ -227,10 +219,10 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
     }
     $container.appendChild($tbody);
 
-    // add empty columns if there are less than 5 columns
+    // add empty columns if there are less than mincolumns
     const $th = $thead.querySelectorAll('tr:first-child>th');
     const numcols = $th.length;
-    if (numcols < mincolumns) {
+    if (numcols <= mincolumns) {
         let $tbodytrs = $tbody.querySelectorAll('tr');
         let $theadtrs = $thead.querySelectorAll('tr');
         let numemptycols = mincolumns - numcols;
@@ -249,6 +241,10 @@ function UICumulativeSetup(paramdata: HemeSampleItem, $container: HTMLTableEleme
         }
     }
 
+    // add extra emtpy column to thead
+    let $th_empty = document.createElement('th');
+    $th_empty.innerHTML = '';
+    $tr1.appendChild($th_empty);
 }
 
 /** Create img for the Graph table */
