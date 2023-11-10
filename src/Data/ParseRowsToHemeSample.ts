@@ -17,12 +17,13 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
 
     const hemeSamples: HemeSampleItem[] = [];
     for (const row of data) {
-        const group = row.Groups;
+        const group = row.Subgroup;
 
         // check if group is a valid hemeGroup
         let validGroup = false;
         for (let key in hemeGroups) {
             if (group === hemeGroups[key]) {
+                row.Groups = group;
                 validGroup = true;
                 break;
             }
