@@ -34,7 +34,6 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
                 subgroups: { runinfo: runinfo }
             };
 
-
             for (const key_subgroupid in subgroupsItems) {
                 const items = subgroupsItems[key_subgroupid] as object;
                 const obj = data.subgroups[key_subgroupid] as object || {};
@@ -45,6 +44,7 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
                     const key = item['item'];
                     if (item['description']) parseditems[key] = item['description'];
                     else if (item[dateref]) parseditems[key] = item[dateref];
+                    else if (sample['presenting'] == sample.analysisDate) parseditems[key] = item['presenting'];
                     else parseditems[key] = '';
                 }
                 data.subgroups[key_subgroupid] = { ...obj, ...parseditems };

@@ -1,7 +1,7 @@
 import './scss/styles.scss';
 import { GetData } from './Data/GetGSheetsData';
 import { CreateHemeSamplesFromRowData } from './Data/ParseRowsToHemeSample';
-import { UIMainSetUp } from './UI/UIMain';
+import { UIMainSetUp, UIMainEventsSetUp } from './UI/UIMain';
 import { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp } from './UI/UIMonitor';
 import { Tooltip } from 'bootstrap';
 import { HemeSampleItem } from './Data/HemeSampleItem';
@@ -16,6 +16,7 @@ function Load() {
     // wait for data, then populate UT content from data
     GetData().then((data) => {
         HemeSampleItems = CreateHemeSamplesFromRowData(data);
+        UIMainEventsSetUp(HemeSampleItems);
         UIQCTableSetUp(HemeSampleItems);
         UIExplorerSetUp(HemeSampleItems);
 

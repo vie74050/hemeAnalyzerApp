@@ -12,7 +12,7 @@
     display: none;
     box-sizing: border-box;
     position: relative;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 100px);
     min-height: 450px;
     overflow: hidden;
     border: 1px solid #333;
@@ -168,16 +168,18 @@
 
         .tableFixHead {
             overflow-y: scroll;
-            overflow-x: auto;
+            overflow-x: hidden;
             height: 100%;
 
             >table {
                 width: 100%;
+                min-width: 800px;
                 text-align: center;
                 border-collapse: collapse;
                 background-color: #fff;
                 font-size: 0.9em;
                 display: none;
+                table-layout: fixed;
 
                 &.selected {
                     display: table;

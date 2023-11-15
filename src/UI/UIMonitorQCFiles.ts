@@ -3,9 +3,11 @@ import { QCSampleItem } from "../Data/HemeSampleItem";
 import { $backBtn } from "./UIMonitor";
 
 const qcfilespagehtml = require('./UIMonitorQCFiles.html').default;
+const maxRows = 1000;
 
 let $graphscontainer: HTMLElement = null;
 let $table: HTMLTableElement = null;
+let DataItems: QCSampleItem[] = [];
 
 /** Creates table body from data, where Groups="QCSample" = <tr>
  * Expected table for QC Files from `UIMonitorQCFiles.html`:
@@ -23,9 +25,9 @@ let $table: HTMLTableElement = null;
     </table>
 */
 function UICreateQCTable(sampleData: QCSampleItem[], $qcfilesPage: HTMLDivElement) {
-    const maxRows = 1000;
+
     const $tbody = document.createElement('tbody');
- 
+
     // subpage elements for qcfiles page
     $qcfilesPage.innerHTML = qcfilespagehtml;
     $graphscontainer = $qcfilesPage.querySelector('#graphscontainer') as HTMLElement;
@@ -33,43 +35,13 @@ function UICreateQCTable(sampleData: QCSampleItem[], $qcfilesPage: HTMLDivElemen
     $table.appendChild($tbody);
 
     sampleData.forEach((item, i) => {
-        let tr = document.createElement('tr');
-        let td0text_status = item.data.status != 'OK' ? '&#9888;' : '';
-        let td1text_fileNo = "QC" + (i + 1).toString().padStart(maxRows.toString().length, '0');
-        let td2text_lotNo = item.lotNo;
-        let td3text_material = item.material; //console.log(item);
-        let td4text_expiry = item.expiry;
-        let td5text_analysisdate = item.analysisDate;
-
-        item.setQCFileNo(td1text_fileNo); // set qc file no. assigned to sample 
-        let td0 = document.createElement('td'); // Error warning
-        td0.innerHTML = td0text_status;
-        tr.appendChild(td0);
-        let td1 = document.createElement('td'); // File
-        td1.innerText = td1text_fileNo;
-        tr.appendChild(td1);
-        let td2 = document.createElement('td'); // Lot #
-        td2.innerText = td2text_lotNo;
-        tr.appendChild(td2);
-        let td3 = document.createElement('td'); // Material
-        td3.innerText = td3text_material;
-        tr.appendChild(td3);
-        let td4 = document.createElement('td'); // Expiry Date
-        td4.innerText = td4text_expiry;
-        tr.appendChild(td4);
-        let td5 = document.createElement('td'); // Analysis Date
-        td5.innerText = td5text_analysisdate;
-        tr.appendChild(td5);
+        let tr = UI_CreateTableRow(item, i);
         $tbody.appendChild(tr);
-
-        // add click event to each row
-        tr.addEventListener('click', function () {
-            trClickHandler(item);
-        });
     });
     // create remaining empty rows
     for (let i = sampleData.length; i < maxRows; i++) {
         let tr = document.createElement('tr');
+        tr.classList.add('_emptyrow');
         $tbody.appendChild(tr);
         let td0 = document.createElement('td'); // Error warning
         td0.innerHTML = '';
@@ -96,19 +68,55 @@ function UICreateQCTable(sampleData: QCSampleItem[], $qcfilesPage: HTMLDivElemen
         resetPage();
     });
 
+    DataItems = sampleData;
 }
 
-/** creates charts from item's sampleData subgroup `haparameter` */
-function UILoadQCGraphs(sampleData: QCSampleItem) {
+/** Create table row from item */
+function UI_CreateTableRow(item: QCSampleItem, i: number): HTMLTableRowElement {
+    let tr = document.createElement('tr');
+    let td0text_status = item.data.status != 'OK' ? '&#9888;' : '';
+    let td1text_fileNo = getTextFileNo(i);
+    let td2text_lotNo = item.lotNo;
+    let td3text_material = item.material; //console.log(item);
+    let td4text_expiry = item.expiry;
+    let td5text_analysisdate = item.analysisDate;
+    let td0 = document.createElement('td'); // Error warning
+    td0.innerHTML = td0text_status;
+    tr.appendChild(td0);
+    let td1 = document.createElement('td'); // File
+    td1.innerText = td1text_fileNo;
+    tr.appendChild(td1);
+    let td2 = document.createElement('td'); // Lot #
+    td2.innerText = td2text_lotNo;
+    tr.appendChild(td2);
+    let td3 = document.createElement('td'); // Material
+    td3.innerText = td3text_material;
+    tr.appendChild(td3);
+    let td4 = document.createElement('td'); // Expiry Date
+    td4.innerText = td4text_expiry;
+    tr.appendChild(td4);
+    let td5 = document.createElement('td'); // Analysis Date
+    td5.innerText = td5text_analysisdate;
+    tr.appendChild(td5);
+
+    // add click event to each row
+    tr.addEventListener('click', function () {
+        trClickHandler(item, td1text_fileNo);
+    });
+    return tr;
+}
+
+/** creates charts from item's subgroup `haparameter` */
+function UILoadQCGraphs(sampleDatum: QCSampleItem, fileno: string) {
     // clear graphs container
     $graphscontainer.innerHTML = '';
 
     // create header row container div class rowheader for fileInfo
     const fileInfo = {
-        'File No.': sampleData.id,
-        'Lot No.': sampleData.lotNo,
-        'Material': sampleData.material,
-        'Expiry Date': sampleData.expiry
+        'File No.': fileno,
+        'Lot No.': sampleDatum.lotNo,
+        'Material': sampleDatum.material,
+        'Expiry Date': sampleDatum.expiry
     };
     const $fileInfoContainer = document.createElement('div');
     $fileInfoContainer.setAttribute('class', 'rowheader');
@@ -132,18 +140,33 @@ function UILoadQCGraphs(sampleData: QCSampleItem) {
         mean: "mean",
         cv: "cv"
     }, $graphscontainer);
-   
-    const analysisdates = sampleData.analysisDates;
-    const paramerterData = sampleData.GetSubgroup('haparameter'); //console.log(paramerterData);
+
+    const analysisdates = sampleDatum.analysisDates;
+    const paramerterData = sampleDatum.GetItemsOfSubgroup('haparameter'); //console.log(paramerterData);
 
     // for each parameterData, create new LineGraph
     for (let key in paramerterData) {
 
-        let paramItem = paramerterData[key];
-        let id = paramItem['item'].scrub();
+        const paramItem = paramerterData[key];
+        const id = paramItem['item'].scrub();
         let yData = analysisdates.map((s, i) => {
-            let dateHeader = 'date' + (i + 1);
-            return Number(paramItem[dateHeader]);
+            const dateref = 'date' + (i + 1);
+            let data = paramItem[dateref];
+
+            if (Number(data)) {
+                return Number(data);
+            } else if (sampleDatum.presenting) {
+                const presenting = sampleDatum.presenting as string;
+                const latest = sampleDatum.analysisDate;
+                if (presenting == latest) {
+                    data = paramItem['presenting'];
+                    return Number(data);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
         });
         let yTitle = paramItem['label'] ? paramItem['label'] : paramItem['item'];
         let yMin = Number(paramItem['allowedmin']);
@@ -165,23 +188,28 @@ function UILoadQCGraphs(sampleData: QCSampleItem) {
         let chart = new LineGraph(chartData, $graphscontainer);
 
         // set heading row width to max chart width
-        if(yData.length > chart._maxPointsPerPg){
+        if (yData.length > chart._maxPointsPerPg) {
             headingRow.canvas.style.width = (chart.canvas.width + 100) + 'px';
             headingRow.canvas.parentElement.scrollLeft = headingRow.canvas.parentElement.scrollWidth;
         };
 
-        
     }
+
+}
+
+/** returns string of the assigned qc file number */
+function getTextFileNo(i:number): string {
+    return "QC" + (i + 1).toString().padStart(maxRows.toString().length, '0');
 
 }
 
 // EVENT HANDLERS
 
 /** <tr> click handler when item row is clicked*/
-function trClickHandler(item: QCSampleItem) {
+function trClickHandler(item: QCSampleItem, fileno: string) {
     $table.style.display = 'none'; // hide table
     $backBtn.style.display = 'inline-block'; // show back            
-    UILoadQCGraphs(item); // create graphs container
+    UILoadQCGraphs(item, fileno); // create graphs container
 }
 
 /** handle qcpage reset */
@@ -191,4 +219,37 @@ function resetPage() {
     $backBtn.style.display = 'none'; // hide back
 }
 
-export { UICreateQCTable }
+/** TODO update table with Presenting data */
+function UI_AddDataRow(id: string) {
+
+    // get the first '_emptyrow' element from table
+    const $emptyrow = $table.querySelector('._emptyrow') as HTMLTableRowElement;
+    // find id in DataItems
+    const item = DataItems.find(item => item.id === id);
+
+    console.log(item);
+
+    // if item is found, update $emptyrow with presenting data
+    if (item) {
+        // add new row to QC table if item.analysisDate != item.presenting
+        if (item.analysisDate != item.presenting) {
+            // update item
+            item.addPresentingAsNewRun();
+
+            $emptyrow.classList.remove('_emptyrow');
+            $emptyrow.cells[0].innerHTML = item.data.status != 'OK' ? '&#9888;' : '';
+            $emptyrow.cells[2].innerHTML = item.lotNo;
+            $emptyrow.cells[3].innerHTML = item.material;
+            $emptyrow.cells[4].innerHTML = item.expiry;
+            $emptyrow.cells[5].innerHTML = item.presenting;
+
+            // add click event to each row
+            let td1text_fileNo = $emptyrow.cells[1].innerText;
+            $emptyrow.addEventListener('click', function () {
+                trClickHandler(item, td1text_fileNo);
+            });
+        }
+    }
+
+}
+export { UICreateQCTable, UI_AddDataRow as QC_AddDataRow }

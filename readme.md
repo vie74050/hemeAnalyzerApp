@@ -33,3 +33,18 @@ See package.json scripts:
 - `npm test` - for testing using jest
 - `npm run start` - for testing locally on `localhost:8080`
 - `npm run deploy` - to deploy to test server (GitHub Pages). It will build to dist and deploy to `gh-pages` branch.
+
+### External Libs
+
+- [Google Sheets API](https://developers.google.com/sheets/api/guides/concepts)
+- [Chart.js](https://www.chartjs.org/)
+
+## Implentation
+
+### Request vars
+
+The parameters vars below can be passed with URL.  
+See `Data/GetGSheetData.ts`.
+
+- `id` the googlesheet (workbook) id
+- `name` the googlesheet (sheet) name
