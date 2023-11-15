@@ -115,7 +115,7 @@
                 background-image: url('./icons/logoff.png');
     
                 &::after {
-                    content: 'Return to samples ';
+                    content: 'view samples';
                 }
             }
         }
@@ -140,7 +140,6 @@
             font-weight: normal;
 
             .main_icon {
-                width: fit-content;
                 height: 55px;
                 &::after {
                     margin-top: 80%;
