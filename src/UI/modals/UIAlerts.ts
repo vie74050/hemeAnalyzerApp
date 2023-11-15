@@ -1,8 +1,11 @@
 import { UICreateElemFromString } from '../../helpers/domElemHelper';
-interface IDetails {
+
+export interface IDetails {
     actions: string;
     errors: string;
 }
+
+/** Modal for run Actions and Alerts */
 export function Modal_UICreateAlerts(): HTMLElement {
     const html = require('./UIAlerts.html').default;
     const $elem = UICreateElemFromString(html, 'div') as HTMLElement;

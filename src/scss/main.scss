@@ -6,13 +6,8 @@
     width: 100vw;
     height: 100vh;
 
-    &.mini {
-        height: 100px;
-        width: fit-content;
-        margin: auto;
-    }
-
     .main_icon {
+        display: block;
         box-sizing: border-box;
         width: 80px;
         height: 50px;
@@ -49,7 +44,7 @@
             }
         }
 
-        &#runbatch-btn {
+        &#runpa-btn {
             background-image: url('./icons/batch_samples.png');
 
             &::after {
@@ -57,7 +52,7 @@
             }
         }
 
-        &#runmanual-btn {
+        &#runma-btn {
             background-image: url('./icons/sm_manual_sample.png');
 
             &::after {
@@ -73,5 +68,37 @@
             }
         }
 
+        &#runqc-btn,
+        &#runpa-btn,
+        &#runma-btn {
+            &.option.disabled::after {
+                content: 'View Samples';
+            }
+        }
+
+        &#main-btn {
+            display: none;
+            background-image: url('./icons/logoff.png');
+
+            &::after {
+                content: 'Return to samples ';
+            }
+        }
+
+
+    }
+    
+    &.mini {
+        height: 100px;
+        width: fit-content;
+        margin: auto;
+
+        .main_icon:not(.disabled) {
+            display: none;
+        }
+                
+        #main-btn {
+            display: block;
+        }
     }
 }

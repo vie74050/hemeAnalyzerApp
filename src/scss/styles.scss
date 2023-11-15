@@ -1,5 +1,6 @@
 @import "./main.scss";
 @import "./monitor.scss";
+@import "./tooltip.scss";
 
 * {
     box-sizing: border-box;
@@ -17,11 +18,3 @@ body {
     background-color: lightblue;
 }
 
-#samplesContainerMenu {
-    box-sizing: border-box;
-    flex: 1;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: #eee;
-}
