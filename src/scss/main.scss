@@ -7,7 +7,7 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
-        filter: blur(15px); -webkit-filter: blur(15px);
+        filter: blur(10px); -webkit-filter: blur(10px);
         z-index: -1;
     }
 
@@ -123,7 +123,7 @@
 
     &.mini {
         position: relative;
-        height: 100px;
+        height: 60px;
         width: 100%;
         margin: auto;
 

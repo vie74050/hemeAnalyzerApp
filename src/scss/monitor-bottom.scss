@@ -1,0 +1,97 @@
+#bot-menu {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    gap: 10px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+
+    >div {
+        box-sizing: border-box;
+        border-radius: 10px;
+        border: 1px solid #111;
+    }
+
+    #machine-status {
+        width: 40px;
+        border: 2px solid #222;
+        background-color: #25ff00;
+        box-shadow: inset 0 0 20px #083800;
+        animation-duration: 0.5s;
+        animation-iteration-count: infinite;
+
+        &.warning {
+            background-color: rgb(255, 196, 0);
+            box-shadow: inset 0 0 20px #5a2c00;
+            animation-name: pulse;
+        }
+    
+        &.error {
+            background-color: red;
+            box-shadow: inset 0 0 20px #5a0000;
+            animation-name: pulse;
+        }
+
+    }
+
+    #rack-status {
+        width: 220px;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 12px;
+
+        .rack {
+            display: inline-block;
+            width: 42%;
+            border: 1px solid white;
+            border-radius: 10px;
+            font-size: 18px;
+            line-height: 18px;
+            padding: 0;
+
+            span.active {
+                color: greenyellow;
+            }
+        }
+
+        .label {
+            width: 100%;
+            font-weight: 700;
+        }
+    }
+
+    #sample-info {
+        flex: 1;
+        text-align: left;
+    }
+
+    #error-status {
+        width: 50px;
+        border: 2px solid #222;
+        background-color: #000;
+    
+        &.red {
+            background-color: red;
+            box-shadow: inset 0 0 20px #5a0000;
+            animation-name: pulse;
+        }
+    }
+    
+    #run-mode {
+        width: 100px;
+        background-color: #eee;
+    }
+
+    @keyframes pulse {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0.7;
+        }
+    }
+    
+}
