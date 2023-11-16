@@ -17,7 +17,7 @@ test("should return data", () => {
     expect(item0_raw['groups']).toBe('QCSample');
 
     expect(item0.id).toBe('qc001');
-    expect(item0.GetSubgroup('sampleinfo')).not.toBeNull();
-    expect(item0.GetSubgroup('sampleinfo')).toHaveProperty('material');
-    expect(item0.GetSubgroup('sampleinfo')).toHaveProperty('expirydate');
+    expect(item0.GetItemsOfSubgroup('sampleinfo')).not.toBeNull();
+    expect(item0.GetItemsOfSubgroup('sampleinfo')).toHaveProperty('material');
+    expect(item0.GetItemsOfSubgroup('sampleinfo')).toHaveProperty('expirydate');
 });

@@ -58,11 +58,11 @@ function SetRackPosition(rack: number, pos: number) {
     }
 
     if ($rack === undefined) {
-        console.error(`rack ${rack} not found`);
+        //console.log(`rack ${rack} not found`);
         return;
     }
     if ($label === undefined) {
-        console.error(`label not found`);
+        //console.log(`label not found`);
         return;
     }
         

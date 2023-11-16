@@ -39,11 +39,16 @@ class HemeSampleItem {
     /** Returns the last analysis date in the analysisdates string */
     public get analysisDate(): string {
         let analysisdates = this.analysisDates;
-        return analysisdates[analysisdates.length - 1];
+        return analysisdates[analysisdates.length - 1] || "";
     }
     /** Returns all analysis dates in the analysisdates string */
     public get analysisDates(): string[] {
-        let analysisdates = (this.data.analysisdates as string).split(/ *; */);
+        let analysisdates = (this.data.analysisdates as string || "").split(/ *; */);
+
+        if (analysisdates) {
+            // remove empty strings
+            analysisdates = analysisdates.filter((date) => date != "");
+        }
         // sort analysisdates
         analysisdates.sort((a, b) => {
             let aDate = new Date(a);
