@@ -2,13 +2,18 @@
 @import "./monitor.scss";
 @import "./tooltip.scss";
 
+@font-face {
+    font-family: 'OpenSans';
+    src: url('./fonts/OpenSans-VariableFont_wdth\,wght.ttf');
+}
+
 * {
     box-sizing: border-box;
 }
 
 html,
 body {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: 'OpenSans', Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
