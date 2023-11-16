@@ -54,6 +54,8 @@ For the latest notes on spreadsheet data, see any associated Notes in the [sampl
 #### Groups
 
 The `Groups` for each line item must point to the main sample ID (`Item`) to which the data belongs.
+![image](https://github.com/vie74050/hemeAnalyzerApp/assets/5272116/812d26df-920e-4984-854e-d44935e93e42)
+
 
 #### Subgroup
 
