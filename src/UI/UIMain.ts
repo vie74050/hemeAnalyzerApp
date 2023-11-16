@@ -79,8 +79,8 @@ function HideMonitor() {
 function showVideoModal( key : string) {
     enum srcs {
         qc = 'https://bcit365-my.sharepoint.com/personal/vienna_ly_bcit_ca/_layouts/15/embed.aspx?UniqueId=4c41a444-c24c-4744-b275-e513a87dba45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-        pa = 'https://www.youtube.com/embed/itzRgmkJu1w?si=Inh-dkjCaugtok29',
-        ma = 'https://www.youtube.com/embed/itzRgmkJu1w?si=Inh-dkjCaugtok29'
+        pa = 'https://www.youtube.com/embed/YQhz7jxorMg?si=NOFU9zv8txQAU3Wi&amp;start=43&end=50',
+        ma = 'https://www.youtube.com/embed/YQhz7jxorMg?si=NOFU9zv8txQAU3Wi&amp;start=29&end=33&rel=0'
     }
     enum titles {
         qc = 'Running QC Samples',

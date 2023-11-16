@@ -4,6 +4,7 @@ import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
 import { UICreateExplorerPage } from "./UIMonitorExplorer";
 import { UICreateHomePage } from "./UIMonitorHome";
+import { UIBottomSetup } from "./UIMonitorBottom";
 
 enum monitorNav {
     home = 'home',
@@ -26,47 +27,33 @@ Object.defineProperty(this, 'currentPage', {
     }
 });
 
-/** Sets the currentPage value if in monitorNav 
- * @returns true if value is in monitorNav, false otherwise
- * currentPage listener will call SelectCurrentPage() if true
-*/
-export function SetCurrentPage(value: string): boolean {
-// if value is in monitorNav, set currentPage to value
-    if (value in monitorNav) {
-        currentPage = value;
-        return true;
-    } else{
-        return false;
-    }
-}
-
 /** Method for setting up monitor page
  * @param monitorId id of monitor container div 
  */
 function UIMonitorSetUp(monitorId: string) {
-    
+
     const $monitor = document.getElementById(monitorId) as HTMLDivElement;
-    $monitor.innerHTML = monitorhtml;   
-    
+    $monitor.innerHTML = monitorhtml;
+
     topbtns = $monitor.getElementsByTagName('button') as HTMLCollectionOf<HTMLButtonElement>;
-    contentPages = $monitor.getElementsByClassName('content-page')as HTMLCollectionOf<HTMLElement>;
-   
+    contentPages = $monitor.getElementsByClassName('content-page') as HTMLCollectionOf<HTMLElement>;
+
     // loop through monitorNav enum and get corresponding buttons from #top-menu
     for (let navId in monitorNav) {
         let btnelem = $monitor.querySelector(`#${navId}-btn`) as HTMLButtonElement;
         // start with home page
         if (navId == 'home') {
             UIHomeSetUp();
-        }     
+        }
 
         if (btnelem) {
             if (navId == 'back') {
                 // reference for subpage navigation
-                $backBtn = btnelem;         
+                $backBtn = btnelem;
                 // add event listener back btn
                 btnelem.addEventListener('click', () => {
                     SelectCurrentPage();
-                });      
+                });
             } else {
                 // add event listener to each nav button
                 btnelem.addEventListener('click', () => {
@@ -75,9 +62,12 @@ function UIMonitorSetUp(monitorId: string) {
             }
         }
     }
-    
+
     SelectCurrentPage();
-    
+
+    // bottom analyzer HUD setup
+    UIBottomSetup($monitor.querySelector('#bot-menu') as HTMLElement);
+
     return { $backBtn };
 }
 
@@ -101,8 +91,8 @@ function SelectCurrentPage() {
 // FUNCTIONS FOR UI SETUP
 
 function UIHomeSetUp() {
-    const $homepage = contentPages.namedItem(monitorNav.home+'-page') as HTMLDivElement;
-   
+    const $homepage = contentPages.namedItem(monitorNav.home + '-page') as HTMLDivElement;
+
     if ($homepage) {
         UICreateHomePage($homepage);
     }
@@ -110,27 +100,42 @@ function UIHomeSetUp() {
 
 /** For setting up QC Tables, called when sheetdata loaded */
 function UIQCTableSetUp(hemeSamples: HemeSampleItem[]) {
-    
-    const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles+'-page') as HTMLDivElement;
+
+    const $qccontentpage = contentPages.namedItem(monitorNav.qcfiles + '-page') as HTMLDivElement;
     // create QC table
     if ($qccontentpage) {
         // filter hemeSamples for QC Samples
         const qcsamples = hemeSamples
-                        .filter((sample) => sample.data.groups === hemeGroups.qc)
-                        .map((sample) => sample as QCSampleItem);
+            .filter((sample) => sample.data.groups === hemeGroups.qc)
+            .map((sample) => sample as QCSampleItem);
 
         UICreateQCTable(qcsamples, $qccontentpage);
 
-    }   
+    }
 }
 
 /** For setting up Explorer page, called when sheetdata loaded */
 function UIExplorerSetUp(hemeSamples: HemeSampleItem[]) {
-    const $explorerpage = contentPages.namedItem(monitorNav.explorer+'-page') as HTMLDivElement;
-    
+    const $explorerpage = contentPages.namedItem(monitorNav.explorer + '-page') as HTMLDivElement;
+
     if ($explorerpage) {
         UICreateExplorerPage(hemeSamples, $explorerpage);
     }
 }
 
-export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, currentPage};
+
+/** Sets the currentPage value if in monitorNav 
+ * @returns true if value is in monitorNav, false otherwise
+ * currentPage listener will call SelectCurrentPage() if true
+*/
+function SetCurrentPage(value: string): boolean {
+    // if value is in monitorNav, set currentPage to value
+    if (value in monitorNav) {
+        currentPage = value;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, SetCurrentPage, currentPage };
