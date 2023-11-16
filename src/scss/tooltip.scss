@@ -2,6 +2,8 @@
     .tooltip-inner {
         max-width: 230px;
         width: 230px;
+        max-height: 200px;
+        overflow: auto;
         background-color: white;
         color: black;
     }

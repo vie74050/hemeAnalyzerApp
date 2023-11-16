@@ -221,15 +221,12 @@ function resetPage() {
 }
 
 function UI_AddDataRow(id: string) {
-    const item = DataItems.find(item => item.id === id);
-    
-    
-    //console.log("explorer", rundata, item);
+    const item = DataItems.find(item => item.id === id);    //console.log("explorer", rundata, item);
 
     if (item) {
         if (item.analysisDate != item.presenting) {
             item.addPresentingAsNewRun();
-            console.log("updated data: ", item);
+            //console.log("updated data: ", item);
         }
     }
     

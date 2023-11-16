@@ -45,25 +45,40 @@ function UIEventsSetUp(hemeSampleItems: HemeSampleItem[]) {
         });
 
         const $btn = $main.querySelector('#run' + btnid + '-btn') as HTMLButtonElement;
-        
+
         if (samples[btnid].length === 0) {
             // remove the button if no sample items
             $btn.remove();
         } else {
             btngroup.push($btn);
             $btn.addEventListener('click', (e) => {
-              
+
                 if ($btn.classList.contains('disabled')) {
                     return;
                 }
                 ui_RunHandler(samples[btnid], $btn);
-                showVideoModal( btnid );
+                showVideoModal(btnid);
 
             });
+
         }
 
         new Tooltip($btn);
     }
+
+    // scrollwheel listener
+    window.addEventListener('wheel', (e) => {
+
+        // also scroll the document bs-tooltip
+        const $bsTooltip = document.querySelector('.tooltip-inner') as HTMLDivElement;
+        if ($bsTooltip !== null) {
+            
+            $bsTooltip.scrollTop = e.deltaY > 0 ? $bsTooltip.scrollTop + 10 : $bsTooltip.scrollTop - 10;
+            //console.log(e.deltaY);
+        }
+    });
+
+
 }
 
 // EVENT HANDLERS
@@ -78,7 +93,7 @@ function HideMonitor() {
     $monitor.classList.remove('show');
 }
 
-function showVideoModal( key : string) {
+function showVideoModal(key: string) {
     enum srcs {
         qc = 'https://bcit365-my.sharepoint.com/personal/vienna_ly_bcit_ca/_layouts/15/embed.aspx?UniqueId=4c41a444-c24c-4744-b275-e513a87dba45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
         pa = 'https://www.youtube.com/embed/YQhz7jxorMg?si=NOFU9zv8txQAU3Wi&amp;start=43&end=50',
@@ -93,7 +108,7 @@ function showVideoModal( key : string) {
         src: srcs[key],
         title: titles[key]
     };
-    $modal.dispatchEvent(new CustomEvent('updatemodal', {detail: detail}));
+    $modal.dispatchEvent(new CustomEvent('updatemodal', { detail: detail }));
 }
 
 function ui_RunHandler(ids: string[], $btn: HTMLButtonElement) {
@@ -107,7 +122,7 @@ function ui_RunHandler(ids: string[], $btn: HTMLButtonElement) {
         'qc2' = 'grey',
         'small' = 'small'
     };
-    
+
     for (let i = 0; i < ids.length; i++) {
         // randomly generate barcode image
         let barcode = '';
@@ -137,7 +152,7 @@ function ui_RunHandler(ids: string[], $btn: HTMLButtonElement) {
     $btn.setAttribute('data-bs-toggle', 'tooltip');
     $btn.setAttribute('data-bs-target', '');
     $btn.classList.add('disabled');
-    
+
 }
 
 export { UIMainSetUp, UIEventsSetUp as UIMainEventsSetUp, HideMonitor };

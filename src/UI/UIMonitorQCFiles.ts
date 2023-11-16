@@ -225,9 +225,7 @@ function UI_AddDataRow(id: string) {
     // get the first '_emptyrow' element from table
     const $emptyrow = $table.querySelector('._emptyrow') as HTMLTableRowElement;
     // find id in DataItems
-    const item = DataItems.find(item => item.id === id);
-
-    console.log(item);
+    const item = DataItems.find(item => item.id === id);    //console.log(id, item);
 
     // if item is found, update $emptyrow with presenting data
     if (item) {
