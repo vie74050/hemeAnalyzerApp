@@ -4,6 +4,7 @@ import { HemeSampleItem } from '../Data/HemeSampleItem';
 import { hemeGroups } from '../Data/ParseRowsToHemeSample';
 import { Modal_UICreateVideo, IDetails } from './modals/UIVideo';
 import { Tooltip } from 'bootstrap';
+import { SetCurrentPage } from './UIMonitor';
 
 const mainhtml = require('./UIMain.html').default;
 let $main: HTMLDivElement, $monitor: HTMLDivElement;
@@ -69,6 +70,7 @@ function UIEventsSetUp(hemeSampleItems: HemeSampleItem[]) {
 function showMonitor() {
     $main.classList.add('mini');
     $monitor.classList.add('show');
+    SetCurrentPage('home');
 }
 
 function HideMonitor() {

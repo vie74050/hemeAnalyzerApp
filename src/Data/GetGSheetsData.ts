@@ -9,7 +9,7 @@ interface ISpreadsheetValues {
 // Default google worksheet id
 var spreadsheetId = "1QCDTOlikbl3E0CjCcmjNOfPrl1veu1C1j6tBtlXKI_o";
 // Default sheet name(s) within worksheet 
-var sheetname = 'SampleData';
+var sheetname = 'sampleData1';
 
 const data_for_testing = googData as ISpreadsheetValues;
 
