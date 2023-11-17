@@ -5,15 +5,14 @@
 
     .main-menu {
         position: relative;
-        display: grid;
+        display: flex;
+        flex-wrap: wrap;
         height: 100%;
-        max-height: 50vh;
+        max-height: 70vh;
         width: 100%;
         column-gap: 50px;
-        grid-template-columns: auto auto auto auto auto;
         justify-content: center;
-        padding-top: 10vh;
-
+        align-content: center;
         .icon-holder {
             position: relative;
             display: flex;
