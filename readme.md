@@ -26,11 +26,11 @@ The `AppKey` should be stored in a `./.env`.
 
 Install using `npm install`.
 
-See package.json scripts:
+See `package.json` scripts:
 
 - `npm test` - for testing using jest
 - `npm run start` - for testing locally on `localhost:8080`
-- `npm run deploy` - to deploy to test server (GitHub Pages). It will build to dist and deploy to `gh-pages` branch.
+- `npm run deploy` - to deploy to test server (GitHub Pages). It will build to `./dist` and deploy to `gh-pages` branch.
 
 ### External Libs
 
@@ -55,7 +55,6 @@ For the latest notes on spreadsheet data, see any associated Notes in the [sampl
 
 The `Groups` for each line item must point to the main sample ID (`Item`) to which the data belongs.
 ![image](https://github.com/vie74050/hemeAnalyzerApp/assets/5272116/812d26df-920e-4984-854e-d44935e93e42)
-
 
 #### Subgroup
 
