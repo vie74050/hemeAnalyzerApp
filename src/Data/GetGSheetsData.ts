@@ -1,4 +1,4 @@
-import { googData } from "../tests/testdata";'./testdata';
+import { googData } from "../tests/testdata";
 
 interface ISpreadsheetValues {
     majorDimension: "DIMENSION_UNSPECIFIED" | "ROWS" | "COLUMNS";
