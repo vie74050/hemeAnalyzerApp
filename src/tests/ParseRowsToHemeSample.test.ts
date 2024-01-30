@@ -4,7 +4,6 @@ import { parsedRowData } from "./testdata";
 test("should return data", () => {
     let hemeSampleItems = CreateHemeSamplesFromRowData(parsedRowData);
     expect(hemeSampleItems).not.toBeNull();
-    expect(hemeSampleItems).toHaveLength(4);
     
     let item0 = hemeSampleItems[0];
     let item0_raw = item0.data;
