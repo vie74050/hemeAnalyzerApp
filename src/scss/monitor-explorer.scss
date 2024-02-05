@@ -171,6 +171,7 @@
         table {
             font-size: small;
             min-width: 800px;
+            text-align: left;
 
             th {
                 font-weight: bold;
@@ -184,7 +185,7 @@
 
             th:nth-child(1),
             td:nth-child(1) {
-                text-align: left;
+                
                 padding-left: 0.5em;
             }
 
@@ -199,13 +200,16 @@
                 width: auto;
             }
 
+            th._flags,
             td._flags,
             td[rowspan] {
-                text-align: left;
                 vertical-align: top;
                 padding: 1em;
-                background-color: #fff;
                 width: auto;
+            }
+            td._fags,
+            td[rowspan]{
+                background-color: #fff;
             }
 
             td.img-holder {
@@ -217,6 +221,12 @@
                     max-width: calc(100vh - 200px);
                     max-height: 100%;
                 }
+            }
+
+            th.col-narrow,
+            td.col-narrow {
+                width: 3.5em;
+                text-align: center;
             }
         }
     }
