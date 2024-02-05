@@ -151,15 +151,20 @@ function UIMainTableSetup(paramdata: HemeSampleItem, $tbody: HTMLTableElement, d
         let item = params[param];
         let $tr = document.createElement('tr');
         let $td_item = document.createElement('td');
+        let $td_range = document.createElement('td');
         let $td_data = document.createElement('td');
         let $td_unit = document.createElement('td');
         let label = item.label || item.item;
         $td_item.innerHTML = label;
+        $td_range.innerHTML = getRange(item[dateref],item) || '';
         $td_data.innerHTML = item[dateref] || '-';
         $td_unit.innerHTML = item.unit || '';
         $tr.appendChild($td_item);
+        $tr.appendChild($td_range);
         $tr.appendChild($td_data);
         $tr.appendChild($td_unit);
+
+        $td_range.classList.add('col-narrow');
         $tbody.appendChild($tr);
         n++;
     }
@@ -283,4 +288,31 @@ function UIFlags(paramdata: HemeSampleItem, dateref, $holder: HTMLTableElement) 
         $td_flags.innerHTML = txt;
 
     }
+}
+
+/** Check value within range and return flag label to use in table.
+ * L = low, H = high, N = normal, cL = critical low, cH = critical high
+ * @returns string, 'L', 'H', ' ', 'cL', 'cH'
+ */
+function getRange(data: string, item: Record<string,string>): string {
+    //console.log(item);
+    enum flagOptions {
+        L = 'L',
+        H = 'H',
+        N = ' ',
+        cL = 'cL',
+        cH = 'cH'   
+    }
+    let value = Number(data);
+    let min = Number(item.allowedmin);
+    let max = Number(item.allowedmax);
+    let criticalmin = Number(item.criticalmin);
+    let criticalmax = Number(item.criticalmax);
+    let flag = '';
+    if (value < min) flag = flagOptions.L;
+    if (value > max) flag = flagOptions.H;
+    if (value >= min && value <= max) flag = flagOptions.N;
+    if (value < criticalmin) flag = flagOptions.cL;
+    if (value > criticalmax) flag = flagOptions.cH;
+    return flag;
 }
