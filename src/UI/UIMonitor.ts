@@ -2,7 +2,7 @@ import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { hemeGroups } from "../Data/ParseRowsToHemeSample";
 import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
-import { UICreateExplorerPage } from "./UIMonitorExplorer";
+import { DataExplorer } from "./UIMonitorExplorer";
 import { UICreateHomePage } from "./UIMonitorHome";
 import { UIBottomSetup } from "./UIMonitorBottom";
 
@@ -10,6 +10,7 @@ enum monitorNav {
     home = 'home',
     qcfiles = 'qcfiles',
     explorer = 'explorer',
+    samples = 'samples',
     back = 'back'
 }
 
@@ -119,10 +120,27 @@ function UIExplorerSetUp(hemeSamples: HemeSampleItem[]) {
     const $explorerpage = contentPages.namedItem(monitorNav.explorer + '-page') as HTMLDivElement;
 
     if ($explorerpage) {
-        UICreateExplorerPage(hemeSamples, $explorerpage);
+        //UICreateExplorerPage(hemeSamples, $explorerpage);
+        new DataExplorer(hemeSamples, $explorerpage);
     }
+
+    // also create patient sample page
+    UISamplesSetUp(hemeSamples);
 }
 
+/** For setting up Samples page */
+function UISamplesSetUp(hemeSamples: HemeSampleItem[]) {
+    const $samplespage = contentPages.namedItem(monitorNav.samples + '-page') as HTMLDivElement;
+
+    if ($samplespage) {
+        //filter hemeSamples for non-qc samples
+        const samples = hemeSamples
+            .filter((sample) => sample.data.groups !== hemeGroups.qc);
+
+        new DataExplorer(samples, $samplespage);
+
+    }
+}
 
 /** Sets the currentPage value if in monitorNav 
  * @returns true if value is in monitorNav, false otherwise
