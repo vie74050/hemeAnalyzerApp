@@ -1,9 +1,7 @@
 import { HemeSampleItem } from "../Data/HemeSampleItem";
 import { selectElemFromGroup, UICreateElemFromString } from "../helpers/domElemHelper";
 import { RunData, GetRunData } from "../Data/GetRunData";
-import { Modal_UICreateSearch } from "./modals/UISearch";
-import { Modal_UICreateAlerts } from "./modals/UIAlerts";
-import { $backBtn } from "./UIMonitor";
+import { $backBtn, $alerts, $searchEl } from "./UIMonitor";
 import { UpdateSamplesPage } from "./UIMonitorExplorerSamples";
 
 enum explorerNav {
@@ -11,7 +9,7 @@ enum explorerNav {
     patientinfo = 'patientinfo',
     reagentinfo = 'reagentinfo'
 }
-enum rowDataAttributes {
+export enum rowDataAttributes {
     id = 'id',
     label = 'label',
     patientid = 'Patient id',
@@ -32,6 +30,7 @@ export class DataExplorer {
     private DataItems: HemeSampleItem[];
 
     constructor(hemeSamples: HemeSampleItem[], $parentpage: HTMLDivElement) {
+        this.$alerts = $alerts;
         this.$explorermenudiv = UICreateElemFromString(explorerhtml, 'div') as HTMLLIElement;
         this.$tablecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 1) as HTMLLIElement;
         this.$subpagecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 2) as HTMLLIElement;
@@ -106,18 +105,11 @@ export class DataExplorer {
         // option buttons
         const $btns = UICreateElemFromString(explorerhtml, 'span') as HTMLLIElement;
         $explorermenudiv.appendChild($btns);
-        // add SEARCH MODAL to explorer page
-        const $searchEl = Modal_UICreateSearch($tablecontainerdiv, rowDataAttributes);
-        $parentpage.appendChild($searchEl);
-
+        
         //add custom event to listen for $explorerpage reset
         $parentpage.addEventListener('reset', () => {
             this.resetPage();
         });
-
-        // add ALERTS MODAL to explorer page
-        this.$alerts = Modal_UICreateAlerts();
-        $parentpage.appendChild(this.$alerts);
 
        this.DataItems = hemeSamples;
     }
