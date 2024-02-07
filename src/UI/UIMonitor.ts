@@ -6,6 +6,7 @@ import { DataExplorer, rowDataAttributes } from "./UIMonitorExplorer";
 import { UICreateHomePage } from "./UIMonitorHome";
 import { UIBottomSetup } from "./UIMonitorBottom";
 import { Modal_UICreateSearch } from "./modals/UISearch";
+import { Modal_UICreateRunStatus } from "./modals/UIRunStatus";
 import { Modal_UICreateAlerts } from "./modals/UIAlerts";
 
 enum monitorNav {
@@ -22,7 +23,8 @@ let $backBtn: HTMLButtonElement = null,
     contentPages: HTMLCollectionOf<HTMLElement> = null,
     currentPage: string = monitorNav.home,
     $searchEl: HTMLElement = null, 
-    $alerts: HTMLElement = null;
+    $alerts: HTMLElement = null,
+    $runstatus: HTMLElement = null;
 
 // getter and setter for currentPage to call SelectCurrentPage() when currentPage is set
 Object.defineProperty(this, 'currentPage', {
@@ -77,11 +79,15 @@ function UIMonitorSetUp(monitorId: string) {
     $searchEl = Modal_UICreateSearch(rowDataAttributes);
     $monitor.appendChild($searchEl);
 
+    // add RUN STATUS MODAL to content page
+    $runstatus = Modal_UICreateRunStatus();
+    $monitor.appendChild($runstatus);
+
     // add ALERTS MODAL to content page
     $alerts = Modal_UICreateAlerts();
     $monitor.appendChild($alerts);
 
-    return { $backBtn, $alerts, $searchEl };
+    return { $backBtn, $alerts, $searchEl, $runstatus };
 }
 
 // EVENT HANDLERS
