@@ -2,14 +2,17 @@ import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { hemeGroups } from "../Data/ParseRowsToHemeSample";
 import { HemeSampleItem, QCSampleItem } from "../Data/HemeSampleItem";
 import { UICreateQCTable } from "./UIMonitorQCFiles";
-import { UICreateExplorerPage } from "./UIMonitorExplorer";
+import { DataExplorer, rowDataAttributes } from "./UIMonitorExplorer";
 import { UICreateHomePage } from "./UIMonitorHome";
 import { UIBottomSetup } from "./UIMonitorBottom";
+import { Modal_UICreateSearch } from "./modals/UISearch";
+import { Modal_UICreateAlerts } from "./modals/UIAlerts";
 
 enum monitorNav {
     home = 'home',
     qcfiles = 'qcfiles',
     explorer = 'explorer',
+    samples = 'samples',
     back = 'back'
 }
 
@@ -17,7 +20,9 @@ const monitorhtml = require('./UIMonitor.html').default;
 let $backBtn: HTMLButtonElement = null,
     topbtns: HTMLCollectionOf<HTMLButtonElement> = null,
     contentPages: HTMLCollectionOf<HTMLElement> = null,
-    currentPage: string = monitorNav.home;
+    currentPage: string = monitorNav.home,
+    $searchEl: HTMLElement = null, 
+    $alerts: HTMLElement = null;
 
 // getter and setter for currentPage to call SelectCurrentPage() when currentPage is set
 Object.defineProperty(this, 'currentPage', {
@@ -68,7 +73,15 @@ function UIMonitorSetUp(monitorId: string) {
     // bottom analyzer HUD setup
     UIBottomSetup($monitor.querySelector('#bot-menu') as HTMLElement);
 
-    return { $backBtn };
+    // add SEARCH MODAL to content page
+    $searchEl = Modal_UICreateSearch(rowDataAttributes);
+    $monitor.appendChild($searchEl);
+
+    // add ALERTS MODAL to content page
+    $alerts = Modal_UICreateAlerts();
+    $monitor.appendChild($alerts);
+
+    return { $backBtn, $alerts, $searchEl };
 }
 
 // EVENT HANDLERS
@@ -117,12 +130,31 @@ function UIQCTableSetUp(hemeSamples: HemeSampleItem[]) {
 /** For setting up Explorer page, called when sheetdata loaded */
 function UIExplorerSetUp(hemeSamples: HemeSampleItem[]) {
     const $explorerpage = contentPages.namedItem(monitorNav.explorer + '-page') as HTMLDivElement;
-
+   
     if ($explorerpage) {
-        UICreateExplorerPage(hemeSamples, $explorerpage);
+        //UICreateExplorerPage(hemeSamples, $explorerpage);
+        new DataExplorer(hemeSamples, $explorerpage);
     }
+    
+    // also create patient sample page
+    UISamplesSetUp(hemeSamples);
+
+    
 }
 
+/** For setting up Samples page */
+function UISamplesSetUp(hemeSamples: HemeSampleItem[]) {
+    const $samplespage = contentPages.namedItem(monitorNav.samples + '-page') as HTMLDivElement;
+
+    if ($samplespage) {
+        //filter hemeSamples for non-qc samples
+        const samples = hemeSamples
+            .filter((sample) => sample.data.groups !== hemeGroups.qc);
+
+        new DataExplorer(samples, $samplespage);
+
+    }
+}
 
 /** Sets the currentPage value if in monitorNav 
  * @returns true if value is in monitorNav, false otherwise
@@ -138,4 +170,4 @@ function SetCurrentPage(value: string): boolean {
     }
 }
 
-export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, SetCurrentPage, currentPage };
+export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, $alerts, $searchEl, SetCurrentPage, currentPage };

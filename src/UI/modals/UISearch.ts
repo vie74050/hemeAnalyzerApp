@@ -2,9 +2,10 @@ import { UICreateElemFromString } from '../../helpers/domElemHelper';
 
 /** Creates the search modal element from html template
  * @param $tablecontainer the container element to search attributes for
+ * @param attributes the HTML attributes to search within the container
  * @returns 
  */
-function Modal_UICreateSearch($tablecontainer: HTMLElement, attributes): HTMLElement {
+function Modal_UICreateSearch(attributes): HTMLElement {
     const searchhtml = require('./UISearch.html').default;
     const $searchEl = UICreateElemFromString(searchhtml, 'div') as HTMLElement;
     const $input = $searchEl.querySelector('input') as HTMLInputElement;
@@ -15,7 +16,7 @@ function Modal_UICreateSearch($tablecontainer: HTMLElement, attributes): HTMLEle
         // add event listener to $submit_btn
         $submit_btn.addEventListener('click', (e) => {
             e.preventDefault();
-            SearchBtnHandler($input.value.scrub(), $tablecontainer, attributes);
+            SearchBtnHandler($input.value.scrub(), attributes);
         });
     }
 
@@ -24,14 +25,18 @@ function Modal_UICreateSearch($tablecontainer: HTMLElement, attributes): HTMLEle
         $reset_btn.addEventListener('click', (e) => {
             e.preventDefault();
             $input.value = '';
-            SearchBtnHandler('', $tablecontainer, attributes);
+            SearchBtnHandler('', attributes);
         });
     }
    
     return $searchEl;
 }
 
-function SearchBtnHandler(str: string, $tbl_container: HTMLElement, attr) {
+function SearchBtnHandler(str: string, attributes) {
+    // .tablecontainer of .content-page.selected
+    const $tbl_container: HTMLElement = document.querySelector('.content-page.selected .tablecontainer');
+
+
     const $trs = Array.from($tbl_container.querySelectorAll('tbody tr'));
 
     $trs.forEach($tr => {
@@ -40,7 +45,7 @@ function SearchBtnHandler(str: string, $tbl_container: HTMLElement, attr) {
 
     // loop through attr and find elems
     if (str.length < 1) return;
-    for (const key in attr) {
+    for (const key in attributes) {
         // get all tbody tr in $tbl_container
         
         const $elems =  Array.from($tbl_container.querySelectorAll(`[data-${key}*="${str}"]`));
