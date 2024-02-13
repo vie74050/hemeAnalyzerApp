@@ -2,7 +2,8 @@ import { RunData } from "../Data/GetRunData";
 import { HemeSampleItems } from "..";
 import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { HemeSampleItem } from "../Data/HemeSampleItem";
-import { IDetails } from "./modals/UIAlerts";
+import { IDetails as IAlertDetails} from "./modals/UIAlerts";
+import { IDetails as IRunStatusDetails} from "./modals/UIRunStatus";
 
 enum subgroupNav {
     main = 'samplepage-main',
@@ -15,8 +16,12 @@ enum subgroupNav {
  * @param run: RunData, the run data
  * @param $container: HTMLLIElement, the target container
  */
-export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $alerts: HTMLElement) {
-    //console.log(run);
+export function UpdateSamplesPage(
+    run: RunData, 
+    $container: HTMLLIElement, 
+    $alertsmodal: HTMLElement, 
+    $runstatusmodal: HTMLElement
+    ){    //console.log(run);
 
     // get all div ids from $container #rowheader, including children
     const $ids = $container.querySelectorAll('.rowheader [id]');
@@ -33,6 +38,8 @@ export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $aler
     // assign run info variables
     const runInfo = run.subgroups.runinfo as object;
     if (runInfo) {
+         //*** RUN STATUS **********************************************************//
+
         // get div with id 'samplepage-pn` and update w runinfo 'P /N'
         const $pn = $container.querySelector('#samplepage-pn');
         const pn_data = runInfo['P / N'] || '';
@@ -46,6 +53,13 @@ export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $aler
         const isValidated = validated_data.toLowerCase() == 'v';
         $validated.innerHTML = isValidated ? 'Validated' : 'Not Validated';
         if (isValidated) $validated.classList.add('selected');
+        let validatedData: IRunStatusDetails = {
+            correct: validated_data
+            // TODO - add options for custom options and fb texts
+        };
+        $runstatusmodal.dispatchEvent(new CustomEvent('updatemodal', { detail: validatedData }));
+
+        //*** RUN ALERTS ************************************************************//
 
         // get div with id 'samplepage-action` and update w runinfo 'Action'
         const $action = $container.querySelector('#samplepage-action');
@@ -67,11 +81,11 @@ export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $aler
         }
 
         // update alerts modal content
-        let details: IDetails = {
+        let details: IAlertDetails = {
             actions: runInfo['Action'],
             errors: runInfo['Error']
         };
-        $alerts.dispatchEvent(new CustomEvent('updatemodal', { detail: details }));
+        $alertsmodal.dispatchEvent(new CustomEvent('updatemodal', { detail: details }));
 
         // get div with id 'samplepage-datetime` and update w runinfo Day,Time
         const $datetime = $container.querySelector('#samplepage-datetime');
@@ -91,21 +105,21 @@ export function UpdateSamplesPage(run: RunData, $container: HTMLLIElement, $aler
         $samplepagepatientname.innerHTML = patientinfo['name'];
     }
 
-    // populate CUMULATIVE tab page
+    //*** populate CUMULATIVE tab page *************************************************************// 
     const itemid = run.id;
     const hemesample = HemeSampleItems.filter((item) => item.id == itemid)[0];
     const $cumulative = $container.querySelector('#' + subgroupNav.cumulative) as HTMLTableElement;
     if (hemesample && $cumulative) {
         UICumulativeSetup(hemesample, $cumulative);
     }
-    // populate MAIN tab page table from haparams
+    //*** populate MAIN tab page table from haparams ***********************************************//
     const dateref = run.dateref;
     const $main = $container.querySelector('#' + subgroupNav.main + ' tbody') as HTMLTableElement;
     if (dateref && $main) {
         UIMainTableSetup(hemesample, $main, dateref);
     }
 
-    // populate GRAPH tab page
+    //*** populate GRAPH tab page *****************************************************************//
     const $graph = $container.querySelector('#' + subgroupNav.graph + ' tbody') as HTMLTableElement;
     const $graph_imgholder = $container.querySelector('#graph') as HTMLTableElement;
     if (run && $graph_imgholder) {
