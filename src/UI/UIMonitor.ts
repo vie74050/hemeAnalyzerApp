@@ -6,6 +6,7 @@ import { DataExplorer, rowDataAttributes } from "./UIMonitorExplorer";
 import { UICreateHomePage } from "./UIMonitorHome";
 import { UIBottomSetup } from "./UIMonitorBottom";
 import { Modal_UICreateSearch } from "./modals/UISearch";
+import { Modal_UICreateRunStatus } from "./modals/UIRunStatus";
 import { Modal_UICreateAlerts } from "./modals/UIAlerts";
 
 enum monitorNav {
@@ -21,8 +22,9 @@ let $backBtn: HTMLButtonElement = null,
     topbtns: HTMLCollectionOf<HTMLButtonElement> = null,
     contentPages: HTMLCollectionOf<HTMLElement> = null,
     currentPage: string = monitorNav.home,
-    $searchEl: HTMLElement = null, 
-    $alerts: HTMLElement = null;
+    $searchElModal: HTMLElement = null, 
+    $alertsModal: HTMLElement = null,
+    $runstatusModal: HTMLElement = null;
 
 // getter and setter for currentPage to call SelectCurrentPage() when currentPage is set
 Object.defineProperty(this, 'currentPage', {
@@ -74,14 +76,18 @@ function UIMonitorSetUp(monitorId: string) {
     UIBottomSetup($monitor.querySelector('#bot-menu') as HTMLElement);
 
     // add SEARCH MODAL to content page
-    $searchEl = Modal_UICreateSearch(rowDataAttributes);
-    $monitor.appendChild($searchEl);
+    $searchElModal = Modal_UICreateSearch(rowDataAttributes);
+    $monitor.appendChild($searchElModal);
+
+    // add RUN STATUS MODAL to content page
+    $runstatusModal = Modal_UICreateRunStatus();
+    $monitor.appendChild($runstatusModal);
 
     // add ALERTS MODAL to content page
-    $alerts = Modal_UICreateAlerts();
-    $monitor.appendChild($alerts);
+    $alertsModal = Modal_UICreateAlerts();
+    $monitor.appendChild($alertsModal);
 
-    return { $backBtn, $alerts, $searchEl };
+    return { $backBtn, $alerts: $alertsModal, $searchEl: $searchElModal, $runstatus: $runstatusModal };
 }
 
 // EVENT HANDLERS
@@ -170,4 +176,4 @@ function SetCurrentPage(value: string): boolean {
     }
 }
 
-export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, $alerts, $searchEl, SetCurrentPage, currentPage };
+export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, $alertsModal, $runstatusModal, SetCurrentPage, currentPage };

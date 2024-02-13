@@ -13,24 +13,22 @@
         width: 100%;
         z-index: 10;
 
-        ul.tab-container {
+        li.tab,
+        .top-right button {
+            border: 1px solid #555;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            text-transform: capitalize;
+            padding: 0.25em 1em;
+            background-color: #f1f1f1;
 
-            li.tab {
-                border: 1px solid #555;
-                border-bottom: none;
-                border-radius: 5px 5px 0 0;
-                cursor: pointer;
-                text-transform: capitalize;
-                padding: 0.25em 1em;
-                background-color: #f1f1f1;
+            &:hover {
+                background-color: $btn-color-hover;
+            }
 
-                &:hover {
-                    background-color: $btn-color-hover;
-                }
-
-                &.selected {
-                    background-color: $btn-color-selected;
-                }
+            &.selected {
+                background-color: $btn-color-selected;
             }
         }
 
@@ -38,13 +36,6 @@
             position: absolute;
             top: 0;
             right: 0;
-
-            button {
-                outline: 0;
-                padding-bottom: 0;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-            }
         }
 
     }
@@ -65,7 +56,10 @@
             flex-direction: column;
             border: 1px solid #555;
             border-radius: 0.3em;
-
+            &[type=button] {
+                width: 8em; 
+                flex-grow: unset;
+            }
             .rowheaderitem {
                 display: flex;
                 flex-grow: 1;
@@ -164,6 +158,8 @@
     }
 
     .subpagecontainer {
+        .col-group.button {
+        }
         .tableFixHead {
             overflow-x: auto;
         }

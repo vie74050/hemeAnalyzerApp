@@ -30,24 +30,25 @@
         width: 100%;
         height: 50px;
 
+        button.btn {
+            background-color: $btn-color;
+            outline: 1px solid #555;
+    
+            &:hover {
+                background-color: $btn-color-hover;
+            }
+    
+            &.selected {
+                background-color: $btn-color-selected;
+                font-weight: 600;
+            }
+        }
+        
         #back-btn {
             display: none;
             float: right;
         }
-    }
 
-    button.btn {
-        background-color: $btn-color;
-        outline: 1px solid #555;
-
-        &:hover {
-            background-color: $btn-color-hover;
-        }
-
-        &.selected {
-            background-color: $btn-color-selected;
-            font-weight: 600;
-        }
     }
 
     #content {
