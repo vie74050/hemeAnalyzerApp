@@ -13,17 +13,19 @@
     display: none;
     box-sizing: border-box;
     position: relative;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 80px);
     min-height: 450px;
     max-height: 100vw;
     overflow: hidden;
-    border: 3px solid #000;
+    border: 1vh solid #000;
     border-radius: 10px;
     background-color: $background-color;
 
     &.show {
         display: flex;
         flex-direction: column;
+        max-width: 1650px;
+        margin: auto;
     }
 
     #top-menu {

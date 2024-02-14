@@ -22,5 +22,22 @@ body {
 body {
     overflow: hidden;
     background-color: lightblue;
+
+    .bg-container {
+        position: absolute;
+        top:0; bottom: 0; left: 0; right: 0;
+        background-image: url('./images/main-bg.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        filter: blur(10px); -webkit-filter: blur(10px);
+        z-index: -1;
+    }
 }
 
+.btn {
+    border: 1px solid grey;
+    &:hover {
+        background-color: lightgrey;
+    }
+}

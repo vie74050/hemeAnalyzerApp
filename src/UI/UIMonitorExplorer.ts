@@ -10,7 +10,7 @@ enum explorerNav {
     patientinfo = 'patientinfo',
     reagentinfo = 'reagentinfo'
 }
-export enum rowDataAttributes {
+export enum rowDataAttributes { // data attributes that search uses
     id = 'id',
     label = 'label',
     patientid = 'Patient id',
@@ -202,6 +202,7 @@ export class DataExplorer {
     
         const td1 = document.createElement('td');
         td1.innerHTML = run.label;
+        tr.appendChild(td1);
     
         columnHeadKey.forEach((key) => {
             let td = document.createElement('td');

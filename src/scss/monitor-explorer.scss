@@ -55,7 +55,7 @@
             gap: 1px;
             flex-direction: column;
             border: 1px solid #555;
-            border-radius: 0.3em;
+            
             &[type=button] {
                 width: 8em; 
                 flex-grow: unset;
@@ -138,6 +138,7 @@
             th {
                 background-color: $btn-color-selected;
                 white-space: nowrap;
+                width: 150px;
             }
             th:nth-child(1) {
                 width: 100px;
@@ -147,11 +148,11 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-
+                width: 150px;
             }
 
-            th:last-child,
-            td:last-child {
+            th.spacer,
+            td.spacer {
                 width: auto;
             }
         }

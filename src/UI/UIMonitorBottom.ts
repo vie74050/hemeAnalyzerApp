@@ -15,11 +15,11 @@ function UIBottomSetup($bot: HTMLElement) {
     UISetupRack();
     
     // UI EVENTS
-    const $runBtn = $bot.querySelector('#run-mode');
+    /*const $runBtn = $bot.querySelector('#run-mode');
     $runBtn?.addEventListener('click', () => {
         SetMachineStatus(Machinestatus.warning);
         AnimateRackPositions();
-    });
+    });*/
 }
 
 function UISetupRack() {
