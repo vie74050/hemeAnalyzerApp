@@ -108,6 +108,23 @@ class HemeSampleItem {
         return haspresenting;
     }
 
+    /** Updated runinfo Validated 
+     * @param string date - the date to be updated
+    */
+    public setAsValidated(date: string) {
+        let runinfo = this.GetItemsOfSubgroup('runinfo');
+        // if runinfo is not empty and has validated key, look for date and update
+        if (runinfo && runinfo['validated'] && runinfo['validated'][date]) {
+            // add 'v,' to the beginning of the string
+            let validated = runinfo['validated'][date] as string;
+            runinfo['validated'][date] = validated && validated.startsWith('v,') ? validated : 'v,' + validated;
+            
+            document.dispatchEvent(new CustomEvent('updateValidated', { detail: { id: this.id, dateref: date } }));
+        }
+        
+    }
+
+
 }
 
 class QCSampleItem extends HemeSampleItem {

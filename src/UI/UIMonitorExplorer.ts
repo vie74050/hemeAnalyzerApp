@@ -1,6 +1,7 @@
 import { HemeSampleItem } from "../Data/HemeSampleItem";
+import { HemeSampleItems } from "..";
 import { selectElemFromGroup, UICreateElemFromString } from "../helpers/domElemHelper";
-import { RunData, GetRunData } from "../Data/GetRunData";
+import { RunData, GetRunData, GetRunDatum } from "../Data/GetRunData";
 import { $backBtn, $alertsModal, $runstatusModal } from "./UIMonitor";
 import { UpdateSamplesPage } from "./UIMonitorExplorerSamples";
 
@@ -108,9 +109,24 @@ export class DataExplorer {
         const $btns = UICreateElemFromString(explorerhtml, 'span') as HTMLLIElement;
         $explorermenudiv.appendChild($btns);
         
-        //add custom event to listen for $explorerpage reset
+        // ADD EVENT LISTENERS
+        // $explorerpage reset
         $parentpage.addEventListener('reset', () => {
             this.resetPage();
+        });
+
+        // updateValidated event
+        document.addEventListener('updateValidated',  function(e: CustomEvent) {
+            if( e.detail ) {
+                let attr = e.detail.id + e.detail.dateref;
+                let $tds = document.querySelectorAll(`td[data-validated="${attr}"]`);
+                $tds.forEach(($td) => {
+                    $td.innerHTML = 'V';
+                    $td.classList.add('text-success');
+                });
+            }
+            console.log(tablegrp, e.detail);
+
         });
 
        this.DataItems = hemeSamples;
@@ -170,7 +186,6 @@ export class DataExplorer {
         const spacer = document.createElement('td');
         spacer.classList.add('spacer');
     
-        let trhtml = '';
         let patientinfo = { id: run.id, label: run.label };
         
         if (run.subgroups['patientinfo']) {
@@ -185,21 +200,26 @@ export class DataExplorer {
             }
         }
     
-        trhtml += `<td>${run.label}</td>`;
+        const td1 = document.createElement('td');
+        td1.innerHTML = run.label;
     
         columnHeadKey.forEach((key) => {
+            let td = document.createElement('td');
             let text = '';
             if (subgroupItems) {
                 text = subgroupItems[key] || '';
-
+                
                 if (key === 'Validated') {
-                    text = text.toLowerCase() == 'v' ? 'V' : ' ';
+                    
+                    td.setAttribute('data-validated', run.id.toString() + run.dateref.toString());
+                    text = text.toLowerCase().includes('v') ? 'V' : ' ';
                 }
             }
-    
-            trhtml += `<td>${text}</td>`;
+            td.innerHTML = text;
+            tr.appendChild(td);
+           
         });
-        tr.innerHTML = trhtml;
+    
         tr.appendChild(spacer);
     
         tr.addEventListener('click', (e) => {
@@ -212,7 +232,10 @@ export class DataExplorer {
     // EVENT HANDLERS
 
     /** <tr> click handler when item row is clicked */
-    private trClickHandler(run: RunData) {
+    private trClickHandler(runref: RunData,) {
+        const hemesample = HemeSampleItems.filter((item) => item.id == runref.id)[0]; 
+        const dateref = runref.dateref;
+        const run: RunData = GetRunDatum(hemesample, runref.date, dateref);         
         const $maincontainerdiv = this.$maincontainerdiv;
         const $subpagecontainerdiv = this.$subpagecontainerdiv;
         const $alertsmodal = this.$alertsmodal;

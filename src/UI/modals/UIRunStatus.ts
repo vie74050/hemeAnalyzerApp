@@ -1,7 +1,9 @@
 import { UICreateElemFromString } from '../../helpers/domElemHelper';
+import { HemeSampleItems } from '../..';
+import { HemeSampleItem } from '../../Data/HemeSampleItem';
+import { RunData } from '../../Data/GetRunData';
 
-export interface IDetails {
-    correct: string;
+interface IDetails {
     prompt_done?: string;
     prompt_todo?: string;
     options?: string[];
@@ -18,53 +20,91 @@ export function Modal_UICreateRunStatus(): HTMLElement {
     const $optionLabelsArr = Array.from($elem.querySelectorAll('.form-check-label')).map(label => label.innerHTML);
     const $fbtext = $elem.querySelector('._fb-text') as HTMLElement;
     const defaultDetails: IDetails = {
-        correct: '',
-        prompt_done: 'This run sample has been validated',
-        prompt_todo: $prompt.innerHTML,
+        prompt_done: 'This run sample has been validated.',
+        prompt_todo: 'Select which parts of the CBC are acceptable and can be “validated”:',
         options: $optionLabelsArr,
         fb_right: 'Correct!',
         fb_wrong: 'Incorrect, review the data and try again.'
     };
     const $submitbtn = $elem.querySelector('._submit-btn') as HTMLButtonElement;
 
+    let details: IDetails = defaultDetails;
+    let validated_data: string = '';
     let correct_opts: string[] = [];
-    
-    // EVENT HANDLER for when the modal is updated, e.g. when a new run is selected
+    let isValidated: boolean = false;
+    let $samplepg: HTMLElement;
+    let hemesample: HemeSampleItem;
+    let dateref: string = '';
+
+    // EVENT HANDLER for when the modal is updated
     $elem.addEventListener('updatemodal', function(e: CustomEvent) {  
-        //console.log(e.detail);
-        const details: IDetails = e.detail;
-        correct_opts = details.correct.split(',');
+        if (e.detail) {
+            $samplepg = e.detail.$elem;
+            hemesample = HemeSampleItems.filter((item) => item.id == e.detail.id)[0]; 
+            dateref = e.detail.dateref;
+
+            const runinfo = e.detail.runinfo || {}; 
+            // check runinfo for each details parameter - if not found, use default
+            details = {
+                prompt_done: runinfo['PromptDone'] || defaultDetails.prompt_done,
+                prompt_todo: runinfo['PromptTodo'] || defaultDetails.prompt_todo,
+                options: runinfo['Options'] || defaultDetails.options,
+                fb_right: runinfo['FbRight'] || defaultDetails.fb_right,
+                fb_wrong: runinfo['FbWrong'] || defaultDetails.fb_wrong
+            };
+            
+            validated_data = runinfo['Validated'] || '';
+            
+        }
+
+        correct_opts = validated_data.replace(/ /g,'').toLowerCase().split(',');        
+        isValidated = correct_opts[0] === 'v';
 
         // initially hide the feedback text
         $fbtext.classList.add('d-none');
 
-        if (correct_opts.length === 1) {
+        // clear all fb classes from options
+        $options.forEach(($opt) => {
+            $opt.classList.remove('_fb-correct', '_fb-wrong');
+        });
+
+        if (isValidated) {
             // already validated
-            $prompt.innerHTML =  details.prompt_done || defaultDetails.prompt_done;
+            $prompt.innerHTML =  details.prompt_done;
             // mark each checkbox option as checked and readonly
             $options.forEach(($opt) => {
                 const $input = $opt.querySelector('input') as HTMLInputElement;
-                $input.checked = true;
-                //$input.checked = correct_opts.includes($input.value);
+                
+                $input.checked = correct_opts.includes($input.value); 
                 $input.readOnly = true;
                 $input.disabled = true;
             });
             
             // hide the modal-footer
             $elem.querySelector('.modal-footer').classList.add('d-none');
+
+            // update samplepg
+            $samplepg.innerHTML = 'Validated';
+            $samplepg.classList.add('selected');
+
         }else {
-            // not validated
+            // Set 'not validated' prompt
             $prompt.innerHTML = details.prompt_todo || defaultDetails.prompt_todo;
 
-            // mark each checkbox option as unchecked and readonly
+            // Reset checkboxes: unchecked, not readonly, not disabled
             $options.forEach(($opt) => {
                 const $input = $opt.querySelector('input') as HTMLInputElement;
                 $input.checked = false;
                 $input.readOnly = false;
                 $input.disabled = false;
             });
-        
+            
+            // show footer (submit button)
             $elem.querySelector('.modal-footer').classList.remove('d-none');
+
+            // update samplepg
+            $samplepg.innerHTML = 'Not Validated';
+            $samplepg.classList.remove('selected');
         }
 
     });
@@ -72,6 +112,8 @@ export function Modal_UICreateRunStatus(): HTMLElement {
     // EVENT HANDLER for when the modal is submitted
     $submitbtn.addEventListener('click', function() {
         $fbtext.innerHTML = defaultDetails.fb_right;
+        $fbtext.classList.remove('d-none');
+
         // check user's checked options against correct_opts  
         // add _fb-correct or _fb-wrong class to option
         $options.forEach(($opt) => {
@@ -80,17 +122,21 @@ export function Modal_UICreateRunStatus(): HTMLElement {
             const is_correct = (correct_opts.includes($input.value) && $inputchecked) || (!correct_opts.includes($input.value) && !$inputchecked);
             if (is_correct) {
                 $opt.classList.add('_fb-correct');
+                $input.readOnly = true;
+                $input.disabled = true;
             } else {
                 $opt.classList.add('_fb-wrong');
                 $fbtext.innerHTML = defaultDetails.fb_wrong;
             }
         });
-
-        // show the feedback text
-        $fbtext.classList.remove('d-none');
         
-        
-
+        if ($fbtext.innerHTML === defaultDetails.fb_right) {
+            // if all options are correct, set run as validated
+            hemesample.setAsValidated(dateref); //console.log(hemesample, dateref);
+            // update samplepg
+            $samplepg.innerHTML = 'Validated';
+            $samplepg.classList.add('selected');
+        }
     });
 
     // EVENT HANDLER for when any input is clicked
@@ -105,7 +151,6 @@ export function Modal_UICreateRunStatus(): HTMLElement {
             $fbtext.classList.add('d-none');
         }
     });
-
 
     return $elem;
 }
