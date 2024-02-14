@@ -15,41 +15,11 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
     // for each sample, get the run data
     hemeSamples.forEach((sample) => {
         const runDates = sample.analysisDates;
-        const subgroupsItems = sample.subgroups;
-
+        
         runDates.forEach((datestring, dateCol_index) => {
-            const date = new Date(datestring);
             const dateref = 'date' + (dateCol_index + 1);
-            const runinfo = {
-                'Day': date.toLocaleDateString("en-US"),
-                'Time': date.toLocaleTimeString(),
-            };
-
-            let data: RunData = {
-                id: sample.id,
-                label: sample.label,
-                date: date,
-                dateref: dateref,
-                //sample: sample,
-                subgroups: { runinfo: runinfo }
-            };
-
-            for (const key_subgroupid in subgroupsItems) {
-                const items = subgroupsItems[key_subgroupid] as object;
-                const obj = data.subgroups[key_subgroupid] as object || {};
-
-                let parseditems = {};
-                for (const itemkey in items) {
-                    const item = items[itemkey];
-                    const key = item['item'];
-                    if (item['description']) parseditems[key] = item['description'];
-                    else if (item[dateref]) parseditems[key] = item[dateref];
-                    else if (sample['presenting'] == sample.analysisDate) parseditems[key] = item['presenting'];
-                    else parseditems[key] = '';
-                }
-                data.subgroups[key_subgroupid] = { ...obj, ...parseditems };
-
-            }
+            let data = GetRunDatum(sample, new Date(datestring), dateref);
+            
 
             runData.push(data);
             i++;
@@ -66,4 +36,40 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
     });
 
     return runData;
+}
+
+export function GetRunDatum(hemeSample: HemeSampleItem, date: Date, dateref: string): RunData {
+
+    const subgroupsItems = hemeSample.subgroups;
+    const runinfo = {
+        'Day': date.toLocaleDateString("en-US"),
+        'Time': date.toLocaleTimeString(),
+    };
+
+    let data: RunData = {
+        id: hemeSample.id,
+        label: hemeSample.label,
+        date: date,
+        dateref: dateref,
+        subgroups: { runinfo: runinfo }
+    };
+
+    for (const key_subgroupid in subgroupsItems) {
+        const items = subgroupsItems[key_subgroupid] as object;
+        const obj = data.subgroups[key_subgroupid] as object || {};
+
+        let parseditems = {};
+        for (const itemkey in items) {
+            const item = items[itemkey];
+            const key = item['item'];
+            if (item['description']) parseditems[key] = item['description'];
+            else if (item[dateref]) parseditems[key] = item[dateref];
+            else if (hemeSample['presenting'] == hemeSample.analysisDate) parseditems[key] = item['presenting'];
+            else parseditems[key] = '';
+        }
+        data.subgroups[key_subgroupid] = { ...obj, ...parseditems };
+
+    }
+
+    return data;
 }

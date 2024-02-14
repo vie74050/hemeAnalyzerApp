@@ -3,7 +3,6 @@ import { HemeSampleItems } from "..";
 import { selectElemFromGroup } from "../helpers/domElemHelper";
 import { HemeSampleItem } from "../Data/HemeSampleItem";
 import { IDetails as IAlertDetails} from "./modals/UIAlerts";
-import { IDetails as IRunStatusDetails} from "./modals/UIRunStatus";
 
 enum subgroupNav {
     main = 'samplepage-main',
@@ -21,8 +20,11 @@ export function UpdateSamplesPage(
     $container: HTMLLIElement, 
     $alertsmodal: HTMLElement, 
     $runstatusmodal: HTMLElement
-    ){    //console.log(run);
-
+    ) {    //console.log(run);
+    
+    const itemid = run.id;
+    const hemesample = HemeSampleItems.filter((item) => item.id == itemid)[0];
+    
     // get all div ids from $container #rowheader, including children
     const $ids = $container.querySelectorAll('.rowheader [id]');
     // clear all divs
@@ -36,9 +38,10 @@ export function UpdateSamplesPage(
     $samplepageid.innerHTML = run.label.toString();
 
     // assign run info variables
-    const runInfo = run.subgroups.runinfo as object;
+    const runInfo = run.subgroups.runinfo as object; 
+    //console.log(runInfo);
     if (runInfo) {
-         //*** RUN STATUS **********************************************************//
+        //*** RUN STATUS **********************************************************//
 
         // get div with id 'samplepage-pn` and update w runinfo 'P /N'
         const $pn = $container.querySelector('#samplepage-pn');
@@ -48,16 +51,15 @@ export function UpdateSamplesPage(
         if (isPositive) $pn.classList.add('selected');
 
         // get div with id 'samplepage-validated` and update w runinfo 'Validated'
-        const $validated = $container.querySelector('#samplepage-validated');
-        const validated_data = runInfo['Validated'] || '';
-        const isValidated = validated_data.toLowerCase() == 'v';
-        $validated.innerHTML = isValidated ? 'Validated' : 'Not Validated';
-        if (isValidated) $validated.classList.add('selected');
-        let validatedData: IRunStatusDetails = {
-            correct: validated_data
-            // TODO - add options for custom options and fb texts
-        };
-        $runstatusmodal.dispatchEvent(new CustomEvent('updatemodal', { detail: validatedData }));
+        const $validated = $container.querySelector('#samplepage-validated');           
+        $runstatusmodal.dispatchEvent(new CustomEvent('updatemodal', { detail: 
+            {
+                id: run.id,
+                dateref: run.dateref,
+                runinfo: runInfo, 
+                $elem: $validated
+            } 
+        }));
 
         //*** RUN ALERTS ************************************************************//
 
@@ -106,8 +108,7 @@ export function UpdateSamplesPage(
     }
 
     //*** populate CUMULATIVE tab page *************************************************************// 
-    const itemid = run.id;
-    const hemesample = HemeSampleItems.filter((item) => item.id == itemid)[0];
+    
     const $cumulative = $container.querySelector('#' + subgroupNav.cumulative) as HTMLTableElement;
     if (hemesample && $cumulative) {
         UICumulativeSetup(hemesample, $cumulative);
