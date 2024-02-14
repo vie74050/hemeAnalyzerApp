@@ -5,13 +5,10 @@
     display: flex;
     gap: 10px;
     background-color: #333;
-    color: #fff;
     text-align: center;
 
     >div {
         box-sizing: border-box;
-        border-radius: 10px;
-        border: 1px solid #111;
     }
 
     #machine-status {
@@ -41,7 +38,8 @@
         box-sizing: border-box;
         text-align: center;
         font-size: 12px;
-
+        color: #fff;
+        margin: auto;
         .rack {
             display: inline-block;
             width: 42%;
@@ -81,7 +79,6 @@
     
     #run-mode {
         width: 100px;
-        background-color: #eee;
     }
 
     @keyframes pulse {

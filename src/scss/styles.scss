@@ -1,8 +1,3 @@
-@import "./main.scss";
-@import "./monitor.scss";
-@import "./tooltip.scss";
-@import "./modal-runstatus.scss";
-
 @font-face {
     font-family: 'OpenSans';
     src: url('./fonts/OpenSans-VariableFont_wdth\,wght.ttf');
@@ -35,9 +30,35 @@ body {
     }
 }
 
-.btn {
-    border: 1px solid grey;
+$btn-color-hover: #f4ffc2;
+$btn-color-selected: rgb(180, 225, 255);
+$btn-color-bg: #eee;
+$btn-color: #333;
+$btn-color-hover: #f4ffc2;
+button.btn, div.btn {
+    color: $btn-color;
+    background-color: $btn-color-bg;
+    outline: 1px solid #555;
+
     &:hover {
-        background-color: lightgrey;
+        background-color: $btn-color-hover;
+    }
+
+    &.selected {
+        background-color: $btn-color-selected;
+        font-weight: 600;
     }
 }
+div{
+    .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
+        color: $btn-color;
+        background-color: $btn-color-selected;
+        border-color: transparent;
+    }
+}
+
+
+@import "./main.scss";
+@import "./monitor.scss";
+@import "./tooltip.scss";
+@import "./modal-runstatus.scss";

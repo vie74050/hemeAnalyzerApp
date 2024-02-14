@@ -6,10 +6,7 @@
 
 #monitor {
     $background-color: #999;
-    $btn-color: #eee;
-    $btn-color-hover: #f4ffc2;
-    $btn-color-selected: rgb(112, 198, 255);
-
+    
     display: none;
     box-sizing: border-box;
     position: relative;
@@ -32,20 +29,6 @@
         width: 100%;
         height: 50px;
 
-        button.btn {
-            background-color: $btn-color;
-            outline: 1px solid #555;
-    
-            &:hover {
-                background-color: $btn-color-hover;
-            }
-    
-            &.selected {
-                background-color: $btn-color-selected;
-                font-weight: 600;
-            }
-        }
-        
         #back-btn {
             display: none;
             float: right;
