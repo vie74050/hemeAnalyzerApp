@@ -105,6 +105,12 @@ function SelectCurrentPage() {
     pageelem.dispatchEvent(new Event('reset'));
 
     //console.log(`Current Page: ${currentPage}`);
+    // if currentPage is home, hide #top-menu
+    if (currentPage === monitorNav.home) {
+        document.getElementById('top-menu').style.display = 'none';
+    } else {
+        document.getElementById('top-menu').style.display = 'block';
+    }
 }
 
 // FUNCTIONS FOR UI SETUP
