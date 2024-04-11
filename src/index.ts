@@ -5,6 +5,7 @@ import { UIMainSetUp, UIMainEventsSetUp } from './UI/UIMain';
 import { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp } from './UI/UIMonitor';
 import { Tooltip } from 'bootstrap';
 import { HemeSampleItem } from './Data/HemeSampleItem';
+import { LoadUnity } from './Unity/UnityHandler';
 
 export var HemeSampleItems: HemeSampleItem[];
 
@@ -13,9 +14,11 @@ function Load() {
     UIMainSetUp("main", "monitor");
     UIMonitorSetUp("monitor");
 
-    // wait for data, then populate UT content from data
-    GetData().then((data) => {
-        HemeSampleItems = CreateHemeSamplesFromRowData(data);
+    Promise.all([
+            LoadUnity(document.getElementById('unity-canvas') as HTMLCanvasElement),
+            GetData()
+    ]).then((data) => {
+        HemeSampleItems = CreateHemeSamplesFromRowData(data[1]);
         UIMainEventsSetUp(HemeSampleItems);
         UIQCTableSetUp(HemeSampleItems);
         UIExplorerSetUp(HemeSampleItems);
