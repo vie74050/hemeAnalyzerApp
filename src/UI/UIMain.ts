@@ -7,6 +7,8 @@ import { SetCurrentPage } from './UIMonitor';
 import { SetAnimTrigger } from '../Unity/UnityHandler';
 
 const mainhtml = require('./UIMain.html').default;
+const tooltiphtml = require('./UIMain_tooltip.html').default;
+
 let $main: HTMLDivElement, $monitor: HTMLDivElement;
 
 /** Setup HTML */
@@ -58,7 +60,7 @@ function UIEventsSetUp(hemeSampleItems: HemeSampleItem[]) {
 
         }
 
-        new Tooltip($btn);
+        new Tooltip($btn, {trigger: 'click'});
     }
 
     // scrollwheel listener
@@ -89,11 +91,11 @@ function HideMonitor() {
 }
 
 function ui_BtnRunHandler(ids: string[], $btn: HTMLButtonElement) {
-    const tooltiphtml = require('./UIMain_tooltip.html').default;
+    
     const btnid = $btn.id;
     let attrhtml = '', option = '';
     enum styleoption {
-        // options for testube styles
+        // options for tooltip test tube styles
         'qc0' = '',
         'qc1' = 'white',
         'qc2' = 'grey',
