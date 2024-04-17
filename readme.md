@@ -32,8 +32,14 @@ See `package.json` scripts:
 - `npm run start` - for testing locally on `localhost:8080`
 - `npm run deploy` - to deploy to test server (GitHub Pages). It will build to `./dist` and deploy to `gh-pages` branch.
 
-### External Libs
+#### Unity WebGL model
 
+The Unity 3D model project files is a separate repo, `HemeAnalyzer-Unity`, using editor version 2022.1.7f1.  
+The build target is the `dist/UnityModel` folder.
+
+#### External libs documentation
+
+- [Unity WebGL communication](https://docs.unity3d.com/2022.1/Documentation/Manual/webgl-interactingwithbrowserscripting.html) for documentation on interacting with browser scripting.
 - [Google Sheets API](https://developers.google.com/sheets/api/guides/concepts)
 - [Chart.js](https://www.chartjs.org/)
 

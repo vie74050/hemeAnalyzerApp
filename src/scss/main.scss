@@ -1,21 +1,39 @@
 #main {
+    --tbn-container-height: 140px;
 
+    #canvas-holder{
+        position: relative;
+        width: 100%;
+        height: calc(100vh - var(--tbn-container-height));
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        cursor: pointer;
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
     .btns-container {
         background-color: rgba(255, 255, 255, 0.5); /* Black w/opacity/see-through */
         color: rgb(0, 0, 0);
         font-weight: bold;
         position: absolute;
-        top: 50%;
+        bottom: 0%;
         left: 0;
-        transform: translate(0, -50%);
-        padding: 20px;
+        padding: 0 0 20px;
         text-align: center;
         display: flex;
         align-items: center;
         justify-content: space-evenly;
         column-gap: 50px;
-        width: 100vw;
-        height: 250px;
+        width: 100%;
+        height: var(--tbn-container-height);
     
         .main_icon {
             display: block;
@@ -60,7 +78,7 @@
                 background-image: url('./icons/batch_samples.png');
     
                 &::after {
-                    content: 'Run Batch Samples';
+                    content: 'Run Batch';
                 }
             }
     
@@ -68,7 +86,7 @@
                 background-image: url('./icons/sm_manual_sample.png');
     
                 &::after {
-                    content: 'Run Manual Sample';
+                    content: 'Run Manual';
                 }
             }
     
@@ -76,25 +94,25 @@
                 background-image: url('./icons/qc_samples.png');
     
                 &::after {
-                    content: 'Run QC Samples';
+                    content: 'Run QC';
                 }
             }
     
             &#runqc-btn {
                 &.option.disabled::after {
-                    content: 'QC samples';
+                    content: 'QC';
                 }
             }
     
             &#runpa-btn {
                 &.option.disabled::after {
-                    content: 'batch samples';
+                    content: 'Batch';
                 }
             }
     
             &#runma-btn {
                 &.option.disabled::after {
-                    content: 'manual sample';
+                    content: 'Manual';
                 }
             }
     
@@ -103,7 +121,7 @@
                 background-image: url('./icons/logoff.png');
     
                 &::after {
-                    content: 'view samples';
+                    content: 'Back';
                 }
             }
         }
@@ -115,6 +133,9 @@
         width: 100%;
         margin: auto;
 
+        #canvas-holder{
+            display: none;
+        }
         .btns-container {
             top: 10px; left: 0; right: 0; bottom: 0;
             padding: 0;

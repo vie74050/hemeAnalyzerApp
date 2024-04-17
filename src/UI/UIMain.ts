@@ -2,21 +2,18 @@ import { QC_AddDataRow } from './UIMonitorQCFiles';
 import { Explorer_AddDataRow } from './UIMonitorExplorer';
 import { HemeSampleItem } from '../Data/HemeSampleItem';
 import { hemeGroups } from '../Data/ParseRowsToHemeSample';
-import { Modal_UICreateVideo, IDetails } from './modals/UIVideo';
 import { Tooltip } from 'bootstrap';
 import { SetCurrentPage } from './UIMonitor';
+import { SetAnimTrigger } from '../Unity/UnityHandler';
 
 const mainhtml = require('./UIMain.html').default;
 let $main: HTMLDivElement, $monitor: HTMLDivElement;
-let $modal: HTMLElement = null;
 
 /** Setup HTML */
 function UIMainSetUp(mainID: string, monitorID: string) {
     $main = document.getElementById(mainID) as HTMLDivElement;
     $main.innerHTML = mainhtml;
     $monitor = document.getElementById(monitorID) as HTMLDivElement;
-    $modal = Modal_UICreateVideo();
-    $main.appendChild($modal);
 }
 
 /** set up UI events after data loaded */
@@ -56,9 +53,7 @@ function UIEventsSetUp(hemeSampleItems: HemeSampleItem[]) {
                 if ($btn.classList.contains('disabled')) {
                     return;
                 }
-                ui_RunHandler(samples[btnid], $btn);
-                showVideoModal(btnid);
-
+                ui_BtnRunHandler(samples[btnid], $btn);
             });
 
         }
@@ -93,25 +88,7 @@ function HideMonitor() {
     $monitor.classList.remove('show');
 }
 
-function showVideoModal(key: string) {
-    enum srcs {
-        qc = 'https://bcit365-my.sharepoint.com/personal/vienna_ly_bcit_ca/_layouts/15/embed.aspx?UniqueId=4c41a444-c24c-4744-b275-e513a87dba45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-        pa = 'https://www.youtube.com/embed/YQhz7jxorMg?si=NOFU9zv8txQAU3Wi&amp;start=43&end=50',
-        ma = 'https://www.youtube.com/embed/YQhz7jxorMg?si=NOFU9zv8txQAU3Wi&amp;start=29&end=33&rel=0'
-    }
-    enum titles {
-        qc = 'Running QC Samples',
-        pa = 'Running Patient Samples',
-        ma = 'Running Manual Sample'
-    }
-    let detail: IDetails = {
-        src: srcs[key],
-        title: titles[key]
-    };
-    $modal.dispatchEvent(new CustomEvent('updatemodal', { detail: detail }));
-}
-
-function ui_RunHandler(ids: string[], $btn: HTMLButtonElement) {
+function ui_BtnRunHandler(ids: string[], $btn: HTMLButtonElement) {
     const tooltiphtml = require('./UIMain_tooltip.html').default;
     const btnid = $btn.id;
     let attrhtml = '', option = '';
@@ -153,6 +130,7 @@ function ui_RunHandler(ids: string[], $btn: HTMLButtonElement) {
     $btn.setAttribute('data-bs-target', '');
     $btn.classList.add('disabled');
 
+    SetAnimTrigger(btnid);
 }
 
 export { UIMainSetUp, UIEventsSetUp as UIMainEventsSetUp, HideMonitor };
