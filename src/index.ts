@@ -26,7 +26,7 @@ function Load() {
         // add tooltip
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new Tooltip(tooltipTriggerEl);
+            return new Tooltip(tooltipTriggerEl, {placement: 'bottom'});
         });
 
         return {hemeSampleItems: HemeSampleItems}
