@@ -10,6 +10,7 @@ const mainhtml = require('./UIMain.html').default;
 const tooltiphtml = require('./UIMain_tooltip.html').default;
 
 let $main: HTMLDivElement, $monitor: HTMLDivElement;
+let $btnstt: Tooltip[] = [];
 
 /** Setup HTML */
 function UIMainSetUp(mainID: string, monitorID: string) {
@@ -60,21 +61,9 @@ function UIEventsSetUp(hemeSampleItems: HemeSampleItem[]) {
 
         }
 
-        new Tooltip($btn, {trigger: 'click'});
+        let btntt = new Tooltip($btn, {trigger: 'click'});
+        $btnstt.push(btntt);
     }
-
-    // scrollwheel listener
-    window.addEventListener('wheel', (e) => {
-
-        // also scroll the document bs-tooltip
-        const $bsTooltip = document.querySelector('.tooltip-inner') as HTMLDivElement;
-        if ($bsTooltip !== null) {
-            
-            $bsTooltip.scrollTop = e.deltaY > 0 ? $bsTooltip.scrollTop + 10 : $bsTooltip.scrollTop - 10;
-            //console.log(e.deltaY);
-        }
-    });
-
 
 }
 
@@ -83,11 +72,21 @@ function showMonitor() {
     $main.classList.add('mini');
     $monitor.classList.add('show');
     SetCurrentPage('home');
+
+    // hide tooltip from all $btns when changing pages
+    $btnstt.forEach((btntt) => {
+        btntt.hide();
+    });
 }
 
 function HideMonitor() {
     $main.classList.remove('mini');
     $monitor.classList.remove('show');
+    
+    // hide tooltip from all $btns when changing pages
+    $btnstt.forEach((btntt) => {
+        btntt.hide();
+    });
 }
 
 function ui_BtnRunHandler(ids: string[], $btn: HTMLButtonElement) {
