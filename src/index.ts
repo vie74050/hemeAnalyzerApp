@@ -8,6 +8,10 @@ import { HemeSampleItem } from './Data/HemeSampleItem';
 import { LoadUnity } from './Unity/UnityHandler';
 
 export var HemeSampleItems: HemeSampleItem[];
+declare global {
+    var sheetdata: [void,Record<string, string>[]];
+    var items: HemeSampleItem[];
+} 
 
 function Load() {
     // set up DOM elements first
@@ -18,10 +22,14 @@ function Load() {
             LoadUnity(document.getElementById('unity-canvas') as HTMLCanvasElement),
             GetData()
     ]).then((data) => {
+        
         HemeSampleItems = CreateHemeSamplesFromRowData(data[1]);
         UIMainEventsSetUp(HemeSampleItems);
         UIQCTableSetUp(HemeSampleItems);
         UIExplorerSetUp(HemeSampleItems);
+
+        globalThis.sheetdata = data;
+        globalThis.items = HemeSampleItems;
 
         // add tooltip
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

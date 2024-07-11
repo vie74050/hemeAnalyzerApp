@@ -2694,7 +2694,7 @@ export const googData = {
             "10/1/2023 11:27:56"
         ],
         [
-            "Patient id",
+            "MRN",
             "",
             "",
             "P12345",
@@ -2703,16 +2703,25 @@ export const googData = {
             "112233"
         ],
         [
-            "name",
+            "First Name",
             "",
             "",
             "P12345",
             "PatientInfo",
             "",
-            "Jon Doe"
+            "Jon"
         ],
         [
-            "sex",
+            "Last Name",
+            "",
+            "",
+            "P12345",
+            "PatientInfo",
+            "",
+            "Doe"
+        ],
+        [
+            "Gender",
             "",
             "",
             "P12345",
@@ -3533,7 +3542,7 @@ export const googData = {
             "11/16/2023 12:50:24"
         ],
         [
-            "Patient id",
+            "MRN",
             "",
             "",
             "P11111",
@@ -3542,16 +3551,25 @@ export const googData = {
             "011-11"
         ],
         [
-            "name",
+            "First Name",
             "",
             "",
             "P11111",
             "PatientInfo",
             "",
-            "Patient One"
+            "One"
         ],
         [
-            "sex",
+            "Last Name",
+            "",
+            "",
+            "P11111",
+            "PatientInfo",
+            "",
+            "Patient"
+        ],
+        [
+            "Gender",
             "",
             "",
             "P11111",
@@ -4205,7 +4223,7 @@ export const googData = {
             "11/16/2023 12:50:24"
         ],
         [
-            "Patient id",
+            "MRN",
             "",
             "",
             "P22222",
@@ -4214,16 +4232,25 @@ export const googData = {
             "011-22"
         ],
         [
-            "name",
+            "First Name",
             "",
             "",
             "P22222",
             "PatientInfo",
             "",
-            "Patient Two"
+            "Two"
         ],
         [
-            "sex",
+            "Last Name",
+            "",
+            "",
+            "P22222",
+            "PatientInfo",
+            "",
+            "Patient"
+        ],
+        [
+            "Gender",
             "",
             "",
             "P22222",
@@ -7528,7 +7555,7 @@ export const parsedRowData = [
         "Date3": "10/1/2023 11:27:56"
     },
     {
-        "Item": "Patient id",
+        "Item": "MRN",
         "Label": "",
         "Structure -->": "",
         "Groups": "P12345",
@@ -7537,16 +7564,25 @@ export const parsedRowData = [
         "Description": "112233"
     },
     {
-        "Item": "name",
+        "Item": "First Name",
         "Label": "",
         "Structure -->": "",
         "Groups": "P12345",
         "Subgroup": "PatientInfo",
         "Options -->": "",
-        "Description": "Jon Doe"
+        "Description": "Jon"
     },
     {
-        "Item": "sex",
+        "Item": "Last Name",
+        "Label": "",
+        "Structure -->": "",
+        "Groups": "P12345",
+        "Subgroup": "PatientInfo",
+        "Options -->": "",
+        "Description": "Doe"
+    },
+    {
+        "Item": "Gender",
         "Label": "",
         "Structure -->": "",
         "Groups": "P12345",
@@ -8367,7 +8403,7 @@ export const parsedRowData = [
         "Presenting": "11/16/2023 12:50:24"
     },
     {
-        "Item": "Patient id",
+        "Item": "MRN",
         "Label": "",
         "Structure -->": "",
         "Groups": "P11111",
@@ -8376,16 +8412,25 @@ export const parsedRowData = [
         "Description": "011-11"
     },
     {
-        "Item": "name",
+        "Item": "First Name",
         "Label": "",
         "Structure -->": "",
         "Groups": "P11111",
         "Subgroup": "PatientInfo",
         "Options -->": "",
-        "Description": "Patient One"
+        "Description": "One"
     },
     {
-        "Item": "sex",
+        "Item": "Last Name",
+        "Label": "",
+        "Structure -->": "",
+        "Groups": "P11111",
+        "Subgroup": "PatientInfo",
+        "Options -->": "",
+        "Description": "Patient"
+    },
+    {
+        "Item": "Gender",
         "Label": "",
         "Structure -->": "",
         "Groups": "P11111",
@@ -9039,7 +9084,7 @@ export const parsedRowData = [
         "Presenting": "11/16/2023 12:50:24"
     },
     {
-        "Item": "Patient id",
+        "Item": "MRN",
         "Label": "",
         "Structure -->": "",
         "Groups": "P22222",
@@ -9048,16 +9093,25 @@ export const parsedRowData = [
         "Description": "011-22"
     },
     {
-        "Item": "name",
+        "Item": "First Name",
         "Label": "",
         "Structure -->": "",
         "Groups": "P22222",
         "Subgroup": "PatientInfo",
         "Options -->": "",
-        "Description": "Patient Two"
+        "Description": "Two"
     },
     {
-        "Item": "sex",
+        "Item": "Last Name",
+        "Label": "",
+        "Structure -->": "",
+        "Groups": "P22222",
+        "Subgroup": "PatientInfo",
+        "Options -->": "",
+        "Description": "Patient"
+    },
+    {
+        "Item": "Gender",
         "Label": "",
         "Structure -->": "",
         "Groups": "P22222",

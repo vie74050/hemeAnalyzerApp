@@ -19,10 +19,6 @@ class HemeSampleItem {
         return this._rawData['id'] as string;
     }
 
-    public get label(): string {
-        return this._rawData['label'] as string;
-    }
-
     public get group(): string {
         return this._rawData['groups'] as string;
     }

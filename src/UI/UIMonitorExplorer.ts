@@ -12,9 +12,9 @@ enum explorerNav {
 }
 export enum rowDataAttributes { // data attributes that search uses
     id = 'id',
-    label = 'label',
-    patientid = 'Patient id',
-    patientname = 'name'
+    mrn = 'MRN',
+    firstname = 'First Name',
+    lastname = 'Last Name',
 }
 // create explorer page
 const explorerhtml = require('./UIMonitorExplorer.html').default;
@@ -37,23 +37,23 @@ export class DataExplorer {
         this.$explorermenudiv = UICreateElemFromString(explorerhtml, 'div') as HTMLLIElement;
         this.$tablecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 1) as HTMLLIElement;
         this.$subpagecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 2) as HTMLLIElement;
-        this.UICreateExplorerPage(hemeSamples, $parentpage);
+        this.UICreateExplorerTabPage(hemeSamples, $parentpage);
         explorerpages.push(this);
     }
-    /** Gets the html template and creates the elements for Exploerer page:
+    /** Gets the html template and creates the elements for Explorer Tab page:
      * - creates a `<ul><li>` for each nav button as tabs
      * - creates a `<table>` for each nav button as content target
      * 
      * @param hemeSamples: HemeSampleItem[], the parsed from sheet
      * @param $parentpage: HTMLDivElement, target container for explorer page
      */
-    public UICreateExplorerPage(hemeSamples: HemeSampleItem[], $parentpage: HTMLDivElement) {
+    public UICreateExplorerTabPage(hemeSamples: HemeSampleItem[], $parentpage: HTMLDivElement) {
         const $explorermenudiv = this.$explorermenudiv;
         const $tablecontainerdiv = this.$tablecontainerdiv;
         const $subpagecontainerdiv = this.$subpagecontainerdiv;
 
         // get run data    
-        const rundata = GetRunData(hemeSamples); //console.log(rundata);
+        const rundata = GetRunData(hemeSamples);
         let btngroup = [], tablegrp = [];
 
         this.$maincontainerdiv = document.createElement('div');
@@ -132,7 +132,8 @@ export class DataExplorer {
        this.DataItems = hemeSamples;
     }
 
-    /** Fill specified table with data, based on tableid:
+    /** Creates tables and populate with data, based on tableid:
+     * - creates a `<th>` for each unique subgroup items keys or label
      * - creates a `<tr>` for each runData
      * - creates `<td>` for each value in runData.subgroups[tableid]
      * @param runData: RunData[]
@@ -140,7 +141,7 @@ export class DataExplorer {
      * Require tableid to be the key specified in runData.subgroups
      */
     private UIcreateTableContent(runData: RunData[], $table: HTMLTableElement) {
-        const tableid = $table.dataset.id;
+        const tableid = $table.id;
         const tablehead = $table.querySelector('thead') as HTMLTableSectionElement;
         const tablebody = $table.querySelector('tbody') as HTMLTableSectionElement;
     
@@ -178,7 +179,7 @@ export class DataExplorer {
 
     /** Create table row from rundata */
     private UI_CreateTableRow(run: RunData, columnHeadKey: string[], $table: HTMLTableElement): HTMLTableRowElement {
-        const tableid = $table.dataset.id;
+        const tableid = $table.id;
         const subgroupItems = run.subgroups[tableid] as object;
         const tr = document.createElement('tr');
         
@@ -186,10 +187,11 @@ export class DataExplorer {
         const spacer = document.createElement('td');
         spacer.classList.add('spacer');
     
-        let patientinfo = { id: run.id, label: run.label };
+        let patientinfo = { id: run.id };
         
         if (run.subgroups['patientinfo']) {
-            patientinfo = { ...patientinfo, ...run.subgroups['patientinfo'] as object };
+            patientinfo = { ...patientinfo, ...run.subgroups['patientinfo'] as object }; 
+            console.log(patientinfo);
         }
         // tag rows with searchable attributes
         for (const key in rowDataAttributes) {
@@ -201,7 +203,7 @@ export class DataExplorer {
         }
     
         const td1 = document.createElement('td');
-        td1.innerHTML = run.label;
+        td1.innerHTML = run.id.toString();
         tr.appendChild(td1);
     
         columnHeadKey.forEach((key) => {
