@@ -40,7 +40,6 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
                 }, {});
 
             itemInfo['id'] = row.Item.scrub();
-            itemInfo['label'] = row.Label.length > 0 ? row.Label : row.Item;
             
             let subgroupsArr = [];
 

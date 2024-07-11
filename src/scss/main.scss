@@ -100,19 +100,19 @@
     
             &#runqc-btn {
                 &.option.disabled::after {
-                    content: 'QC';
+                    content: 'View QC';
                 }
             }
     
             &#runpa-btn {
                 &.option.disabled::after {
-                    content: 'Batch';
+                    content: 'View Batch';
                 }
             }
     
             &#runma-btn {
                 &.option.disabled::after {
-                    content: 'Manual';
+                    content: 'View Manual';
                 }
             }
     

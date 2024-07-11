@@ -35,8 +35,6 @@ function Modal_UICreateSearch(attributes): HTMLElement {
 function SearchBtnHandler(str: string, attributes) {
     // .tablecontainer of .content-page.selected
     const $tbl_container: HTMLElement = document.querySelector('.content-page.selected .tablecontainer');
-
-
     const $trs = Array.from($tbl_container.querySelectorAll('tbody tr'));
 
     $trs.forEach($tr => {
@@ -49,8 +47,10 @@ function SearchBtnHandler(str: string, attributes) {
         // get all tbody tr in $tbl_container
         
         const $elems =  Array.from($tbl_container.querySelectorAll(`[data-${key}*="${str}"]`));
+        
         $elems.forEach($elem => {
             $elem.closest('tr').classList.add('hilight');
+            //console.log($elems);
         });
     }
 

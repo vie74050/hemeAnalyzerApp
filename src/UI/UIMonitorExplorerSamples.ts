@@ -35,7 +35,7 @@ export function UpdateSamplesPage(
 
     // get div with id 'samplepage-id` and update innerHTML with run id
     const $samplepageid = $container.querySelector('#samplepage-id');
-    $samplepageid.innerHTML = run.label.toString();
+    $samplepageid.innerHTML = run.id.toString();
 
     // assign run info variables
     const runInfo = run.subgroups.runinfo as object; 
@@ -100,11 +100,11 @@ export function UpdateSamplesPage(
     if (patientinfo) {
         // get div with id 'samplepage-patientid` and update w patientinfo id
         const $samplepagepatientid = $container.querySelector('#samplepage-patientid');
-        $samplepagepatientid.innerHTML = patientinfo['Patient id'];
+        $samplepagepatientid.innerHTML = patientinfo['MRN'];
 
         // get div with id 'samplepage-patientname` and update w patientinfo name
         const $samplepagepatientname = $container.querySelector('#samplepage-name');
-        $samplepagepatientname.innerHTML = patientinfo['name'];
+        $samplepagepatientname.innerHTML = patientinfo['Last Name'] + ", " + patientinfo['First Name'];
     }
 
     //*** populate CUMULATIVE tab page *************************************************************// 

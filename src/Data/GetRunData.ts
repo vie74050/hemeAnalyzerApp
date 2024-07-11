@@ -2,13 +2,15 @@ import { HemeSampleItem } from "./HemeSampleItem";
 
 export interface RunData {
     id: string | number,
-    label: string,
     date: Date,
     dateref: string,
     subgroups: Record<string, string | object>
 }
 
-/** Extracts run data from each samples and sorts by reverse date */
+/** Extracts run data from each samples and sorts by reverse date 
+ * @param hemeSamples - array of HemeSampleItem
+ * @returns RunData[] - array of RunData
+*/
 export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
     let runData = [];
     let i = 0;
@@ -20,7 +22,6 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
             const dateref = 'date' + (dateCol_index + 1);
             let data = GetRunDatum(sample, new Date(datestring), dateref);
             
-
             runData.push(data);
             i++;
         });
@@ -45,10 +46,9 @@ export function GetRunDatum(hemeSample: HemeSampleItem, date: Date, dateref: str
         'Day': date.toLocaleDateString("en-US"),
         'Time': date.toLocaleTimeString(),
     };
-
+    
     let data: RunData = {
         id: hemeSample.id,
-        label: hemeSample.label,
         date: date,
         dateref: dateref,
         subgroups: { runinfo: runinfo }
