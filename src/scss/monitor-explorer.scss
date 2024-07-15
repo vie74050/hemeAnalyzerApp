@@ -56,42 +56,68 @@
             flex-direction: column;
             border: 1px solid #555;
             
-            &[type=button] {
+            &[type=button],
+            &.btn {
                 width: 8em; 
                 flex-grow: unset;
             }
+
+            ._pn {
+                @extend .text-bg-success;
+                line-height: 2;
+                font-size: large;
+            }
+
+            ._action,
+            ._error,
+            ._none {
+                height: fit-content;
+            }
+
+            ._validated {
+                position: relative;
+                background-image: linear-gradient(#c8ffc8, #00d300);
+                border-radius: 15px;
+                text-align: center;
+                &:before {
+                    display: block;
+                    position: relative;
+                    width: 100%;
+                    font-size: 2em;
+                    content: "\2714";
+                    color: white;
+                }
+                &:after {
+                    display: block;
+                    background-color: white;
+                    position: relative;
+                    width: 100%;
+                    height: 1.5em;
+                    font-size: 0.9em;
+                    font-weight: bold;
+                    content: "Validate";
+                }
+                &.selected:after{
+                    content: "Validated";
+                }
+            }
+
+            ._pn.selected,
+            ._action.selected,
+            ._error.selected {
+                @extend .text-bg-danger;
+            }
+
+            ._none.selected {
+                @extend .text-bg-dark;
+            }
+
             .rowheaderitem {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-
-                &._pn {
-                    @extend .text-bg-success;
-                    line-height: 2;
-                    font-size: large;
-                }
-
-                &._action,
-                &._error,
-                &._none {
-                    height: 33%;
-                }
-
-                &._validated.selected {
-                    @extend .text-bg-info;
-                }
-
-                &._pn.selected,
-                &._action.selected,
-                &._error.selected {
-                    @extend .text-bg-danger;
-                }
-
-                &._none.selected {
-                    @extend .text-bg-dark;
-                }
 
                 &.left-icon {
                     justify-items: left;

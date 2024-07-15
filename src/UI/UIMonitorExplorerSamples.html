@@ -2,12 +2,9 @@
   <div
     title="Run status"
     class="col-group btn"
-    type="button"
-    data-bs-toggle="modal"
-    data-bs-target="#runstatus-modal"
   >
-    <div id="samplepage-pn" class="rowheaderitem _pn">Negative</div>
-    <div id="samplepage-validated" class="rowheaderitem _validated">Validated</div>
+    <div id="samplepage-pn" class=" _pn">Negative</div>
+    <div class="label">Run Status</div>
   </div>
   <div
     title="View run alerts"
@@ -16,9 +13,20 @@
     data-bs-toggle="modal"
     data-bs-target="#alerts-modal"
   >
-    <div id="samplepage-action" class="rowheaderitem _action">Action</div>
-    <div id="samplepage-error" class="rowheaderitem _error">Error</div>
-    <div id="samplepage-none" class="rowheaderitem _none">None</div>
+    <div id="samplepage-action" class=" _action">Action</div>
+    <div id="samplepage-error" class=" _error">Error</div>
+    <div id="samplepage-none" class=" _none">None</div>
+    <div class="label">Alerts</div>
+  </div>
+
+  <div
+    title="Validated status"
+    class="col-group btn"
+    type="button"
+    data-bs-toggle="modal"
+    data-bs-target="#runstatus-modal"
+  >
+    <div id="samplepage-validated" class=" _validated"></div>
   </div>
 
   <div class="col-group">
@@ -51,6 +59,8 @@
       -
     </div>
   </div>
+
+  
 </div>
 
 <div style="height: calc(100% - 100px)">

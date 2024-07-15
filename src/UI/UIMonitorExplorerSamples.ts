@@ -46,7 +46,7 @@ export function UpdateSamplesPage(
         // get div with id 'samplepage-pn` and update w runinfo 'P /N'
         const $pn = $container.querySelector('#samplepage-pn');
         const pn_data = runInfo['P / N'] || '';
-        const isPositive = pn_data.toLowerCase() == 'p';
+        const isPositive = pn_data.scrub() == 'p';
         $pn.innerHTML = isPositive ? 'Positive' : 'Negative';
         if (isPositive) $pn.classList.add('selected');
 
