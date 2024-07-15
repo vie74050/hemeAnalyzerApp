@@ -164,7 +164,7 @@
             th {
                 background-color: $btn-color-selected;
                 white-space: nowrap;
-                width: 150px;
+                width: max-content;
             }
             th:nth-child(1) {
                 width: 100px;
@@ -174,7 +174,7 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                width: 150px;
+                width: max-content;
             }
 
             th.spacer,
