@@ -16,7 +16,7 @@ let DataItems: QCSampleItem[] = [];
         <tr>
         <th title="Out of range status">&#9888</th>
         <th>File</th>
-        <th>Lot #</th>
+     
         <th>Material</th>
         <th>Expiry Date</th>
         <th>Analysis Date</th>
@@ -49,9 +49,6 @@ function UICreateQCTable(sampleData: QCSampleItem[], $qcfilesPage: HTMLDivElemen
         let td1 = document.createElement('td'); // File
         td1.innerText = "QC" + (i + 1).toString().padStart(maxRows.toString().length, '0');
         tr.appendChild(td1);
-        let td2 = document.createElement('td'); // Lot #
-        td2.innerText = "";
-        tr.appendChild(td2);
         let td3 = document.createElement('td'); // Material
         td3.innerText = "";
         tr.appendChild(td3);
@@ -76,7 +73,7 @@ function UI_CreateTableRow(item: QCSampleItem, i: number): HTMLTableRowElement {
     let tr = document.createElement('tr');
     let td0text_status = item.data.status != 'OK' ? '&#9888;' : '';
     let td1text_fileNo = getTextFileNo(i);
-    let td2text_lotNo = item.lotNo;
+    //let td2text_lotNo = item.lotNo;
     let td3text_material = item.material; //console.log(item);
     let td4text_expiry = item.expiry;
     let td5text_analysisdate = item.analysisDate;
@@ -86,9 +83,9 @@ function UI_CreateTableRow(item: QCSampleItem, i: number): HTMLTableRowElement {
     let td1 = document.createElement('td'); // File
     td1.innerText = td1text_fileNo;
     tr.appendChild(td1);
-    let td2 = document.createElement('td'); // Lot #
+    /*let td2 = document.createElement('td'); // Lot #
     td2.innerText = td2text_lotNo;
-    tr.appendChild(td2);
+    tr.appendChild(td2);*/
     let td3 = document.createElement('td'); // Material
     td3.innerText = td3text_material;
     tr.appendChild(td3);
@@ -114,7 +111,7 @@ function UILoadQCGraphs(sampleDatum: QCSampleItem, fileno: string) {
     // create header row container div class rowheader for fileInfo
     const fileInfo = {
         'File No.': fileno,
-        'Lot No.': sampleDatum.lotNo,
+        //'Lot No.': sampleDatum.lotNo,
         'Material': sampleDatum.material,
         'Expiry Date': sampleDatum.expiry
     };
@@ -236,7 +233,7 @@ function UI_AddDataRow(id: string) {
 
             $emptyrow.classList.remove('_emptyrow');
             $emptyrow.cells[0].innerHTML = item.data.status != 'OK' ? '&#9888;' : '';
-            $emptyrow.cells[2].innerHTML = item.lotNo;
+            //$emptyrow.cells[2].innerHTML = item.lotNo;
             $emptyrow.cells[3].innerHTML = item.material;
             $emptyrow.cells[4].innerHTML = item.expiry;
             $emptyrow.cells[5].innerHTML = item.presenting;
