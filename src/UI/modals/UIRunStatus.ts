@@ -1,7 +1,6 @@
 import { UICreateElemFromString } from '../../helpers/domElemHelper';
 import { HemeSampleItems } from '../..';
 import { HemeSampleItem } from '../../Data/HemeSampleItem';
-import { RunData } from '../../Data/GetRunData';
 
 interface IDetails {
     prompt_done?: string;
@@ -21,7 +20,7 @@ export function Modal_UICreateRunStatus(): HTMLElement {
     const $fbtext = $elem.querySelector('._fb-text') as HTMLElement;
     const defaultDetails: IDetails = {
         prompt_done: 'This run sample has been validated.',
-        prompt_todo: 'Select which parts of the CBC are acceptable and can be “validated”:',
+        prompt_todo: 'Select which parts of the CBC are acceptable and can be "validated":',
         options: $optionLabelsArr,
         fb_right: 'Correct!',
         fb_wrong: 'Incorrect, review the data and try again.'
@@ -84,7 +83,6 @@ export function Modal_UICreateRunStatus(): HTMLElement {
             $elem.querySelector('.modal-footer').classList.add('d-none');
 
             // update samplepg
-            $samplepg.innerHTML = 'Validated';
             $samplepg.classList.add('selected');
 
         }else {
@@ -103,7 +101,6 @@ export function Modal_UICreateRunStatus(): HTMLElement {
             $elem.querySelector('.modal-footer').classList.remove('d-none');
 
             // update samplepg
-            $samplepg.innerHTML = 'Not Validated';
             $samplepg.classList.remove('selected');
         }
 
@@ -134,7 +131,6 @@ export function Modal_UICreateRunStatus(): HTMLElement {
             // if all options are correct, set run as validated
             hemesample.setAsValidated(dateref); //console.log(hemesample, dateref);
             // update samplepg
-            $samplepg.innerHTML = 'Validated';
             $samplepg.classList.add('selected');
         }
     });
