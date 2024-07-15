@@ -29,7 +29,7 @@ class LineGraph {
     stat_sdHTML: HTMLTableCellElement;
     stat_meanHTML: HTMLTableCellElement;
     stat_cvHTML: HTMLTableCellElement;
-    _maxPointsPerPg: number = 5;
+    _maxPointsPerPg: number = 10;
     data: IChartData
 
     public constructor(chartData: IChartData, $container: HTMLElement) {

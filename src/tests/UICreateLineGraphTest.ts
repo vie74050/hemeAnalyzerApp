@@ -1,4 +1,4 @@
-import { LineGraph, IChartData } from './UICreateLineGraph';
+import { LineGraph, IChartData } from '../Graph/UICreateLineGraph';
 
 
 function simpletest() {
