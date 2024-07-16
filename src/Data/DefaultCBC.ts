@@ -48,7 +48,7 @@ enum ageGroup {
 }
 
 /* converted data from the excel file to a json object 
-  0 - 1 month, 1 month <16 years, adult female >=18, adult male >=18
+  0 - 1 month, 1 month <16 years, adult female >=16, adult male >=16
 */
 const DefaultCBC: CBCGroups = {
   "neonate": {
