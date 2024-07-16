@@ -1,3 +1,6 @@
+import "../helpers/string-exts";
+import { LookUpCBCData, CBCDataArray } from "./CBC_reference";
+
 type QCsubgroups = 'sampleinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
 type PAsubgroups = 'patientinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
 
@@ -8,7 +11,10 @@ class HemeSampleItem {
     private _rawData: Record<string, string | object>;
 
     constructor(sample: Record<string, string | object>) {
+        
         this._rawData = sample;
+        
+        this.setHaparameterOptions();
     }
 
     public get data(): Record<string, string | object> {
@@ -120,8 +126,70 @@ class HemeSampleItem {
         
     }
 
+    /** Returns the age to use for reference lookup
+     * i.e. age in years
+     */
+    private get ref_age(): string {
+        let subgroups = this.data['subgroups'];
+        let age_str = "";
+        
+        if (subgroups['patientinfo']) {
+            let age = subgroups['patientinfo']['age'];
+            age_str = age? age.description as string : "";
+        }
+        //console.log(age_str);
+        return age_str;
+    }
+    /** Returns gender for reference lookup 
+     * i.e. 'm' or 'f'
+     * 
+    */
+    private get ref_gender(): string {
+        let subgroups = this.data['subgroups'];
+        let gender_str = "";
 
-}
+        if(subgroups['patientinfo']) {
+            let gender = subgroups['patientinfo']['gender'];
+            gender_str = gender? gender.description as string : "";
+        }
+
+        return gender_str;
+    }
+    /** Set haparameter options from LookUpCBCData if empty */
+    private setHaparameterOptions() {
+        let age = this.ref_age;
+        let gender = this.ref_gender;
+        let refCBC: CBCDataArray = LookUpCBCData(age, gender);
+        
+        let haparameters = this.GetItemsOfSubgroup('haparameter');       
+        // loop through refCBC and set haparameter options if not set
+
+        for (let i = 0; i < refCBC.length; i++) {
+            let cbcdata = refCBC[i];
+            let paramitem = cbcdata["Param"].scrub();
+
+            if (haparameters[paramitem]) {
+                
+                for( var option in cbcdata) {
+                    if (option != "Param") {
+                        let optionItemVal = cbcdata[option];
+                        
+                        if (
+                            optionItemVal != "" &&
+                            (haparameters[paramitem][option.scrub()] == null
+                            || haparameters[paramitem][option.scrub()] == "")
+                        ){
+                            haparameters[paramitem][option.scrub()] = optionItemVal;
+                        }
+                    }
+                }
+            }
+        }
+
+        //console.log(haparameters, refCBC);
+    }
+   
+};
 
 class QCSampleItem extends HemeSampleItem {
     constructor(itemInfo: Record<string, string | object>) {

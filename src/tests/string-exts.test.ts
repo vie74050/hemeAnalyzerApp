@@ -1,4 +1,4 @@
-import "./string-exts";
+import "../helpers/string-exts";
 
 // test utils scrub method
 describe("scrub method", () => {

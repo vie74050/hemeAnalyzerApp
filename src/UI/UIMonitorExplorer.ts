@@ -191,7 +191,7 @@ export class DataExplorer {
         
         if (run.subgroups['patientinfo']) {
             patientinfo = { ...patientinfo, ...run.subgroups['patientinfo'] as object }; 
-            console.log(patientinfo);
+            //console.log(patientinfo);
         }
         // tag rows with searchable attributes
         for (const key in rowDataAttributes) {
