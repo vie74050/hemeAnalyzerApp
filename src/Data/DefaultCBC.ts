@@ -1,205 +1,868 @@
-/* convert the data from the excel file to a json object 
-Param	AllowedMin	AllowedMax	CriticalMin	CriticalMax	Unit
-WBC	9.0	30.0			x 10^9/L
-RBC	4.30	6.10			x 10^12/L
-HGB	150.0	240.0	59.9		g/L
-HCT	0.410	0.730			L/L
-MCV	95.0	121.0			fL
-MCH	26.0	34.0			pg
-MCHC	320	367			g/L
-PLT	140	350	29.9		x 10^9/L
-RDW-SD	34.0	65.0			fL
-RDW-CV	0.0	20.1			%
-MPV	7.4	11.0			fL
-NEUT #	2.00	20.00	0.49		x 10^9/L
-LYMPH #	2.00	10.00			x 10^9/L
-MONO #	0.50	1.80			x 10^9/L
-EO #	0.00	0.60			x 10^9/L
-BASO #	0.00	0.50			x 10^9/L
-NEUT %	20.0	70.0			%
-LYMPH %	10.0	60.0			%
-MONO %	1.0	11.0			%
-EO %	0.0	3.0			%
-BASO %	0.0	2.0			%
-IG #	0.00	0.20			x 10^9/L
-IG %	0.0	0.5			%
-RET #	30.0	170.0			x 10^9/L
-RET %	0.5	6.0			%
-*/
-export const neonate = {
-  "WBC": {
-    AllowedMin: 9.0,
-    AllowedMax: 30.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "RBC": {
-    AllowedMin: 4.30,
-    AllowedMax: 6.10,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^12/L",
-  },
-  "HGB": {
-    AllowedMin: 150.0,
-    AllowedMax: 240.0,
-    CriticalMin: 59.9,
-    CriticalMax: null,
-    Unit: "g/L",
-  },
-  "HCT": {
-    AllowedMin: 0.410,
-    AllowedMax: 0.730,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "L/L",
-  },
-  "MCV": {
-    AllowedMin: 95.0,
-    AllowedMax: 121.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "fL",
-  },
-  "MCH": {
-    AllowedMin: 26.0,
-    AllowedMax: 34.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "pg",
-  },
-  "MCHC": {
-    AllowedMin: 320,
-    AllowedMax: 367,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "g/L",
-  },
-  "PLT": {
-    AllowedMin: 140,
-    AllowedMax: 350,
-    CriticalMin: 29.9,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "RDW-SD": {
-    AllowedMin: 34.0,
-    AllowedMax: 65.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "fL",
-  },
-  "RDW-CV": {
-    AllowedMin: 0.0,
-    AllowedMax: 20.1,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "MPV": {
-    AllowedMin: 7.4,
-    AllowedMax: 11.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "fL",
-  },
-  "NEUT": {
-    AllowedMin: 2.00,
-    AllowedMax: 20.00,
-    CriticalMin: 0.49,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "LYMPH": {
-    AllowedMin: 2.00,
-    AllowedMax: 10.00,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "MONO": {
-    AllowedMin: 0.50,
-    AllowedMax: 1.80,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "EO": {
-    AllowedMin: 0.00,
-    AllowedMax: 0.60,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "BASO": {
-    AllowedMin: 0.00,
-    AllowedMax: 0.50,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "NEUT %": {
-    AllowedMin: 20.0,
-    AllowedMax: 70.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "LYMPH %": {
-    AllowedMin: 10.0,
-    AllowedMax: 60.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "MONO %": {
-    AllowedMin: 1.0,
-    AllowedMax: 11.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "EO %": {
-    AllowedMin: 0.0,
-    AllowedMax: 3.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "BASO %": {
-    AllowedMin: 0.0,
-    AllowedMax: 2.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "IG": {
-    AllowedMin: 0.00,
-    AllowedMax: 0.20,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "IG %": {
-    AllowedMin: 0.0,
-    AllowedMax: 0.5,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
-  "RET": {
-    AllowedMin: 30.0,
-    AllowedMax: 170.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "x 10^9/L",
-  },
-  "RET %": {
-    AllowedMin: 0.5,
-    AllowedMax: 6.0,
-    CriticalMin: null,
-    CriticalMax: null,
-    Unit: "%",
-  },
+import "../helpers/string-exts";
+
+type rangeOptions = {
+  item?: string;
+  allowedmin: number;
+  allowedmax: number;
+  criticalmin: number | null;
+  criticalmax: number | null;
+  unit: string;
 };
+type CBCGroup = {
+  wbc: rangeOptions;
+  rbc: rangeOptions;
+  hgb: rangeOptions;
+  hct: rangeOptions;
+  mcv: rangeOptions;
+  mch: rangeOptions;
+  mchc: rangeOptions;
+  plt: rangeOptions;
+  rdwsd: rangeOptions;
+  rdwcv: rangeOptions;
+  mpv: rangeOptions;
+  neut: rangeOptions;
+  lymph: rangeOptions;
+  mono: rangeOptions;
+  eo: rangeOptions;
+  baso: rangeOptions;
+  neutp: rangeOptions;
+  lymphp: rangeOptions;
+  monop: rangeOptions;
+  eop: rangeOptions;
+  basop: rangeOptions;
+  ig: rangeOptions;
+  igp: rangeOptions;
+  ret: rangeOptions;
+  retp: rangeOptions;
+};
+
+type CBCGroups = {
+  [key: string]: CBCGroup;
+};
+
+enum ageGroup {
+  neonate = "neonate",
+  child = "child",
+  adult_f = "adult f",
+  adult_m = "adult m",
+}
+
+/* converted data from the excel file to a json object 
+  0 - 1 month, 1 month <16 years, adult female >=18, adult male >=18
+*/
+const DefaultCBC: CBCGroups = {
+  "neonate": {
+    wbc: {
+      allowedmin: 9.0,
+      allowedmax: 30.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rbc: {
+      allowedmin: 4.30,
+      allowedmax: 6.10,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^12/L",
+    },
+    hgb: {
+      allowedmin: 150.0,
+      allowedmax: 240.0,
+      criticalmin: 59.9,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    hct: {
+      allowedmin: 0.410,
+      allowedmax: 0.730,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "L/L",
+    },
+    mcv: {
+      allowedmin: 95.0,
+      allowedmax: 121.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    mch: {
+      allowedmin: 26.0,
+      allowedmax: 34.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "pg",
+    },
+    mchc: {
+      allowedmin: 320,
+      allowedmax: 367,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    plt: {
+      allowedmin: 140,
+      allowedmax: 350,
+      criticalmin: 29.9,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rdwsd: {
+      item: "RDW-SD",
+      allowedmin: 34.0,
+      allowedmax: 65.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    rdwcv: {
+      item: "RDW-CV",
+      allowedmin: 0.0,
+      allowedmax: 20.1,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    mpv: {
+      allowedmin: 7.4,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    neut: {
+      item: "NEUT #",
+      allowedmin: 2.00,
+      allowedmax: 20.00,
+      criticalmin: 0.49,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    lymph: {
+      item: "LYMPH #",
+      allowedmin: 2.00,
+      allowedmax: 10.00,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    mono: {
+      item: "MONO #",
+      allowedmin: 0.50,
+      allowedmax: 1.80,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    eo: {
+      item: "EO #",
+      allowedmin: 0.00,
+      allowedmax: 0.60,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    baso: {
+      item: "BASO #",
+      allowedmin: 0.00,
+      allowedmax: 0.50,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    neutp: {
+      item: "NEUT %",
+      allowedmin: 20.0,
+      allowedmax: 70.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    lymphp: {
+      item: "LYMPH %",
+      allowedmin: 10.0,
+      allowedmax: 60.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    monop: {
+      item: "MONO %",
+      allowedmin: 1.0,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    eop: {
+      item: "EO %",
+      allowedmin: 0.0,
+      allowedmax: 3.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    basop: {
+      item: "BASO %",
+      allowedmin: 0.0,
+      allowedmax: 2.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ig: {
+      item: "IG",
+      allowedmin: 0.00,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    igp: {
+      item: "IG %",
+      allowedmin: 0.0,
+      allowedmax: 0.5,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ret: {
+      item: "RET #",
+      allowedmin: 30.0,
+      allowedmax: 170.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    retp: {
+      item: "RET %",
+      allowedmin: 0.5,
+      allowedmax: 6.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+  },
+  "child": {
+    wbc: {
+      allowedmin: 5.0,
+      allowedmax: 12.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rbc: {
+      allowedmin: 3.80,
+      allowedmax: 5.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^12/L",
+    },
+    hgb: {
+      allowedmin: 110.0,
+      allowedmax: 145.0,
+      criticalmin: 59.9,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    hct: {
+      allowedmin: 0.320,
+      allowedmax: 0.420,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "L/L",
+    },
+    mcv: {
+      allowedmin: 72.0,
+      allowedmax: 92.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    mch: {
+      allowedmin: 26.0,
+      allowedmax: 34.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "pg",
+    },
+    mchc: {
+      allowedmin: 320,
+      allowedmax: 355,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    plt: {
+      allowedmin: 160,
+      allowedmax: 440,
+      criticalmin: 29.9,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rdwsd: {
+      item: "RDW-SD",
+      allowedmin: 34.0,
+      allowedmax: 65.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    rdwcv: {
+      item: "RDW-CV",
+      allowedmin: 0.0,
+      allowedmax: 18.1,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    mpv: {
+      allowedmin: 7.4,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    neut: {
+      item: "NEUT #",
+      allowedmin: 2.00,
+      allowedmax: 7.50,
+      criticalmin: 0.49,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    lymph: {
+      item: "LYMPH #",
+      allowedmin: 3.50,
+      allowedmax: 10.00,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    mono: {
+      item: "MONO #",
+      allowedmin: 0.00,
+      allowedmax: 0.80,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    eo: {
+      item: "EO #",
+      allowedmin: 0.00,
+      allowedmax: 0.60,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    baso: {
+      item: "BASO #",
+      allowedmin: 0.0,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    neutp: {
+      item: "NEUT %",
+      allowedmin: 30.0,
+      allowedmax: 70.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    lymphp: {
+      item: "LYMPH %",
+      allowedmin: 10.0,
+      allowedmax: 60.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    monop: {
+      item: "MONO %",
+      allowedmin: 0.0,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    eop: {
+      item: "EO %",
+      allowedmin: 0.0,
+      allowedmax: 3.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    basop: {
+      item: "BASO %",
+      allowedmin: 0.0,
+      allowedmax: 2.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ig: {
+      item: "IG",
+      allowedmin: 0.00,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    igp: {
+      item: "IG %",
+      allowedmin: 0.0,
+      allowedmax: 0.5,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ret: {
+      item: "RET #",
+      allowedmin: 30.0,
+      allowedmax: 170.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    retp: {
+      item: "RET %",
+      allowedmin: 0.5,
+      allowedmax: 6.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+  },
+  "adult f": {
+    wbc: {
+      allowedmin: 4.0,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rbc: {
+      allowedmin: 3.70,
+      allowedmax: 5.00,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^12/L",
+    },
+    hgb: {
+      allowedmin: 120.0,
+      allowedmax: 150.0,
+      criticalmin: 59.9,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    hct: {
+      allowedmin: 0.350,
+      allowedmax: 0.450,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "L/L",
+    },
+    mcv: {
+      allowedmin: 80.0,
+      allowedmax: 100.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    mch: {
+      allowedmin: 26.0,
+      allowedmax: 34.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "pg",
+    },
+    mchc: {
+      allowedmin: 320,
+      allowedmax: 360,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    plt: {
+      allowedmin: 140,
+      allowedmax: 450,
+      criticalmin: 29.9,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rdwsd: {
+      item: "RDW-SD",
+      allowedmin: 34.0,
+      allowedmax: 65.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    rdwcv: {
+      item: "RDW-CV",
+      allowedmin: 11.0,
+      allowedmax: 18.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    mpv: {
+      allowedmin: 7.4,
+      allowedmax: 11.00,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    neut: {
+      item: "NEUT #",
+      allowedmin: 1.70,
+      allowedmax: 7.50,
+      criticalmin: 0.49,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    lymph: {
+      item: "LYMPH #",
+      allowedmin: 1.00,
+      allowedmax: 3.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    mono: {
+      item: "MONO #",
+      allowedmin: 0.10,
+      allowedmax: 1.30,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    eo: {
+      item: "EO #",
+      allowedmin: 0.00,
+      allowedmax: 0.30,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    baso: {
+      item: "BASO #",
+      allowedmin: 0.00,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    neutp: {
+      item: "NEUT %",
+      allowedmin: 50.0,
+      allowedmax: 70.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    lymphp: {
+      item: "LYMPH %",
+      allowedmin: 18.0,
+      allowedmax: 42.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    monop: {
+      item: "MONO %",
+      allowedmin: 2.0,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    eop: {
+      item: "EO %",
+      allowedmin: 1.0,
+      allowedmax: 3.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    basop: {
+      item: "BASO %",
+      allowedmin: 0.0,
+      allowedmax: 2.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ig: {
+      item: "IG",
+      allowedmin: 0.00,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    igp: {
+      item: "IG %",
+      allowedmin: 0.0,
+      allowedmax: 0.5,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ret: {
+      item: "RET #",
+      allowedmin: 29.0,
+      allowedmax: 120.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    retp: {
+      item: "RET %",
+      allowedmin: 0.4,
+      allowedmax: 4.8,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+  },
+  "adult m": {
+    wbc: {
+      allowedmin: 4.0,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rbc: {
+      allowedmin: 4.40,
+      allowedmax: 5.80,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^12/L",
+    },
+    hgb: {
+      allowedmin: 130.0,
+      allowedmax: 170.0,
+      criticalmin: 59.9,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    hct: {
+      allowedmin: 0.400,
+      allowedmax: 0.530,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "L/L",
+    },
+    mcv: {
+      allowedmin: 80.0,
+      allowedmax: 100.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    mch: {
+      allowedmin: 26.0,
+      allowedmax: 34.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "pg",
+    },
+    mchc: {
+      allowedmin: 320,
+      allowedmax: 360,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "g/L",
+    },
+    plt: {
+      allowedmin: 140,
+      allowedmax: 450,
+      criticalmin: 29.9,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    rdwsd: {
+      item: "RDW-SD",
+      allowedmin: 34.0,
+      allowedmax: 65.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    rdwcv: {
+      item: "RDW-CV",
+      allowedmin: 11.0,
+      allowedmax: 18.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    mpv: {
+      allowedmin: 7.4,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "fL",
+    },
+    neut: {
+      item: "NEUT #",
+      allowedmin: 1.70,
+      allowedmax: 7.50,
+      criticalmin: 0.49,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    lymph: {
+      item: "LYMPH #",
+      allowedmin: 1.00,
+      allowedmax: 3.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    mono: {
+      item: "MONO #",
+      allowedmin: 0.10,
+      allowedmax: 1.30,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    eo: {
+      item: "EO #",
+      allowedmin: 0.00,
+      allowedmax: 0.30,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    baso: {
+      item: "BASO #",
+      allowedmin: 0.00,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    neutp: {
+      item: "NEUT %",
+      allowedmin: 50.0,
+      allowedmax: 70.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    lymphp: {
+      item: "LYMPH %",
+      allowedmin: 18.0,
+      allowedmax: 42.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    monop: {
+      item: "MONO %",
+      allowedmin: 2.0,
+      allowedmax: 11.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    eop: {
+      item: "EO %",
+      allowedmin: 1.0,
+      allowedmax: 3.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    basop: {
+      item: "BASO %",
+      allowedmin: 0.0,
+      allowedmax: 2.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ig: {
+      item: "IG",
+      allowedmin: 0.00,
+      allowedmax: 0.20,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    igp: {
+      item: "IG %",
+      allowedmin: 0.0,
+      allowedmax: 0.5,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+    ret: {
+      item: "RET #",
+      allowedmin: 29.0,
+      allowedmax: 120.0,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "x 10^9/L",
+    },
+    retp: {
+      item: "RET %",
+      allowedmin: 0.4,
+      allowedmax: 4.8,
+      criticalmin: null,
+      criticalmax: null,
+      unit: "%",
+    },
+  }
+};
+
+function parseAge(age_str: string): number {
+  let age = age_str.replace('old', '');
+
+  if (age.includes('day')) {
+    return parseInt(age) / 365;
+  }
+  if (age.includes('week')) {
+    return parseInt(age) / 52;
+  }
+  if (age.includes('month')) {
+    return parseInt(age) / 12;
+  }
+  if (age.includes('year')) {
+    return parseInt(age);
+  }
+
+  return parseInt(age);
+}
+
+function GetRangeDefaults(age_str: string, gender_str: string ='f'): CBCGroup {
+  let age_yrs: number = parseAge(age_str);
+
+  if (age_yrs < 1 / 12) {
+    return DefaultCBC[ageGroup.neonate];
+
+  } else if (age_yrs < 16) {
+    return DefaultCBC[ageGroup.child];
+
+  } else {
+      
+    if (gender_str == 'm') {
+        return DefaultCBC[ageGroup.adult_m];
+      }
+
+      return DefaultCBC[ageGroup.adult_f];
+  }
+
+  console.error(`No reference data found for`, age_str, gender_str);
+}
+
+export { GetRangeDefaults, CBCGroup, CBCGroups };

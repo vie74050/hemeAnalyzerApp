@@ -35,6 +35,7 @@ export function CreateHemeSamplesFromRowData(data: Record<string, string>[]): He
             let itemInfo: Record<string, string | object> = Object.keys(row)
                 .filter(key => row[key] != null && row[key] != undefined && row[key].length > 0)
                 .reduce((obj, key) => {
+
                     obj[key.scrub()] = row[key]; 
                     return obj;
                 }, {});

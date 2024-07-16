@@ -1,5 +1,5 @@
 import "../helpers/string-exts";
-import { LookUpCBCData, CBCDataArray } from "./CBC_reference";
+import { GetRangeDefaults, CBCGroup } from "./DefaultCBC";
 
 type QCsubgroups = 'sampleinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
 type PAsubgroups = 'patientinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
@@ -155,37 +155,29 @@ class HemeSampleItem {
 
         return gender_str;
     }
-    /** Set haparameter options from LookUpCBCData if empty */
+    /** Set CBC HAparameters to defaultss from `DefaultCBC`, if empty */
     private setHaparameterOptions() {
         let age = this.ref_age;
         let gender = this.ref_gender;
-        let refCBC: CBCDataArray = LookUpCBCData(age, gender);
-        
-        let haparameters = this.GetItemsOfSubgroup('haparameter');       
+        let refCBC: CBCGroup = GetRangeDefaults(age, gender);
+        let haparameters = this.GetItemsOfSubgroup('haparameter');
+
         // loop through refCBC and set haparameter options if not set
+        for (var paramkey in refCBC) {
+            let itemdefaults = refCBC[paramkey];
 
-        for (let i = 0; i < refCBC.length; i++) {
-            let cbcdata = refCBC[i];
-            let paramitem = cbcdata["Param"].scrub();
-
-            if (haparameters[paramitem]) {
-                
-                for( var option in cbcdata) {
-                    if (option != "Param") {
-                        let optionItemVal = cbcdata[option];
-                        
-                        if (
-                            optionItemVal != "" &&
-                            (haparameters[paramitem][option.scrub()] == null
-                            || haparameters[paramitem][option.scrub()] == "")
-                        ){
-                            haparameters[paramitem][option.scrub()] = optionItemVal;
-                        }
+            if (haparameters[paramkey]) {
+                let item = haparameters[paramkey];
+                for (var rangeOpt in itemdefaults) {
+                    
+                    if (item[rangeOpt] == null && itemdefaults[rangeOpt] !=null) {
+                        item[rangeOpt] = itemdefaults[rangeOpt];
                     }
                 }
             }
+           
         }
-
+        
         //console.log(haparameters, refCBC);
     }
    
