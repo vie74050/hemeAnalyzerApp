@@ -2,6 +2,7 @@ import { HemeSampleItem } from "./HemeSampleItem";
 
 export interface RunData {
     id: string | number,
+    item: string,
     date: Date,
     dateref: string,
     subgroups: Record<string, string | object>
@@ -53,12 +54,12 @@ export function GetRunDatum(hemeSample: HemeSampleItem, date: Date, dateref: str
     hemeSample.setPN(dateref,pn);
     const runinfo = {
         'Day': formattedDate,
-        'Time': date.toLocaleTimeString(),
-        'P / N' : pn
+        'Time': date.toLocaleTimeString()
     };
     
     let data: RunData = {
         id: hemeSample.id,
+        item: hemeSample.data.item as string,
         date: date,
         dateref: dateref,
         subgroups: { runinfo: runinfo }

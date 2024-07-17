@@ -232,7 +232,7 @@ class HemeSampleItem {
     public setPN(dateref: string, status: runPNStatus) {
         let runinfo = this.GetItemsOfSubgroup('runinfo');
         if (runinfo['pn'] == null) {
-            runinfo['pn'] = {};
+            runinfo['pn'] = { item: 'P/N' , subgroup: 'runinfo' , groups: this.data.item as string };
         }
         runinfo['pn'][dateref] = status;
     }

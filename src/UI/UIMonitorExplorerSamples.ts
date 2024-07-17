@@ -35,7 +35,7 @@ export function UpdateSamplesPage(
 
     // get div with id 'samplepage-id` and update innerHTML with run id
     const $samplepageid = $container.querySelector('#samplepage-id');
-    $samplepageid.innerHTML = run.id.toString();
+    $samplepageid.innerHTML = run.item.toString();
 
     // assign run info variables
     const runInfo = run.subgroups.runinfo as object; 
@@ -95,7 +95,7 @@ export function UpdateSamplesPage(
 
     }
 
-    // assign patient info variables
+    // assign patient info variables at top of page
     const patientinfo = run.subgroups.patientinfo;
     if (patientinfo) {
         // get div with id 'samplepage-patientid` and update w patientinfo id
