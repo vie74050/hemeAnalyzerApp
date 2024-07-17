@@ -2,7 +2,7 @@ import { HemeSampleItem } from "../Data/HemeSampleItem";
 import { HemeSampleItems } from "..";
 import { selectElemFromGroup, UICreateElemFromString } from "../helpers/domElemHelper";
 import { RunData, GetRunData, GetRunDatum } from "../Data/GetRunData";
-import { $backBtn, $alertsModal, $runstatusModal } from "./UIMonitor";
+import { $backBtn, $alertsModal, $runValidationModal } from "./UIMonitor";
 import { UpdateSamplesPage } from "./UIMonitorExplorerSamples";
 
 enum explorerNav {
@@ -25,7 +25,7 @@ let explorerpages: DataExplorer[] = [];
 export class DataExplorer {
     private $maincontainerdiv: HTMLDivElement;
     private $alertsmodal: HTMLElement;
-    private $runstatusmodal: HTMLElement;
+    private $runvalidationmodal: HTMLElement;
     private $explorermenudiv: HTMLLIElement;
     private $tablecontainerdiv: HTMLLIElement;
     private $subpagecontainerdiv: HTMLLIElement;
@@ -33,7 +33,7 @@ export class DataExplorer {
 
     constructor(hemeSamples: HemeSampleItem[], $parentpage: HTMLDivElement) {
         this.$alertsmodal = $alertsModal;
-        this.$runstatusmodal = $runstatusModal;
+        this.$runvalidationmodal = $runValidationModal;
         this.$explorermenudiv = UICreateElemFromString(explorerhtml, 'div') as HTMLLIElement;
         this.$tablecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 1) as HTMLLIElement;
         this.$subpagecontainerdiv = UICreateElemFromString(explorerhtml, 'div', 2) as HTMLLIElement;
@@ -242,13 +242,13 @@ export class DataExplorer {
         const $maincontainerdiv = this.$maincontainerdiv;
         const $subpagecontainerdiv = this.$subpagecontainerdiv;
         const $alertsmodal = this.$alertsmodal;
-        const $runstatusmodal = this.$runstatusmodal;
+        const $runvalidationmodal = this.$runvalidationmodal;
 
         $maincontainerdiv.style.display = 'none'; // hide table
         $subpagecontainerdiv.style.display = 'block'; // show samples page
         $backBtn.style.display = 'inline-block'; // show back
 
-        UpdateSamplesPage(run, $subpagecontainerdiv, $alertsmodal, $runstatusmodal);
+        UpdateSamplesPage(run, $subpagecontainerdiv, $alertsmodal, $runvalidationmodal);
     }
 
     /** handle explorer page reset event */
