@@ -335,5 +335,6 @@ function getRange(data: string | number, item: Record<string,string>): string {
     if (flag != flagOptions.N) {
         console.log(item.item, value, min, max, criticalmin, criticalmax);
     }
+
     return flag;
 }
