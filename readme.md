@@ -80,11 +80,13 @@ The parameters for the sample can have the following options:
 
 #### Status
 
-The formula in the `Status` column checks if any run `HAParameter` are out of range:
+If ranges are specified, use the formula in the `Status` column to check if any run `HAParameter` are out of range:
 
 ```sheets
 =IF(ArrayFormula(COUNT(if(Q13:W37<$H13:$H37,1),if(Q13:W37>$I13:$I37,1)))>0, "Err-range", "OK")
 ```
+
+- helper formula to verify sheet
 
 #### Analysis dates -->
 
@@ -93,6 +95,8 @@ The formula should concatenate all the dates required for the sample.
 ```sheets
 =TEXTJOIN("; ", TRUE, Q2:2)
 ```
+
+- Helper formula to set which dates to use.  If blank, then all `date{{n}}` columns that are not blank will be used.
 
 - The **Date**{{n}} columns (start from column Q)
 - Adjust cell end points as needed to specify the columns with data
