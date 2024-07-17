@@ -50,7 +50,16 @@ class HemeSampleItem {
         if (analysisdates) {
             // remove empty strings
             analysisdates = analysisdates.filter((date) => date != "");
+            
         }
+        
+        if (analysisdates.length == 0) {
+            analysisdates = Object.keys(this.data).filter((key) => { 
+                return key.startsWith('date') 
+            }).map((key) => this.data[key] as string);
+            console.log(analysisdates);
+        }
+        
         // sort analysisdates
         analysisdates.sort((a, b) => {
             let aDate = new Date(a);
