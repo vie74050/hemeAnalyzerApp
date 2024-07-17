@@ -19,7 +19,7 @@ export function UpdateSamplesPage(
     run: RunData, 
     $container: HTMLLIElement, 
     $alertsmodal: HTMLElement, 
-    $runstatusmodal: HTMLElement
+    $runvalidationmodal: HTMLElement
     ) {    //console.log(run);
     
     const itemid = run.id;
@@ -52,7 +52,7 @@ export function UpdateSamplesPage(
 
         // get div with id 'samplepage-validated` and update w runinfo 'Validated'
         const $validated = $container.querySelector('#samplepage-validated');           
-        $runstatusmodal.dispatchEvent(new CustomEvent('updatemodal', { detail: 
+        $runvalidationmodal.dispatchEvent(new CustomEvent('updatemodal', { detail: 
             {
                 id: run.id,
                 dateref: run.dateref,
@@ -329,5 +329,6 @@ function getRange(data: string, item: Record<string,string>): string {
     if (value >= min && value <= max) flag = flagOptions.N;
     if (value < criticalmin) flag = flagOptions.cL;
     if (value > criticalmax) flag = flagOptions.cH;
+
     return flag;
 }

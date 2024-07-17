@@ -11,8 +11,8 @@ interface IDetails {
 }
 
 /** Modal for run Actions and Alerts */
-export function Modal_UICreateRunStatus(): HTMLElement {
-    const html = require('./UIRunStatus.html').default;
+export function Modal_UICreateRunValidation(): HTMLElement {
+    const html = require('./UIRunValidation.html').default;
     const $elem = UICreateElemFromString(html, 'div') as HTMLElement;
     const $prompt = $elem.querySelector('._select-prompt') as HTMLElement;
     const $options = $elem.querySelectorAll('.form-check') as NodeListOf<HTMLElement>;

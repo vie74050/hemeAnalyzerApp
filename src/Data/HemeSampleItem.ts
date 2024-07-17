@@ -57,7 +57,7 @@ class HemeSampleItem {
             analysisdates = Object.keys(this.data).filter((key) => { 
                 return key.startsWith('date') 
             }).map((key) => this.data[key] as string);
-            console.log(analysisdates);
+            //console.log(analysisdates);
         }
         
         // sort analysisdates

@@ -6,7 +6,7 @@ import { DataExplorer, rowDataAttributes } from "./UIMonitorExplorer";
 import { UICreateHomePage } from "./UIMonitorHome";
 import { UIBottomSetup } from "./UIMonitorBottom";
 import { Modal_UICreateSearch } from "./modals/UISearch";
-import { Modal_UICreateRunStatus } from "./modals/UIRunStatus";
+import { Modal_UICreateRunValidation } from "./modals/UIRunValidation";
 import { Modal_UICreateAlerts } from "./modals/UIAlerts";
 
 enum monitorNav {
@@ -24,7 +24,7 @@ let $backBtn: HTMLButtonElement = null,
     currentPage: string = monitorNav.home,
     $searchElModal: HTMLElement = null, 
     $alertsModal: HTMLElement = null,
-    $runstatusModal: HTMLElement = null;
+    $runValidationModal: HTMLElement = null;
 
 // getter and setter for currentPage to call SelectCurrentPage() when currentPage is set
 Object.defineProperty(this, 'currentPage', {
@@ -79,15 +79,15 @@ function UIMonitorSetUp(monitorId: string) {
     $searchElModal = Modal_UICreateSearch(rowDataAttributes);
     $monitor.appendChild($searchElModal);
 
-    // add RUN STATUS MODAL to content page
-    $runstatusModal = Modal_UICreateRunStatus();
-    $monitor.appendChild($runstatusModal);
+    // add RUN VALIDATION MODAL to content page
+    $runValidationModal = Modal_UICreateRunValidation();
+    $monitor.appendChild($runValidationModal);
 
     // add ALERTS MODAL to content page
     $alertsModal = Modal_UICreateAlerts();
     $monitor.appendChild($alertsModal);
 
-    return { $backBtn, $alerts: $alertsModal, $searchEl: $searchElModal, $runstatus: $runstatusModal };
+    return { $backBtn, $alerts: $alertsModal, $searchEl: $searchElModal, $runAlert: $runValidationModal };
 }
 
 // EVENT HANDLERS
@@ -182,4 +182,4 @@ function SetCurrentPage(value: string): boolean {
     }
 }
 
-export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, $alertsModal, $runstatusModal, SetCurrentPage, currentPage };
+export { UIMonitorSetUp, UIQCTableSetUp, UIExplorerSetUp, $backBtn, $alertsModal, $runValidationModal, SetCurrentPage, currentPage };
