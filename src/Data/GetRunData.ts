@@ -2,6 +2,7 @@ import { HemeSampleItem } from "./HemeSampleItem";
 
 export interface RunData {
     id: string | number,
+    item: string,
     date: Date,
     dateref: string,
     subgroups: Record<string, string | object>
@@ -31,11 +32,13 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
     runData = runData.sort((a, b) => {
         return b.date.getTime() - a.date.getTime();
     });
-    // add seq to sorted runData runinfo
+    // add seq, the row reference number, to the sorted runData runinfo
     runData.forEach((run, index) => {
         run.subgroups['runinfo']['Seq'] = runData.length - index;
     });
+  
     //console.log(runData, hemeSamples);
+
     return runData;
 }
 
@@ -49,13 +52,16 @@ export function GetRunDatum(hemeSample: HemeSampleItem, date: Date, dateref: str
     const month = formatter.formatToParts(date).find(part => part.type === 'month').value;
     const formattedDate = `${day}/${month}/${date.getFullYear()}`;
 
+    const pn = hemeSample.getPN(dateref);
+    hemeSample.setPN(dateref,pn);
     const runinfo = {
         'Day': formattedDate,
-        'Time': date.toLocaleTimeString(),
+        'Time': date.toLocaleTimeString()
     };
     
     let data: RunData = {
         id: hemeSample.id,
+        item: hemeSample.data.item as string,
         date: date,
         dateref: dateref,
         subgroups: { runinfo: runinfo }

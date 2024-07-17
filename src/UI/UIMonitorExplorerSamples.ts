@@ -35,7 +35,7 @@ export function UpdateSamplesPage(
 
     // get div with id 'samplepage-id` and update innerHTML with run id
     const $samplepageid = $container.querySelector('#samplepage-id');
-    $samplepageid.innerHTML = run.id.toString();
+    $samplepageid.innerHTML = run.item.toString();
 
     // assign run info variables
     const runInfo = run.subgroups.runinfo as object; 
@@ -95,7 +95,7 @@ export function UpdateSamplesPage(
 
     }
 
-    // assign patient info variables
+    // assign patient info variables at top of page
     const patientinfo = run.subgroups.patientinfo;
     if (patientinfo) {
         // get div with id 'samplepage-patientid` and update w patientinfo id
@@ -307,9 +307,11 @@ function UIFlags(paramdata: HemeSampleItem, dateref, $holder: HTMLTableElement) 
 
 /** Check value within range and return flag label to use in table.
  * L = low, H = high, N = normal, cL = critical low, cH = critical high
+ * @param data - the value to check
+ * @param item - the item to check against
  * @returns string, 'L', 'H', ' ', 'cL', 'cH'
  */
-function getRange(data: string, item: Record<string,string>): string {
+function getRange(data: string | number, item: Record<string,string>): string {
     //console.log(item);
     enum flagOptions {
         L = 'L',
@@ -329,6 +331,10 @@ function getRange(data: string, item: Record<string,string>): string {
     if (value >= min && value <= max) flag = flagOptions.N;
     if (value < criticalmin) flag = flagOptions.cL;
     if (value > criticalmax) flag = flagOptions.cH;
+
+    if (flag != flagOptions.N) {
+        console.log(item.item, value, min, max, criticalmin, criticalmax);
+    }
 
     return flag;
 }

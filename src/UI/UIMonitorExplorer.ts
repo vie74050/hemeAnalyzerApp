@@ -202,8 +202,9 @@ export class DataExplorer {
             }
         }
     
+        // first column for each table is sample number
         const td1 = document.createElement('td');
-        td1.innerHTML = run.id.toString();
+        td1.innerHTML = run.item;
         tr.appendChild(td1);
     
         columnHeadKey.forEach((key) => {

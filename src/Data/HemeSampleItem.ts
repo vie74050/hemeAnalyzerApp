@@ -3,6 +3,7 @@ import { GetRangeDefaults, CBCGroup } from "./DefaultCBC";
 
 type QCsubgroups = 'sampleinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
 type PAsubgroups = 'patientinfo' | 'reagentinfo' | 'runinfo' | 'haparameter' | 'other';
+type runPNStatus = 'p' | 'n';
 
 /* Class that accepts a Record<string, string> and returns a HemeSample object.
  The parent class for QC and PA samples.
@@ -164,30 +165,76 @@ class HemeSampleItem {
 
         return gender_str;
     }
-    /** Set CBC HAparameters to defaultss from `DefaultCBC`, if empty */
+    /** Set HAparameters to defaultss from `DefaultCBC`, if empty */
     private setHaparameterOptions() {
         let age = this.ref_age;
         let gender = this.ref_gender;
-        let refCBC: CBCGroup = GetRangeDefaults(age, gender);
-        let haparameters = this.GetItemsOfSubgroup('haparameter');
 
-        // loop through refCBC and set haparameter options if not set
-        for (var paramkey in refCBC) {
-            let itemdefaults = refCBC[paramkey];
+        if (age && age !='') {
+            let refCBC: CBCGroup = GetRangeDefaults(age, gender);
+            let haparameters = this.GetItemsOfSubgroup('haparameter');
 
-            if (haparameters[paramkey]) {
+            // paramkey == 'hgb', 'wbc', 'plt', etc
+            for (var paramkey in haparameters) {
+                let itemdefaults = refCBC[paramkey];
                 let item = haparameters[paramkey];
-                for (var rangeOpt in itemdefaults) {
-                    
-                    if (item[rangeOpt] == null && itemdefaults[rangeOpt] !=null) {
-                        item[rangeOpt] = itemdefaults[rangeOpt];
+                
+                if (itemdefaults) {
+                    // loop through refCBC options and set haparameter options if not set
+                    for (var rangeOpt in itemdefaults) {
+                        
+                        if (item[rangeOpt] == null && itemdefaults[rangeOpt] !=null) {
+                            item[rangeOpt] = itemdefaults[rangeOpt];
+                        }
                     }
-                }
+                }           
             }
-           
         }
         
-        //console.log(haparameters, refCBC);
+        
+        //console.log(haparameters);
+
+    }
+
+    /** Checks the HA parameters for a run date for any values out of range.
+     * @param dateref - the datere to check (e.g. 'date1', 'date2', etc)
+     * @returns runPNStatus - p if any values are out of range
+     */
+    public getPN(dateref: string): runPNStatus {
+        let pnstatus: runPNStatus = 'n';
+        let haparameters = this.GetItemsOfSubgroup('haparameter');
+        
+        for(var paramkey in haparameters) {
+            var check = Object.keys(haparameters[paramkey]).some((key) => {
+                
+                let date_val = haparameters[paramkey][dateref];
+                let min = haparameters[paramkey]['allowedmin'];
+                let max = haparameters[paramkey]['allowedmax'];
+                let bool = (date_val && (Number(date_val) < Number(min) || Number(date_val) > Number(max)));
+                
+                if (bool)
+                    console.log(this.id, paramkey, dateref, date_val, min, max);
+
+                return bool; 
+                
+            });
+
+            if (check) {
+                pnstatus = 'p'; 
+                break;
+            }
+        }
+
+        return pnstatus;
+    }
+
+    /** Sets runinfo.pn[dateref] to status */
+    public setPN(dateref: string, status: runPNStatus) {
+        let runinfo = this.GetItemsOfSubgroup('runinfo');
+        if (runinfo['pn'] == null) {
+            runinfo['pn'] = { item: 'P/N' , subgroup: 'runinfo' , groups: this.data.item as string };
+        }
+        runinfo['pn'][dateref] = status;
     }
    
 };
@@ -198,7 +245,7 @@ class QCSampleItem extends HemeSampleItem {
     }
     
     public get lotNo(): string {
-        return this.data.label as string;
+        return this.data.item as string;
     }
     public get material(): string {
         let mat = "";
