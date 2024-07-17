@@ -42,8 +42,15 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
 export function GetRunDatum(hemeSample: HemeSampleItem, date: Date, dateref: string): RunData {
 
     const subgroupsItems = hemeSample.subgroups;
+    
+    // format date dd/MMM/yyyy
+    const formatter = new Intl.DateTimeFormat('en-us', { day:'numeric', month: 'short' , year: 'numeric'});
+    const day = formatter.formatToParts(date).find(part => part.type === 'day').value;
+    const month = formatter.formatToParts(date).find(part => part.type === 'month').value;
+    const formattedDate = `${day}/${month}/${date.getFullYear()}`;
+
     const runinfo = {
-        'Day': date.toLocaleDateString("en-US"),
+        'Day': formattedDate,
         'Time': date.toLocaleTimeString(),
     };
     

@@ -52,12 +52,14 @@
         }
 
         #graphscontainer {
-
             width: calc(100% + #{$scollbar-width});
             display: flex;
             flex-direction: column;
             background-color: #fff;
 
+            &:empty {
+                display: none;
+            }
             .rowheader {
                 position: absolute;
                 top: 45px;
@@ -154,13 +156,14 @@
         }
 
         .tableFixHead {
-            overflow-y: scroll;
-            overflow-x: hidden;
+            box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x: auto;
             height: 100%;
 
             >table {
                 width: 100%;
-                min-width: 800px;
+                min-width: 1200px;
                 text-align: center;
                 border-collapse: collapse;
                 background-color: #fff;
