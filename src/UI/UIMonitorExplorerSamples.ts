@@ -307,9 +307,11 @@ function UIFlags(paramdata: HemeSampleItem, dateref, $holder: HTMLTableElement) 
 
 /** Check value within range and return flag label to use in table.
  * L = low, H = high, N = normal, cL = critical low, cH = critical high
+ * @param data - the value to check
+ * @param item - the item to check against
  * @returns string, 'L', 'H', ' ', 'cL', 'cH'
  */
-function getRange(data: string, item: Record<string,string>): string {
+function getRange(data: string | number, item: Record<string,string>): string {
     //console.log(item);
     enum flagOptions {
         L = 'L',
@@ -330,5 +332,8 @@ function getRange(data: string, item: Record<string,string>): string {
     if (value < criticalmin) flag = flagOptions.cL;
     if (value > criticalmax) flag = flagOptions.cH;
 
+    if (flag != flagOptions.N) {
+        console.log(item.item, value, min, max, criticalmin, criticalmax);
+    }
     return flag;
 }
