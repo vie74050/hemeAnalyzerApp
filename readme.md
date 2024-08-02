@@ -16,13 +16,17 @@ Sample data is retrieved from Google sheets.  This allows instructors to generat
 
 ## DEVELOPMENT
 
-### Set Up
+### Set Up Google App Key
 
 To connect to Google sheets, an App Key is required, and was generated from [Cloud Developer Console](https://console.cloud.google.com/apis/credentials?project=quickstart-1556582949982).  
 
 **NB** The current AppKey (`API Key MedLab`) is generated on BCITVie's account and is restricted to the testing domains specified in the console management.  
 
 The `AppKey` should be stored in a `./.env`.
+
+### Set up node
+
+`nvm install v12.16.1` The version compatible with the node-sass module version used.  If already installed (check using `nvm list`), make sure to switch to version, i.e. `nvm use`
 
 Install using `npm install`.
 

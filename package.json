@@ -11,6 +11,9 @@
         "predeploy": "npm run build && npm run",
         "deploy": "gh-pages -d dist"
     },
+    "engines": {
+        "node": ">=17.0.0 <19.0.0"
+    },
     "dependencies": {
         "@babel/preset-env": "^7.22.20",
         "@types/bootstrap": "^5.2.7",
