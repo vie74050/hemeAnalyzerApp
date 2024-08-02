@@ -20,10 +20,10 @@ export function Modal_UICreateRunValidation(): HTMLElement {
     const $fbtext = $elem.querySelector('._fb-text') as HTMLElement;
     const defaultDetails: IDetails = {
         prompt_done: 'This run sample has been validated.',
-        prompt_todo: 'Select which parts of the CBC are acceptable and can be "validated":',
+        prompt_todo: 'Select which parts of the CBC are acceptable and can be "validated". Choose all that apply:',
         options: $optionLabelsArr,
         fb_right: 'Correct!',
-        fb_wrong: 'Incorrect, review the data and try again.'
+        fb_wrong: 'Incorrect. Review the correct option(s) shown.'
     };
     const $submitbtn = $elem.querySelector('._submit-btn') as HTMLButtonElement;
 
@@ -127,12 +127,10 @@ export function Modal_UICreateRunValidation(): HTMLElement {
             }
         });
         
-        if ($fbtext.innerHTML === defaultDetails.fb_right) {
-            // if all options are correct, set run as validated
-            hemesample.setAsValidated(dateref); //console.log(hemesample, dateref);
-            // update samplepg
-            $samplepg.classList.add('selected');
-        }
+        // set run as validated, even if there are wrong answers
+        hemesample.setAsValidated(dateref); //console.log(hemesample, dateref);
+        // update samplepg
+        $samplepg.classList.add('selected');
     });
 
     // EVENT HANDLER for when any input is clicked
