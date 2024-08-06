@@ -126,14 +126,19 @@ class HemeSampleItem {
     public setAsValidated(date: string) {
         let runinfo = this.GetItemsOfSubgroup('runinfo');
         // if runinfo is not empty and has validated key, look for date and update
-        if (runinfo && runinfo['validated'] && runinfo['validated'][date]) {
+        if (runinfo && runinfo['validated']) {
             // add 'v,' to the beginning of the string
             let validated = runinfo['validated'][date] as string;
+
+            if (runinfo['validated'][date]  == null) {
+                // if validated is null, set to 'v,'
+                runinfo['validated'][date] = 'v'; console.log('setAsValidated', this.id, date);
+            }
+
             runinfo['validated'][date] = validated && validated.startsWith('v,') ? validated : 'v,' + validated;
             
             document.dispatchEvent(new CustomEvent('updateValidated', { detail: { id: this.id, dateref: date } }));
         }
-        
     }
 
     /** Returns the age to use for reference lookup

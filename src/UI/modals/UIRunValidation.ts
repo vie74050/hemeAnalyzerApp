@@ -128,7 +128,7 @@ export function Modal_UICreateRunValidation(): HTMLElement {
         });
         
         // set run as validated, even if there are wrong answers
-        hemesample.setAsValidated(dateref); //console.log(hemesample, dateref);
+        hemesample.setAsValidated(dateref); console.log(hemesample, dateref);
         // update samplepg
         $samplepg.classList.add('selected');
     });
