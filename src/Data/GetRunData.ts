@@ -36,7 +36,9 @@ export function GetRunData(hemeSamples: HemeSampleItem[]): RunData[] {
     runData.forEach((run, index) => {
         run.subgroups['runinfo']['Seq'] = runData.length - index;
     });
-    console.log(runData, hemeSamples);
+  
+    //console.log(runData, hemeSamples);
+
     return runData;
 }
 
