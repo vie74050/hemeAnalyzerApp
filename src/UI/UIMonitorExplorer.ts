@@ -125,7 +125,7 @@ export class DataExplorer {
                     $td.classList.add('text-success');
                 });
             }
-            console.log(tablegrp, e.detail);
+            //console.log(tablegrp, e.detail);
 
         });
 

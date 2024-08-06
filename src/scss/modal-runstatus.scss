@@ -3,6 +3,11 @@
     margin: 1.5rem;
     line-height: 1;
 
+    input{
+        cursor: pointer;
+        font-size: larger;
+    }
+    
     &._fb-correct {
         color: #4CAF50;
         &::after {

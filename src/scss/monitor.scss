@@ -157,8 +157,8 @@
 
         .tableFixHead {
             box-sizing: border-box;
-            overflow-y: auto;
-            overflow-x: auto;
+            overflow-y: scroll;
+            overflow-x: hidden;
             height: 100%;
 
             >table {
@@ -178,11 +178,23 @@
                 th {
                     position: sticky;
                     font-weight: 500;
-                    top: 0px;
+                    top: 0;
                     background-color: rgb(180, 225, 255);
                     text-transform: capitalize;
+                    z-index: 2;
                 }
-
+              
+                th:first-child {
+                    position: sticky;
+                    left: 0;
+                    z-index: 3;
+                }
+                tr>td:first-child {
+                    position: sticky;
+                    left: 0;
+                    z-index: 1;
+                }
+    
                 th:first-child,
                 td:first-child {
                     border-right: 1px solid #aaa;
@@ -193,8 +205,11 @@
                 }
 
                 /* striped rows */
-                tbody tr:nth-of-type(odd) {
+                tbody tr:nth-of-type(odd) td {
                     background-color: #f1f1f1;
+                }
+                tbody tr:nth-of-type(even) td {
+                    background-color: #fff;
                 }
 
                 /* hover row */

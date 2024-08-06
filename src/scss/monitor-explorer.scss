@@ -95,7 +95,7 @@
                     height: 1.5em;
                     font-size: 0.9em;
                     font-weight: bold;
-                    content: "Validate";
+                    content: "Not validate";
                 }
                 &.selected:after{
                     content: "Validated";
@@ -184,8 +184,7 @@
     }
 
     .subpagecontainer {
-        .col-group.button {
-        }
+        
         .tableFixHead {
             overflow-x: auto;
         }
@@ -206,7 +205,6 @@
 
             th:nth-child(1),
             td:nth-child(1) {
-                
                 padding-left: 0.5em;
             }
 
